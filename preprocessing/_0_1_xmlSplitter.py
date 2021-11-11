@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*-
+"""
+-------------------------------------------------
+   File Name:       _0_1_xmlSplitter.py
+   Description:     split a xml file into parts
+                    Call like: `python XML_breaker.py books.xml book 1000`
+                    where "books.xml" is the name of your input file, "book" is the element you want to split on, 
+                    and 1000 is how many you want in each file. It will create "books1.xml", "books2.xml", etc.
+                    python3 xmlSplitter.py ../data/post_data/Posts.xml row 100000
+   Author:          Junda
+   date:            11/6/21
+-------------------------------------------------
+"""
+
 import os
 import sys
 from xml.sax import parse
@@ -8,6 +22,8 @@ from xml.sax.saxutils import XMLGenerator
 # where "books.xml" is the name of your input file, "book" is the element you want to split on, and 1000 is how many you want in each file. It will create "books1.xml", "books2.xml", &c.
 
 # python3 xmlSplitter.py ../data/post_data/Posts.xml row 100000
+
+
 class CycleFile(object):
 
     def __init__(self, filename):
@@ -32,8 +48,9 @@ class CycleFile(object):
     def close(self):
         self.file.close()
 
+
 class XMLBreaker(XMLGenerator):
-    
+
     def __init__(self, break_into=None, break_after=1000, out=None, *args, **kwargs):
         XMLGenerator.__init__(self, out, encoding='utf-8', *args, **kwargs)
         self.out_file = out
@@ -60,6 +77,7 @@ class XMLBreaker(XMLGenerator):
                 XMLGenerator.startDocument(self)
                 for element in self.context:
                     XMLGenerator.startElement(self, *element)
+
 
 filename, break_into, break_after = sys.argv[1:]
 parse(filename, XMLBreaker(break_into, int(break_after), out=CycleFile(filename)))
