@@ -3,6 +3,14 @@ from pathConfig import data_dir
 import os
 from utils.time_util import get_current_time
 import csv
+"""
+-------------------------------------------------
+   File Name:      
+   Description: count the occurences of tags and export to csv
+   Author:     
+   date:        
+-------------------------------------------------
+"""
 
 task = 'tagRec'
 dataset = 'SO-05-Sep-2018'

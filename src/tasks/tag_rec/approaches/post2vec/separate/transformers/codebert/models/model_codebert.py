@@ -8,10 +8,42 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 from transformers import RobertaTokenizer, RobertaConfig, RobertaModel
 
-from pyToolkit.lib.utils.csv_util import append_new_row
-from pyToolkit.lib.utils.time_util import get_current_time
 from utils.data_util import get_specific_comp_list
 from utils.eval_util import evaluate_batch, evaluate_batch_f1_5
+
+class Config(object):
+    '''
+    配置参数
+    '''
+    def __init__(self,dataset):
+        self.model_name='LiChenhao Bert Model'
+        # 训练集，测试集，检验集，类别，模型训练结果保存路径
+        self.train_path=dataset+'/data/train.txt'
+        self.test_path=dataset+'/data/test.txt'
+        self.dev_path=dataset+'/data/dev.txt'
+
+        self.class_list=[x.strip() for x in open(dataset+'/data/class.txt').readlines()]
+        self.save_path=dataset+'/saved_dict/'+self.model_name+'.ckpt'
+
+        # 配置使用检测GPU
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        # 若超过1000还没有提升就提前结束训练
+        self.require_improvement=100000
+        # 类别数
+        self.num_classes = len(self.class_list)
+
+        # 整体训练次数
+        self.num_epoch=6
+        # batch大小
+        self.batch_size=128
+        #每个序列最大token数
+        self.pad_size=32
+        #学习率
+        self.learning_rate = 1e-5
+
+        self.bert_path='bert_pretrain'	#预训练网络相对路径
+        self.tokenizer=BertTokenizer.from_pretrained(self.bert_path) #加载预训练Bert网络对输入数据进行embedding
+        self.hidden_size=768  #Bert模型后自定义分类器（单隐层全连接网络）的隐层节点数
 
 
 class MultiComp(nn.Module):
@@ -20,7 +52,8 @@ class MultiComp(nn.Module):
         super(MultiComp, self).__init__()
 
         self.args = args
-        self.codebert = RobertaModel.from_pretrained("microsoft/codebert-base")
+        self.encoder = args.encoder
+        self.tokenizer = args.tokenizer
         self.dropout = nn.Dropout(args.dropout)
 
         self.fc1 = nn.Linear(
@@ -30,38 +63,15 @@ class MultiComp(nn.Module):
             args.hidden_dim)
         self.fc2 = nn.Linear(args.hidden_dim, args.class_num)
 
-    def forward(self, t, dt, dc):
-        t = self.title_embed(t.cuda() if torch.cuda.is_available() else t)  # [128,1,100,32]
-        dt = self.desc_text_embed(dt.cuda() if torch.cuda.is_available() else dt)  # [128,1,1000,32]
-        dc = self.desc_code_embed(dc.cuda() if torch.cuda.is_available() else dc)  # [128,1,1000,32]
-
-        if self.args.static:
-            t = Variable(t)
-            dt = Variable(dt)
-            dc = Variable(dc)
-
-        t = t.unsqueeze(1)  # (N, Ci, W, D) # [128,1,100,32]
-        dt = dt.unsqueeze(1)  # (N, Ci, W, D) # [128,1,1000,32]
-        dc = dc.unsqueeze(1)  # (N, Ci, W, D) # [128,1,1000,32]
-
-        t = [F.relu(conv(t)).squeeze(3) for conv in self.convs_t]  # [(N, Co, W), ...]*len(Ks)
-        dt = [F.relu(conv(dt)).squeeze(3) for conv in self.convs_dt]  # [(N, Co, W), ...]*len(Ks)
-        dc = [F.relu(conv(dc)).squeeze(3) for conv in self.convs_dc]  # [(N, Co, W), ...]*len(Ks)
-
-        t = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in t]  # [(N, Co), ...]*len(Ks)
-        dt = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in dt]  # [(N, Co), ...]*len(Ks)
-        dc = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in dc]  # [(N, Co), ...]*len(Ks)
-
-        x_t, x_dt, x_dc = torch.cat(t, 1), torch.cat(dt, 1), torch.cat(dc, 1)
-        x = torch.cat((x_t, x_dt, x_dc), 1)
-
-        x = self.dropout(x)  # (N, len(Ks)*Co) (128, 900)
-        sigmoid = nn.Sigmoid()
-        x = F.relu(self.fc1(x))  # (N, C)
-        logit = self.fc2(x)  # (N, C)
-        output = sigmoid(logit)
-
-        return output
+    def forward(self, input_ids=None,labels=None): 
+        logits=self.encoder(input_ids,attention_mask=input_ids.ne(1))[0]
+        prob=torch.softmax(logits,-1)
+        if labels is not None:
+            loss_fct = nn.CrossEntropyLoss(ignore_index=-1)
+            loss = loss_fct(logits,labels)
+            return loss,prob
+        else:
+            return prob
 
     def get_output_vector(self, qlist=None, batch_size=64):
         with torch.no_grad():

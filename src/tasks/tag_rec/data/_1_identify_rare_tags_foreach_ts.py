@@ -14,16 +14,6 @@ from pathConfig import data_dir
 import csv
 
 
-def load_tags(tags_fpath):
-    tags = []
-    import pandas as pd
-    df = pd.read_csv(tags_fpath)
-    for idx, row in df.iterrows():
-        tags.append(row['tag'])
-    print("# tags = %s" % len(tags))
-    return tags
-
-
 def identify_rare_tags(tag_dict, rare_tags_fpath, commom_tags_fpath, ts):
     """
     a tag to be rare if its number of appearances is less than or equal to a predefined threshold ts.

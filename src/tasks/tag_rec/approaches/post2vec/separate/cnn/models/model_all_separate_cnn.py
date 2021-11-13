@@ -20,8 +20,10 @@ class MultiComp(nn.Module):
 
         self.args = args
         self.title_embed = nn.Embedding(args.title_embed_num, args.embed_dim)
-        self.desc_text_embed = nn.Embedding(args.desc_text_embed_num, args.embed_dim)
-        self.desc_code_embed = nn.Embedding(args.desc_code_embed_num, args.embed_dim)
+        self.desc_text_embed = nn.Embedding(
+            args.desc_text_embed_num, args.embed_dim)
+        self.desc_code_embed = nn.Embedding(
+            args.desc_code_embed_num, args.embed_dim)
         self.convs_t = nn.ModuleList(
             [nn.Conv2d(1, args.title_kernel_num, (K, args.embed_dim)) for K in args.title_kernel_sizes])
         self.convs_dt = nn.ModuleList(
@@ -38,9 +40,12 @@ class MultiComp(nn.Module):
         self.fc2 = nn.Linear(args.hidden_dim, args.class_num)
 
     def forward(self, t, dt, dc):
-        t = self.title_embed(t.cuda() if torch.cuda.is_available() else t)  # [128,1,100,32]
-        dt = self.desc_text_embed(dt.cuda() if torch.cuda.is_available() else dt)  # [128,1,1000,32]
-        dc = self.desc_code_embed(dc.cuda() if torch.cuda.is_available() else dc)  # [128,1,1000,32]
+        t = self.title_embed(
+            t.cuda() if torch.cuda.is_available() else t)  # [128,1,100,32]
+        dt = self.desc_text_embed(
+            dt.cuda() if torch.cuda.is_available() else dt)  # [128,1,1000,32]
+        dc = self.desc_code_embed(
+            dc.cuda() if torch.cuda.is_available() else dc)  # [128,1,1000,32]
 
         if self.args.static:
             t = Variable(t)
@@ -51,21 +56,26 @@ class MultiComp(nn.Module):
         dt = dt.unsqueeze(1)  # (N, Ci, W, D) # [128,1,1000,32]
         dc = dc.unsqueeze(1)  # (N, Ci, W, D) # [128,1,1000,32]
 
-        t = [F.relu(conv(t)).squeeze(3) for conv in self.convs_t]  # [(N, Co, W), ...]*len(Ks)
-        dt = [F.relu(conv(dt)).squeeze(3) for conv in self.convs_dt]  # [(N, Co, W), ...]*len(Ks)
-        dc = [F.relu(conv(dc)).squeeze(3) for conv in self.convs_dc]  # [(N, Co, W), ...]*len(Ks)
+        t = [F.relu(conv(t)).squeeze(3)
+             for conv in self.convs_t]  # [(N, Co, W), ...]*len(Ks)
+        dt = [F.relu(conv(dt)).squeeze(3)
+              for conv in self.convs_dt]  # [(N, Co, W), ...]*len(Ks)
+        dc = [F.relu(conv(dc)).squeeze(3)
+              for conv in self.convs_dc]  # [(N, Co, W), ...]*len(Ks)
 
-        t = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in t]  # [(N, Co), ...]*len(Ks)
-        dt = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in dt]  # [(N, Co), ...]*len(Ks)
-        dc = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in dc]  # [(N, Co), ...]*len(Ks)
+        t = [F.max_pool1d(i, i.size(2)).squeeze(2)
+             for i in t]  # [(N, Co), ...]*len(Ks)
+        dt = [F.max_pool1d(i, i.size(2)).squeeze(2)
+              for i in dt]  # [(N, Co), ...]*len(Ks)
+        dc = [F.max_pool1d(i, i.size(2)).squeeze(2)
+              for i in dc]  # [(N, Co), ...]*len(Ks)
 
         x_t, x_dt, x_dc = torch.cat(t, 1), torch.cat(dt, 1), torch.cat(dc, 1)
         x = torch.cat((x_t, x_dt, x_dc), 1)
 
         x = self.dropout(x)  # (N, len(Ks)*Co) (128, 900)
-        sigmoid = nn.Sigmoid()
-        x = F.relu(self.fc1(x))  # (N, C)
-        logit = self.fc2(x)  # (N, C)
+        x = self.fc1(x)
+        logit = self.fc2(x)
         output = sigmoid(logit)
 
         return output
@@ -91,9 +101,12 @@ class MultiComp(nn.Module):
                 if self.args.cuda:
                     t, dt, dc = t.cuda(), dt.cuda(), dc.cuda()
 
-                t = self.title_embed(t.cuda() if torch.cuda.is_available() else t)  # [128,1,100,32]
-                dt = self.desc_text_embed(dt.cuda() if torch.cuda.is_available() else dt)  # [128,1,1000,32]
-                dc = self.desc_code_embed(dc.cuda() if torch.cuda.is_available() else dc)  # [128,1,1000,32]
+                t = self.title_embed(
+                    t.cuda() if torch.cuda.is_available() else t)  # [128,1,100,32]
+                dt = self.desc_text_embed(
+                    dt.cuda() if torch.cuda.is_available() else dt)  # [128,1,1000,32]
+                dc = self.desc_code_embed(
+                    dc.cuda() if torch.cuda.is_available() else dc)  # [128,1,1000,32]
 
                 if self.args.static:
                     t = Variable(t)
@@ -104,20 +117,29 @@ class MultiComp(nn.Module):
                 dt = dt.unsqueeze(1)  # (N, Ci, W, D) # [128,1,1000,32]
                 dc = dc.unsqueeze(1)  # (N, Ci, W, D) # [128,1,1000,32]
 
-                t = [F.relu(conv(t)).squeeze(3) for conv in self.convs_t]  # [(N, Co, W), ...]*len(Ks)
-                dt = [F.relu(conv(dt)).squeeze(3) for conv in self.convs_dt]  # [(N, Co, W), ...]*len(Ks)
-                dc = [F.relu(conv(dc)).squeeze(3) for conv in self.convs_dc]  # [(N, Co, W), ...]*len(Ks)
+                t = [F.relu(conv(t)).squeeze(3)
+                     for conv in self.convs_t]  # [(N, Co, W), ...]*len(Ks)
+                dt = [F.relu(conv(dt)).squeeze(3)
+                      for conv in self.convs_dt]  # [(N, Co, W), ...]*len(Ks)
+                dc = [F.relu(conv(dc)).squeeze(3)
+                      for conv in self.convs_dc]  # [(N, Co, W), ...]*len(Ks)
 
-                t = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in t]  # [(N, Co), ...]*len(Ks)
-                dt = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in dt]  # [(N, Co), ...]*len(Ks)
-                dc = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in dc]  # [(N, Co), ...]*len(Ks)
+                t = [F.max_pool1d(i, i.size(2)).squeeze(2)
+                     for i in t]  # [(N, Co), ...]*len(Ks)
+                dt = [F.max_pool1d(i, i.size(2)).squeeze(2)
+                      for i in dt]  # [(N, Co), ...]*len(Ks)
+                dc = [F.max_pool1d(i, i.size(2)).squeeze(2)
+                      for i in dc]  # [(N, Co), ...]*len(Ks)
 
-                x_t, x_dt, x_dc = torch.cat(t, 1), torch.cat(dt, 1), torch.cat(dc, 1)
+                x_t, x_dt, x_dc = torch.cat(
+                    t, 1), torch.cat(dt, 1), torch.cat(dc, 1)
 
                 for j in range(et - st):
                     qlist[st + j].title = (Variable(x_t).data).cpu().numpy()[j]
-                    qlist[st + j].desc_text = (Variable(x_dt).data).cpu().numpy()[j]
-                    qlist[st + j].desc_code = (Variable(x_dc).data).cpu().numpy()[j]
+                    qlist[st +
+                          j].desc_text = (Variable(x_dt).data).cpu().numpy()[j]
+                    qlist[st +
+                          j].desc_code = (Variable(x_dc).data).cpu().numpy()[j]
 
         return qlist
 
@@ -169,12 +191,15 @@ def train(train_iter, dev_iter, model, args, global_train_step, best_acc):
             loss_record_fpath = os.path.join(args.save_dir, "loss_cur.csv")
             append_new_row([global_train_step, loss.item()], loss_record_fpath)
             if steps % args.log_interval == 0:
-                sys.stdout.write('\rBatch[{}] - loss: {:.10f}'.format(steps, loss))
+                sys.stdout.write(
+                    '\rBatch[{}] - loss: {:.10f}'.format(steps, loss))
             if steps % args.dev_interval == 0 and args.dev_ratio != 0.0 and len(dev_iter) != 0:
                 dev_loss, dev_acc = dev_eval(dev_iter, model, args)
                 # record loss foreach step
-                dev_loss_record_fpath = os.path.join(args.save_dir, "dev_loss_cur.csv")
-                append_new_row([global_train_step, dev_loss, dev_acc], dev_loss_record_fpath)
+                dev_loss_record_fpath = os.path.join(
+                    args.save_dir, "dev_loss_cur.csv")
+                append_new_row([global_train_step, dev_loss,
+                               dev_acc], dev_loss_record_fpath)
                 if dev_acc > best_acc:
                     best_acc = dev_acc
                     last_step = steps
@@ -334,6 +359,7 @@ def test_eval(data_iter, model, args, topk_list, metric):
             auc /= cnt
             return [auc]
 
+
 def test_f1_5_eval(data_iter, model, args, metric):
     model.eval()
     with torch.no_grad():
@@ -363,7 +389,8 @@ def test_f1_5_eval(data_iter, model, args, metric):
                 f1_5_list_single_batch = evaluate_batch_f1_5(pred=logit.cpu().detach().numpy(),
                                                              label=target.cpu().detach().numpy())
             else:
-                f1_5_list_single_batch = evaluate_batch_f1_5(pred=logit.detach().numpy(), label=target.detach().numpy())
+                f1_5_list_single_batch = evaluate_batch_f1_5(
+                    pred=logit.detach().numpy(), label=target.detach().numpy())
 
             if metric == 'ori' or metric == 'standard':
                 f1_5_list.extend(f1_5_list_single_batch)
