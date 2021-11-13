@@ -60,7 +60,7 @@ def write_list_to_csv(list_tmp, csv_fpath, header):
 def separate_text_code(html_str):
     import re
     # regex: <pre(.*)><code>([\s\S]*?)</code></pre>
-    regex_pattern = r'<pre(.*?)><code>([\s\S]*?)</code></pre>'s
+    regex_pattern = r'<pre(.*?)><code>([\s\S]*?)</code></pre>'
     code_list = []
     html_text = html_str
     for m in re.finditer(regex_pattern, html_str):

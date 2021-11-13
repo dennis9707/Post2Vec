@@ -28,7 +28,7 @@ def filter_by_common(target_tags, common_tags):
     return list(set(target_tags).intersection(set(common_tags)))
 
 
-def build_corpus(all_fpath, tags_vocab, rare_flag, corpus_fpath):
+def build_corpus(all_fpath, tags_vocab, corpus_fpath, isRare=False):
     rows = []
     print("Filtering corpus based on tags...")
     cnt = 0
@@ -42,7 +42,7 @@ def build_corpus(all_fpath, tags_vocab, rare_flag, corpus_fpath):
             desc_code = row['Code']
             creation_date = row['CreationDate']
             tags = ast.literal_eval(row['Tags'])
-            if rare_flag == True:
+            if isRare == True:
                 clean_tags = filter_by_rare(tags, tags_vocab)
             else:
                 clean_tags = filter_by_common(tags, tags_vocab)
@@ -75,7 +75,8 @@ def build_corpus(all_fpath, tags_vocab, rare_flag, corpus_fpath):
     cols = ["qid", "title", "desc_text",
             "desc_code", "creation_date", "clean_tags"]
     new_df = pd.DataFrame(rows, columns=cols)
-    new_df.to_csv(corpus_fpath)
+    new_df.to_csv(corpus_fpath+".csv", index=False)
+    new_df.to_pickle(corpus_fpath+".pkl")
     print("Write %s lines successfully." % cnt)
 
 
@@ -83,12 +84,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # Input:
     source_corpus_fpath = "../data/questions/Questions54FilteredNA.csv"
-    rare_tags_fpath = "../data/tags/20211110/ts1000/_2_1_rareTags.csv"
-    common_tags_fpath = "../data/tags/20211110/ts1000/_2_1_commonTags.csv"
-
+    # rare_tags_fpath = "../data/tags/20211110/ts1000/_2_1_rareTags.csv"
+    common_tags_fpath = "../data/tags/20211110/top10/common.csv"
     # Output:
-    target_corpus_fpath = "../data/csv/filtered_tags/Question1_filtered.pkl"
+    target_corpus_fpath = "../data/questions/Questions54Top10"
 
-    rare_tags = load_tags(rare_tags_fpath)
+    # rare_tags = load_tags(rare_tags_fpath)
     common_tags = load_tags(common_tags_fpath)
     build_corpus(source_corpus_fpath, common_tags, target_corpus_fpath)

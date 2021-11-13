@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 -------------------------------------------------
-   File Name:       _1_identify_rare_tags_foreach_ts
+   File Name:       _2_1_identify_rare_tags_for_file.py
    Description:
-   Author:     jundas
-   date:        11/6/21
+   Author:          Junda
+   date:            11/6/21
 -------------------------------------------------
 """
 
