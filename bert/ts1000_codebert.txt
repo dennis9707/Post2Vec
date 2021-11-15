@@ -1,0 +1,330 @@
+Downloading:   0%|          | 0.00/226k [00:00<?, ?B/s]Downloading:  16%|█▌        | 36.0k/226k [00:00<00:01, 157kB/s]Downloading:  33%|███▎      | 75.0k/226k [00:00<00:00, 164kB/s]Downloading:  47%|████▋     | 107k/226k [00:00<00:00, 152kB/s] Downloading:  90%|████████▉ | 203k/226k [00:00<00:00, 256kB/s]Downloading: 100%|██████████| 226k/226k [00:00<00:00, 244kB/s]
+Downloading:   0%|          | 0.00/28.0 [00:00<?, ?B/s]Downloading: 100%|██████████| 28.0/28.0 [00:00<00:00, 24.9kB/s]
+Downloading:   0%|          | 0.00/455k [00:00<?, ?B/s]Downloading:   8%|▊         | 36.0k/455k [00:00<00:02, 156kB/s]Downloading:  18%|█▊        | 84.0k/455k [00:00<00:02, 186kB/s]Downloading:  25%|██▌       | 116k/455k [00:00<00:02, 164kB/s] Downloading:  43%|████▎     | 196k/455k [00:00<00:01, 236kB/s]Downloading:  89%|████████▉ | 404k/455k [00:01<00:00, 474kB/s]Downloading: 100%|██████████| 455k/455k [00:01<00:00, 392kB/s]
+Downloading:   0%|          | 0.00/570 [00:00<?, ?B/s]Downloading: 100%|██████████| 570/570 [00:00<00:00, 522kB/s]
+Downloading:   0%|          | 0.00/420M [00:00<?, ?B/s]Downloading:   1%|          | 2.76M/420M [00:00<00:15, 28.9MB/s]Downloading:   1%|▏         | 5.86M/420M [00:00<00:13, 31.0MB/s]Downloading:   2%|▏         | 8.98M/420M [00:00<00:13, 31.8MB/s]Downloading:   3%|▎         | 12.1M/420M [00:00<00:13, 32.2MB/s]Downloading:   4%|▎         | 15.2M/420M [00:00<00:13, 32.3MB/s]Downloading:   4%|▍         | 18.3M/420M [00:00<00:12, 32.4MB/s]Downloading:   5%|▌         | 21.4M/420M [00:00<00:12, 32.5MB/s]Downloading:   6%|▌         | 24.5M/420M [00:00<00:12, 32.5MB/s]Downloading:   7%|▋         | 27.6M/420M [00:00<00:12, 32.4MB/s]Downloading:   7%|▋         | 30.7M/420M [00:01<00:12, 32.5MB/s]Downloading:   8%|▊         | 33.8M/420M [00:01<00:12, 32.5MB/s]Downloading:   9%|▉         | 37.0M/420M [00:01<00:12, 32.5MB/s]Downloading:  10%|▉         | 40.1M/420M [00:01<00:12, 32.5MB/s]Downloading:  10%|█         | 43.2M/420M [00:01<00:12, 32.6MB/s]Downloading:  11%|█         | 46.3M/420M [00:01<00:12, 32.6MB/s]Downloading:  12%|█▏        | 49.4M/420M [00:01<00:11, 32.6MB/s]Downloading:  13%|█▎        | 52.5M/420M [00:01<00:11, 32.6MB/s]Downloading:  13%|█▎        | 55.6M/420M [00:01<00:11, 32.6MB/s]Downloading:  14%|█▍        | 58.7M/420M [00:01<00:11, 32.6MB/s]Downloading:  15%|█▍        | 61.9M/420M [00:02<00:11, 32.6MB/s]Downloading:  15%|█▌        | 65.0M/420M [00:02<00:11, 32.6MB/s]Downloading:  16%|█▌        | 68.1M/420M [00:02<00:11, 32.6MB/s]Downloading:  17%|█▋        | 71.2M/420M [00:02<00:11, 32.6MB/s]Downloading:  18%|█▊        | 74.3M/420M [00:02<00:11, 32.6MB/s]Downloading:  18%|█▊        | 77.4M/420M [00:02<00:11, 32.6MB/s]Downloading:  19%|█▉        | 80.5M/420M [00:02<00:10, 32.6MB/s]Downloading:  20%|█▉        | 83.6M/420M [00:02<00:10, 32.2MB/s]Downloading:  21%|██        | 86.7M/420M [00:02<00:10, 32.0MB/s]Downloading:  21%|██▏       | 89.8M/420M [00:02<00:10, 31.8MB/s]Downloading:  22%|██▏       | 92.8M/420M [00:03<00:10, 31.8MB/s]Downloading:  23%|██▎       | 95.8M/420M [00:03<00:10, 31.7MB/s]Downloading:  24%|██▎       | 98.8M/420M [00:03<00:10, 31.6MB/s]Downloading:  24%|██▍       | 102M/420M [00:03<00:10, 31.6MB/s] Downloading:  25%|██▍       | 105M/420M [00:03<00:10, 31.6MB/s]Downloading:  26%|██▌       | 108M/420M [00:03<00:10, 31.6MB/s]Downloading:  26%|██▋       | 111M/420M [00:03<00:10, 31.6MB/s]Downloading:  27%|██▋       | 114M/420M [00:03<00:10, 31.6MB/s]Downloading:  28%|██▊       | 117M/420M [00:03<00:10, 31.6MB/s]Downloading:  29%|██▊       | 120M/420M [00:03<00:09, 31.6MB/s]Downloading:  29%|██▉       | 123M/420M [00:04<00:09, 31.6MB/s]Downloading:  30%|██▉       | 126M/420M [00:04<00:09, 31.5MB/s]Downloading:  31%|███       | 129M/420M [00:04<00:09, 31.5MB/s]Downloading:  31%|███▏      | 132M/420M [00:04<00:09, 31.5MB/s]Downloading:  32%|███▏      | 135M/420M [00:04<00:09, 31.5MB/s]Downloading:  33%|███▎      | 138M/420M [00:04<00:09, 31.5MB/s]Downloading:  34%|███▎      | 141M/420M [00:04<00:09, 31.5MB/s]Downloading:  34%|███▍      | 144M/420M [00:04<00:09, 31.4MB/s]Downloading:  35%|███▍      | 147M/420M [00:04<00:09, 31.4MB/s]Downloading:  36%|███▌      | 150M/420M [00:04<00:09, 31.4MB/s]Downloading:  36%|███▋      | 153M/420M [00:05<00:08, 31.5MB/s]Downloading:  37%|███▋      | 156M/420M [00:05<00:08, 31.4MB/s]Downloading:  38%|███▊      | 159M/420M [00:05<00:08, 31.3MB/s]Downloading:  39%|███▊      | 162M/420M [00:05<00:08, 31.4MB/s]Downloading:  39%|███▉      | 165M/420M [00:05<00:08, 31.4MB/s]Downloading:  40%|███▉      | 168M/420M [00:05<00:08, 31.4MB/s]Downloading:  41%|████      | 171M/420M [00:05<00:08, 31.4MB/s]Downloading:  41%|████▏     | 174M/420M [00:05<00:08, 31.4MB/s]Downloading:  42%|████▏     | 177M/420M [00:05<00:08, 31.4MB/s]Downloading:  43%|████▎     | 180M/420M [00:05<00:08, 31.4MB/s]Downloading:  44%|████▎     | 183M/420M [00:06<00:07, 31.4MB/s]Downloading:  44%|████▍     | 186M/420M [00:06<00:07, 31.4MB/s]Downloading:  45%|████▍     | 189M/420M [00:06<00:07, 31.4MB/s]Downloading:  46%|████▌     | 192M/420M [00:06<00:07, 31.4MB/s]Downloading:  46%|████▋     | 195M/420M [00:06<00:07, 31.4MB/s]Downloading:  47%|████▋     | 198M/420M [00:06<00:07, 31.4MB/s]Downloading:  48%|████▊     | 201M/420M [00:06<00:07, 31.4MB/s]Downloading:  49%|████▊     | 204M/420M [00:06<00:07, 31.4MB/s]Downloading:  49%|████▉     | 207M/420M [00:06<00:07, 31.4MB/s]Downloading:  50%|████▉     | 210M/420M [00:06<00:07, 31.3MB/s]Downloading:  51%|█████     | 213M/420M [00:07<00:06, 31.4MB/s]Downloading:  51%|█████▏    | 216M/420M [00:07<00:06, 31.4MB/s]Downloading:  52%|█████▏    | 219M/420M [00:07<00:06, 31.4MB/s]Downloading:  53%|█████▎    | 222M/420M [00:07<00:06, 31.4MB/s]Downloading:  54%|█████▎    | 225M/420M [00:07<00:06, 31.4MB/s]Downloading:  54%|█████▍    | 228M/420M [00:07<00:06, 31.4MB/s]Downloading:  55%|█████▌    | 231M/420M [00:07<00:06, 31.6MB/s]Downloading:  56%|█████▌    | 234M/420M [00:07<00:06, 31.9MB/s]Downloading:  56%|█████▋    | 237M/420M [00:07<00:05, 32.1MB/s]Downloading:  57%|█████▋    | 240M/420M [00:07<00:05, 32.2MB/s]Downloading:  58%|█████▊    | 243M/420M [00:08<00:05, 32.3MB/s]Downloading:  59%|█████▊    | 247M/420M [00:08<00:05, 32.3MB/s]Downloading:  59%|█████▉    | 250M/420M [00:08<00:05, 32.4MB/s]Downloading:  60%|██████    | 253M/420M [00:08<00:05, 32.4MB/s]Downloading:  61%|██████    | 256M/420M [00:08<00:05, 32.5MB/s]Downloading:  62%|██████▏   | 259M/420M [00:08<00:05, 32.5MB/s]Downloading:  62%|██████▏   | 262M/420M [00:08<00:05, 32.5MB/s]Downloading:  63%|██████▎   | 265M/420M [00:08<00:04, 32.5MB/s]Downloading:  64%|██████▍   | 268M/420M [00:08<00:04, 32.5MB/s]Downloading:  65%|██████▍   | 271M/420M [00:08<00:04, 32.5MB/s]Downloading:  65%|██████▌   | 275M/420M [00:09<00:04, 32.5MB/s]Downloading:  66%|██████▌   | 278M/420M [00:09<00:04, 32.5MB/s]Downloading:  67%|██████▋   | 281M/420M [00:09<00:04, 32.5MB/s]Downloading:  68%|██████▊   | 284M/420M [00:09<00:04, 32.5MB/s]Downloading:  68%|██████▊   | 287M/420M [00:09<00:04, 32.5MB/s]Downloading:  69%|██████▉   | 290M/420M [00:09<00:04, 32.6MB/s]Downloading:  70%|██████▉   | 293M/420M [00:09<00:04, 32.5MB/s]Downloading:  71%|███████   | 296M/420M [00:09<00:03, 32.5MB/s]Downloading:  71%|███████▏  | 299M/420M [00:09<00:03, 32.6MB/s]Downloading:  72%|███████▏  | 302M/420M [00:09<00:03, 32.5MB/s]Downloading:  73%|███████▎  | 306M/420M [00:10<00:03, 32.5MB/s]Downloading:  73%|███████▎  | 309M/420M [00:10<00:03, 32.5MB/s]Downloading:  74%|███████▍  | 312M/420M [00:10<00:03, 32.5MB/s]Downloading:  75%|███████▍  | 315M/420M [00:10<00:03, 32.5MB/s]Downloading:  76%|███████▌  | 318M/420M [00:10<00:03, 32.5MB/s]Downloading:  76%|███████▋  | 321M/420M [00:10<00:03, 32.5MB/s]Downloading:  77%|███████▋  | 324M/420M [00:10<00:03, 32.5MB/s]Downloading:  78%|███████▊  | 327M/420M [00:10<00:02, 32.5MB/s]Downloading:  79%|███████▊  | 330M/420M [00:10<00:04, 21.5MB/s]Downloading:  79%|███████▉  | 333M/420M [00:11<00:03, 23.5MB/s]Downloading:  80%|████████  | 336M/420M [00:11<00:03, 25.6MB/s]Downloading:  81%|████████  | 340M/420M [00:11<00:03, 27.3MB/s]Downloading:  82%|████████▏ | 343M/420M [00:11<00:02, 28.7MB/s]Downloading:  82%|████████▏ | 346M/420M [00:11<00:02, 29.7MB/s]Downloading:  83%|████████▎ | 349M/420M [00:11<00:02, 30.5MB/s]Downloading:  84%|████████▍ | 352M/420M [00:11<00:02, 31.0MB/s]Downloading:  84%|████████▍ | 355M/420M [00:11<00:02, 31.3MB/s]Downloading:  85%|████████▌ | 358M/420M [00:11<00:02, 31.6MB/s]Downloading:  86%|████████▌ | 361M/420M [00:11<00:01, 31.8MB/s]Downloading:  87%|████████▋ | 364M/420M [00:12<00:01, 31.8MB/s]Downloading:  87%|████████▋ | 367M/420M [00:12<00:01, 31.9MB/s]Downloading:  88%|████████▊ | 370M/420M [00:12<00:01, 32.0MB/s]Downloading:  89%|████████▉ | 373M/420M [00:12<00:01, 32.0MB/s]Downloading:  90%|████████▉ | 376M/420M [00:12<00:01, 32.1MB/s]Downloading:  90%|█████████ | 380M/420M [00:12<00:01, 32.1MB/s]Downloading:  91%|█████████ | 383M/420M [00:12<00:01, 32.2MB/s]Downloading:  92%|█████████▏| 386M/420M [00:12<00:01, 32.3MB/s]Downloading:  93%|█████████▎| 389M/420M [00:12<00:01, 32.3MB/s]Downloading:  93%|█████████▎| 392M/420M [00:12<00:00, 32.4MB/s]Downloading:  94%|█████████▍| 395M/420M [00:13<00:00, 32.3MB/s]Downloading:  95%|█████████▍| 398M/420M [00:13<00:00, 32.3MB/s]Downloading:  95%|█████████▌| 401M/420M [00:13<00:00, 32.3MB/s]Downloading:  96%|█████████▌| 404M/420M [00:13<00:00, 32.4MB/s]Downloading:  97%|█████████▋| 407M/420M [00:13<00:00, 32.4MB/s]Downloading:  98%|█████████▊| 410M/420M [00:13<00:00, 32.4MB/s]Downloading:  98%|█████████▊| 414M/420M [00:13<00:00, 32.5MB/s]Downloading:  99%|█████████▉| 417M/420M [00:13<00:00, 32.5MB/s]Downloading: 100%|█████████▉| 420M/420M [00:13<00:00, 32.5MB/s]Downloading: 100%|██████████| 420M/420M [00:13<00:00, 31.7MB/s]
+Some weights of the model checkpoint at bert-base-uncased were not used when initializing BertModel: ['cls.seq_relationship.weight', 'cls.predictions.decoder.weight', 'cls.predictions.bias', 'cls.seq_relationship.bias', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.transform.dense.weight']
+- This IS expected if you are initializing BertModel from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing BertModel from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+number of training steps 44191
+############# Epoch 0: Training Start   #############
+Epoch: 0, Batch: 0， Loss:  0.7205146551132202
+Current Time = 18:03:15
+Epoch: 0, Batch: 100， Loss:  0.3991140127182007
+Current Time = 18:05:50
+Epoch: 0, Batch: 200， Loss:  0.24574701488018036
+Current Time = 18:08:24
+Epoch: 0, Batch: 300， Loss:  0.15931634604930878
+Current Time = 18:10:57
+Epoch: 0, Batch: 400， Loss:  0.11983921378850937
+Current Time = 18:13:33
+Epoch: 0, Batch: 500， Loss:  0.09424027800559998
+Current Time = 18:16:07
+Epoch: 0, Batch: 600， Loss:  0.08503545820713043
+Current Time = 18:18:41
+Epoch: 0, Batch: 700， Loss:  0.07491430640220642
+Current Time = 18:21:15
+Epoch: 0, Batch: 800， Loss:  0.06512580066919327
+Current Time = 18:23:52
+Epoch: 0, Batch: 900， Loss:  0.06540216505527496
+Current Time = 18:26:27
+Epoch: 0, Batch: 1000， Loss:  0.05673176422715187
+Current Time = 18:29:01
+Epoch: 0, Batch: 1100， Loss:  0.05779113993048668
+Current Time = 18:31:39
+Epoch: 0, Batch: 1200， Loss:  0.05877675488591194
+Current Time = 18:34:13
+Epoch: 0, Batch: 1300， Loss:  0.055717334151268005
+Current Time = 18:36:51
+Epoch: 0, Batch: 1400， Loss:  0.05319850146770477
+Current Time = 18:39:25
+Epoch: 0, Batch: 1500， Loss:  0.05281422659754753
+Current Time = 18:42:02
+Epoch: 0, Batch: 1600， Loss:  0.05692377686500549
+Current Time = 18:44:37
+Epoch: 0, Batch: 1700， Loss:  0.053725264966487885
+Current Time = 18:47:17
+Epoch: 0, Batch: 1800， Loss:  0.05293869972229004
+Current Time = 18:49:53
+Epoch: 0, Batch: 1900， Loss:  0.053819440305233
+Current Time = 18:52:27
+Epoch: 0, Batch: 2000， Loss:  0.052214767783880234
+Current Time = 18:55:04
+Epoch: 0, Batch: 2100， Loss:  0.05500522628426552
+Current Time = 18:57:38
+Epoch: 0, Batch: 2200， Loss:  0.04952843114733696
+Current Time = 19:00:14
+Epoch: 0, Batch: 2300， Loss:  0.05176345631480217
+Current Time = 19:02:48
+Epoch: 0, Batch: 2400， Loss:  0.05674237757921219
+Current Time = 19:05:25
+Epoch: 0, Batch: 2500， Loss:  0.052586473524570465
+Current Time = 19:07:59
+Epoch: 0, Batch: 2600， Loss:  0.051866576075553894
+Current Time = 19:10:34
+Epoch: 0, Batch: 2700， Loss:  0.05198410525918007
+Current Time = 19:13:13
+Epoch: 0, Batch: 2800， Loss:  0.05369044095277786
+Current Time = 19:15:49
+Epoch: 0, Batch: 2900， Loss:  0.051228541880846024
+Current Time = 19:18:27
+Epoch: 0, Batch: 3000， Loss:  0.04890632629394531
+Current Time = 19:21:04
+Epoch: 0, Batch: 3100， Loss:  0.05176167190074921
+Current Time = 19:23:39
+Epoch: 0, Batch: 3200， Loss:  0.051721103489398956
+Current Time = 19:26:16
+Epoch: 0, Batch: 3300， Loss:  0.054162655025720596
+Current Time = 19:28:54
+Epoch: 0, Batch: 3400， Loss:  0.051511526107788086
+Current Time = 19:31:29
+Epoch: 0, Batch: 3500， Loss:  0.043769605457782745
+Current Time = 19:34:07
+Epoch: 0, Batch: 3600， Loss:  0.051858797669410706
+Current Time = 19:36:46
+Epoch: 0, Batch: 3700， Loss:  0.04794323816895485
+Current Time = 19:39:22
+Epoch: 0, Batch: 3800， Loss:  0.045584868639707565
+Current Time = 19:41:59
+Epoch: 0, Batch: 3900， Loss:  0.0479331910610199
+Current Time = 19:44:36
+Epoch: 0, Batch: 4000， Loss:  0.04633646085858345
+Current Time = 19:47:14
+Epoch: 0, Batch: 4100， Loss:  0.04501662775874138
+Current Time = 19:49:51
+Epoch: 0, Batch: 4200， Loss:  0.04192688316106796
+Current Time = 19:52:28
+Epoch: 0, Batch: 4300， Loss:  0.04326910898089409
+Current Time = 19:55:07
+Epoch: 0, Batch: 4400， Loss:  0.04254942387342453
+Current Time = 19:57:43
+############# Epoch 0: Training End     #############
+############# Epoch 0: Validation Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/metrics/_classification.py:1272: UndefinedMetricWarning: Recall is ill-defined and being set to 0.0 in labels with no true samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/opt/conda/lib/python3.6/site-packages/sklearn/metrics/_classification.py:1272: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/opt/conda/lib/python3.6/site-packages/sklearn/metrics/_classification.py:1515: UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in labels with no true nor predicted samples. Use `zero_division` parameter to control this behavior.
+  average, "true nor predicted", 'F-score is', len(true_sum)
+Accuracy Score = 0.2633832976445396
+F1 Score (Micro) = 0.376761960448556
+F1 Score (Macro) = 0.005752875683267031
+Recall Score (Micro) = 0.23253595916894365
+Recall Score (Macro) = 0.004970462302314462
+Precision Score (Micro) = 0.9920818211811283
+Precision Score (Macro) = 0.011062363178424156
+############# Epoch 0: Validation End     #############
+Epoch: 0 	Avgerage Training Loss: 0.000017 	Average Validation Loss: 0.000038
+Validation loss decreased (inf --> 0.000038).  Saving model ...
+############# Epoch 0  Done   #############
+
+############# Epoch 1: Training Start   #############
+Epoch: 1, Batch: 0， Loss:  0.04422840476036072
+Current Time = 20:11:02
+Epoch: 1, Batch: 100， Loss:  0.047743551433086395
+Current Time = 20:13:41
+Epoch: 1, Batch: 200， Loss:  0.04388608783483505
+Current Time = 20:16:16
+Epoch: 1, Batch: 300， Loss:  0.04146254062652588
+Current Time = 20:18:56
+Epoch: 1, Batch: 400， Loss:  0.041166506707668304
+Current Time = 20:21:36
+Epoch: 1, Batch: 500， Loss:  0.03727608919143677
+Current Time = 20:24:16
+Epoch: 1, Batch: 600， Loss:  0.03994336351752281
+Current Time = 20:26:56
+Epoch: 1, Batch: 700， Loss:  0.04251159355044365
+Current Time = 20:29:32
+Epoch: 1, Batch: 800， Loss:  0.035114288330078125
+Current Time = 20:32:10
+Epoch: 1, Batch: 900， Loss:  0.03906198590993881
+Current Time = 20:34:48
+Epoch: 1, Batch: 1000， Loss:  0.038306038826704025
+Current Time = 20:37:24
+Epoch: 1, Batch: 1100， Loss:  0.04011448845267296
+Current Time = 20:40:02
+Epoch: 1, Batch: 1200， Loss:  0.0362619012594223
+Current Time = 20:42:38
+Epoch: 1, Batch: 1300， Loss:  0.03398335352540016
+Current Time = 20:45:18
+Epoch: 1, Batch: 1400， Loss:  0.03263631835579872
+Current Time = 20:47:55
+Epoch: 1, Batch: 1500， Loss:  0.035431187599897385
+Current Time = 20:50:33
+Epoch: 1, Batch: 1600， Loss:  0.03349483385682106
+Current Time = 20:53:12
+Epoch: 1, Batch: 1700， Loss:  0.036943886429071426
+Current Time = 20:55:51
+Epoch: 1, Batch: 1800， Loss:  0.03693791478872299
+Current Time = 20:58:28
+Epoch: 1, Batch: 1900， Loss:  0.03502631187438965
+Current Time = 21:01:06
+Epoch: 1, Batch: 2000， Loss:  0.027980003505945206
+Current Time = 21:03:46
+Epoch: 1, Batch: 2100， Loss:  0.030501753091812134
+Current Time = 21:06:24
+Epoch: 1, Batch: 2200， Loss:  0.033652473241090775
+Current Time = 21:09:03
+Epoch: 1, Batch: 2300， Loss:  0.040125638246536255
+Current Time = 21:11:40
+Epoch: 1, Batch: 2400， Loss:  0.03429485857486725
+Current Time = 21:14:18
+Epoch: 1, Batch: 2500， Loss:  0.03135593980550766
+Current Time = 21:16:54
+Epoch: 1, Batch: 2600， Loss:  0.030126236379146576
+Current Time = 21:19:30
+Epoch: 1, Batch: 2700， Loss:  0.03061479702591896
+Current Time = 21:22:06
+Epoch: 1, Batch: 2800， Loss:  0.030144046992063522
+Current Time = 21:24:45
+Epoch: 1, Batch: 2900， Loss:  0.02866922877728939
+Current Time = 21:27:21
+Epoch: 1, Batch: 3000， Loss:  0.026204712688922882
+Current Time = 21:30:01
+Epoch: 1, Batch: 3100， Loss:  0.030826762318611145
+Current Time = 21:32:38
+Epoch: 1, Batch: 3200， Loss:  0.032277580350637436
+Current Time = 21:35:15
+Epoch: 1, Batch: 3300， Loss:  0.02941383607685566
+Current Time = 21:37:53
+Epoch: 1, Batch: 3400， Loss:  0.033167172223329544
+Current Time = 21:40:28
+Epoch: 1, Batch: 3500， Loss:  0.03369467705488205
+Current Time = 21:43:08
+Epoch: 1, Batch: 3600， Loss:  0.02348458021879196
+Current Time = 21:45:45
+Epoch: 1, Batch: 3700， Loss:  0.02703436091542244
+Current Time = 21:48:23
+Epoch: 1, Batch: 3800， Loss:  0.027732491493225098
+Current Time = 21:51:01
+Epoch: 1, Batch: 3900， Loss:  0.02579178288578987
+Current Time = 21:53:46
+Epoch: 1, Batch: 4000， Loss:  0.024150222539901733
+Current Time = 21:56:22
+Epoch: 1, Batch: 4100， Loss:  0.024855773895978928
+Current Time = 21:59:01
+Epoch: 1, Batch: 4200， Loss:  0.02773410640656948
+Current Time = 22:01:36
+Epoch: 1, Batch: 4300， Loss:  0.025524836033582687
+Current Time = 22:04:12
+Epoch: 1, Batch: 4400， Loss:  0.0233460646122694
+Current Time = 22:06:54
+############# Epoch 1: Training End     #############
+############# Epoch 1: Validation Start   #############
+Accuracy Score = 0.5212775582833188
+F1 Score (Micro) = 0.7268293928407293
+F1 Score (Macro) = 0.04167788195094424
+Recall Score (Micro) = 0.7337990410888282
+Recall Score (Macro) = 0.03677620770548312
+Precision Score (Micro) = 0.7199908948353483
+Precision Score (Macro) = 0.04851975761348649
+############# Epoch 1: Validation End     #############
+Epoch: 1 	Avgerage Training Loss: 0.000008 	Average Validation Loss: 0.000028
+Validation loss decreased (0.000038 --> 0.000028).  Saving model ...
+############# Epoch 1  Done   #############
+
+############# Epoch 2: Training Start   #############
+Epoch: 2, Batch: 0， Loss:  0.02785571664571762
+Current Time = 22:20:22
+Epoch: 2, Batch: 100， Loss:  0.02697722055017948
+Current Time = 22:23:01
+Epoch: 2, Batch: 200， Loss:  0.028495842590928078
+Current Time = 22:25:41
+Epoch: 2, Batch: 300， Loss:  0.025202322751283646
+Current Time = 22:28:19
+Epoch: 2, Batch: 400， Loss:  0.023801136761903763
+Current Time = 22:30:53
+Epoch: 2, Batch: 500， Loss:  0.027208855375647545
+Current Time = 22:33:33
+Epoch: 2, Batch: 600， Loss:  0.024423526600003242
+Current Time = 22:36:11
+Epoch: 2, Batch: 700， Loss:  0.0245262011885643
+Current Time = 22:38:52
+Epoch: 2, Batch: 800， Loss:  0.023144371807575226
+Current Time = 22:41:33
+Epoch: 2, Batch: 900， Loss:  0.024788178503513336
+Current Time = 22:44:10
+Epoch: 2, Batch: 1000， Loss:  0.025386592373251915
+Current Time = 22:46:48
+Epoch: 2, Batch: 1100， Loss:  0.02458537369966507
+Current Time = 22:49:28
+Epoch: 2, Batch: 1200， Loss:  0.023821063339710236
+Current Time = 22:52:07
+Epoch: 2, Batch: 1300， Loss:  0.01907585747539997
+Current Time = 22:54:42
+Epoch: 2, Batch: 1400， Loss:  0.022233756259083748
+Current Time = 22:57:19
+Epoch: 2, Batch: 1500， Loss:  0.02459745481610298
+Current Time = 22:59:59
+Epoch: 2, Batch: 1600， Loss:  0.021049270406365395
+Current Time = 23:02:35
+Epoch: 2, Batch: 1700， Loss:  0.026632893830537796
+Current Time = 23:05:15
+Epoch: 2, Batch: 1800， Loss:  0.02478186786174774
+Current Time = 23:07:54
+Epoch: 2, Batch: 1900， Loss:  0.021917948499321938
+Current Time = 23:10:33
+Epoch: 2, Batch: 2000， Loss:  0.02246813289821148
+Current Time = 23:13:11
+Epoch: 2, Batch: 2100， Loss:  0.02368897572159767
+Current Time = 23:15:49
+Epoch: 2, Batch: 2200， Loss:  0.023295488208532333
+Current Time = 23:18:25
+Epoch: 2, Batch: 2300， Loss:  0.022262975573539734
+Current Time = 23:21:05
+Epoch: 2, Batch: 2400， Loss:  0.025778917595744133
+Current Time = 23:23:43
+Epoch: 2, Batch: 2500， Loss:  0.023032180964946747
+Current Time = 23:26:20
+Epoch: 2, Batch: 2600， Loss:  0.02562856115400791
+Current Time = 23:29:02
+Epoch: 2, Batch: 2700， Loss:  0.018415411934256554
+Current Time = 23:31:42
+Epoch: 2, Batch: 2800， Loss:  0.017863810062408447
+Current Time = 23:34:19
+Epoch: 2, Batch: 2900， Loss:  0.021597864106297493
+Current Time = 23:36:56
+Epoch: 2, Batch: 3000， Loss:  0.02424939163029194
+Current Time = 23:39:36
+Epoch: 2, Batch: 3100， Loss:  0.0238029882311821
+Current Time = 23:42:14
+Epoch: 2, Batch: 3200， Loss:  0.023928238078951836
+Current Time = 23:44:50
+Epoch: 2, Batch: 3300， Loss:  0.019935328513383865
+Current Time = 23:47:25
+Epoch: 2, Batch: 3400， Loss:  0.021401159465312958
+Current Time = 23:50:06
+Epoch: 2, Batch: 3500， Loss:  0.019501134753227234
+Current Time = 23:52:47
+Epoch: 2, Batch: 3600， Loss:  0.024198174476623535
+Current Time = 23:55:25
+Epoch: 2, Batch: 3700， Loss:  0.021025400608778
+Current Time = 23:58:03
+Epoch: 2, Batch: 3800， Loss:  0.022916458547115326
+Current Time = 00:00:43
+Epoch: 2, Batch: 3900， Loss:  0.022348623722791672
+Current Time = 00:03:23
+Epoch: 2, Batch: 4000， Loss:  0.020882027223706245
+Current Time = 00:06:02
+Epoch: 2, Batch: 4100， Loss:  0.022223733365535736
+Current Time = 00:08:40
+Epoch: 2, Batch: 4200， Loss:  0.02072472684085369
+Current Time = 00:11:17
+Epoch: 2, Batch: 4300， Loss:  0.024011509492993355
+Current Time = 00:13:54
+Epoch: 2, Batch: 4400， Loss:  0.02351473458111286
+Current Time = 00:16:30
+############# Epoch 2: Training End     #############
+############# Epoch 2: Validation Start   #############
+Accuracy Score = 0.4647585728503785
+F1 Score (Micro) = 0.6947569389900553
+F1 Score (Macro) = 0.04274733438526738
+Recall Score (Micro) = 0.7410424292416353
+Recall Score (Macro) = 0.0380943661813714
+Precision Score (Micro) = 0.6539135181857471
+Precision Score (Macro) = 0.04916878078716782
+############# Epoch 2: Validation End     #############
+Epoch: 2 	Avgerage Training Loss: 0.000005 	Average Validation Loss: 0.000027
+Validation loss decreased (0.000028 --> 0.000027).  Saving model ...
+############# Epoch 2  Done   #############
+
