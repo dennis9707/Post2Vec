@@ -5,8 +5,6 @@ from transformers import AutoTokenizer, AutoModel, PreTrainedModel, AutoModelFor
 from model.loss import loss_fn
 
 
-# Initializing a DistilBERT configuration
-
 class TwinBert(PreTrainedModel):
     def get_title_tokenizer(self):
         raise NotImplementedError
