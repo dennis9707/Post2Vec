@@ -1,11 +1,11 @@
 from sklearn import metrics
 import pandas as pd
-from data_structure.question import BERTQuestionDataset
+from data_structure.question import QuestionDataset
 import torch.nn as nn
 import torch
 from torch.utils.data import DataLoader
 from sklearn import preprocessing
-from model.model import AlbertForMultiLable
+from model.model import CodeBERTModel
 from model.loss import loss_fn
 import gc
 import numpy as np
@@ -18,9 +18,13 @@ import argparse
 import os
 import random
 from datetime import datetime
-from transformers import AlbertTokenizer, AlbertModel
 
 device_ids = [0, 1, 2, 3, 4, 5, 6, 7]
+MODEL_CLASSES = {
+    'albert-v2': (RobertaConfig, RobertaModel, RobertaTokenizer),
+    'roberta': (RobertaConfig, RobertaModel, RobertaTokenizer),
+    'distilbert': (DistilBertConfig, DistilBertForMaskedLM, DistilBertTokenizer)
+}
 
 
 def seed_everything(seed=42):
@@ -36,10 +40,10 @@ def seed_everything(seed=42):
 
 
 def train(input_train, input_valid, mlb, args):
-    tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2')
+    tokenizer = AutoTokenizer.from_pretrained("jeniya/BERTOverflow")
     valid_loss_min = np.Inf
-    checkpoint_path = './results/checkpoint/current_checkpoint_albert_ts1000.pt'
-    best_model_path = './results/best_model/best_model_albert_ts1000.pt'
+    checkpoint_path = './results/checkpoint/current_checkpoint_bertoverflow.pt'
+    best_model_path = './results/best_model/best_model_bertoverflow.pt'
     train = pd.read_pickle(args.train_data_file)
     valid = pd.read_pickle(args.valid_data_file)
     # hyperparameters
@@ -48,8 +52,8 @@ def train(input_train, input_valid, mlb, args):
     EPOCHS = args.epoch
     LEARNING_RATE = args.learning_rate
 
-    training_set = BERTQuestionDataset(train, mlb, tokenizer)
-    valid_set = BERTQuestionDataset(valid, mlb, tokenizer)
+    training_set = QuestionDataset(train, mlb, tokenizer)
+    valid_set = QuestionDataset(valid, mlb, tokenizer)
 
     train_data_loader = DataLoader(training_set,
                                    batch_size=TRAIN_BATCH_SIZE,
@@ -65,7 +69,7 @@ def train(input_train, input_valid, mlb, args):
     device = torch.device(
         'cuda') if torch.cuda.is_available() else torch.device('cpu')
     n_train_steps = int(len(training_set) / TRAIN_BATCH_SIZE * 10)
-    model = AlbertForMultiLable(170)
+    model = CodeBERTModel(170)
     model = torch.nn.DataParallel(model, device_ids=device_ids)
     # model = model.cuda(device=device_ids[0])
     model.to(device)
@@ -92,13 +96,10 @@ def train(input_train, input_valid, mlb, args):
         for batch_idx, data in enumerate(train_data_loader):
             ids = data['input_ids'].to(device, dtype=torch.long)
             mask = data['mask'].to(device, dtype=torch.long)
-            token_type_ids = data['token_type_ids'].to(
-                device, dtype=torch.long)
             targets = data['labels'].to(device, dtype=torch.float)
 
             optimizer.zero_grad()
-            outputs = model(
-                input_ids=ids, token_type_ids=token_type_ids, attention_mask=mask)
+            outputs = model(ids, mask)
 
             loss = loss_fn(outputs, targets)
             if batch_idx % 100 == 0:
@@ -127,13 +128,8 @@ def train(input_train, input_valid, mlb, args):
             for batch_idx, data in enumerate(valid_data_loader, 0):
                 ids = data['input_ids'].to(device, dtype=torch.long)
                 mask = data['mask'].to(device, dtype=torch.long)
-                token_type_ids = data['token_type_ids'].to(
-                    device, dtype=torch.long)
-
                 targets = data['labels'].to(device, dtype=torch.float)
-                outputs = model(
-                    input_ids=ids, token_type_ids=token_type_ids, attention_mask=mask)
-
+                outputs = model(ids, mask)
                 fin_targets.extend(targets.cpu().detach().numpy().tolist())
                 fin_outputs.extend(torch.sigmoid(
                     outputs).cpu().detach().numpy().tolist())
@@ -224,9 +220,9 @@ def main():
 
     parser.add_argument("--epoch", default=3, type=int,
                         help="The number of epoch")
-    parser.add_argument("--train_batch_size", default=32, type=int,
+    parser.add_argument("--train_batch_size", default=64, type=int,
                         help="Batch size for training.")
-    parser.add_argument("--valid_batch_size", default=32, type=int,
+    parser.add_argument("--valid_batch_size", default=64, type=int,
                         help="Batch size for evaluation.")
     parser.add_argument('-dropout', type=float, default=0.1,
                         help='the probability for dropout [default: 0.1]')

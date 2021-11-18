@@ -1,0 +1,321 @@
+Some weights of the model checkpoint at distilbert-base-uncased were not used when initializing DistilBertModel: ['vocab_projector.bias', 'vocab_transform.bias', 'vocab_layer_norm.weight', 'vocab_transform.weight', 'vocab_layer_norm.bias', 'vocab_projector.weight']
+- This IS expected if you are initializing DistilBertModel from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing DistilBertModel from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+number of training steps 44191
+############# Epoch 0: Training Start   #############
+Epoch: 0, Batch: 0， Loss:  0.7030571699142456
+Current Time = 07:09:57
+Epoch: 0, Batch: 100， Loss:  0.3332221210002899
+Current Time = 07:12:06
+Epoch: 0, Batch: 200， Loss:  0.24868015944957733
+Current Time = 07:14:18
+Epoch: 0, Batch: 300， Loss:  0.19176052510738373
+Current Time = 07:16:28
+Epoch: 0, Batch: 400， Loss:  0.1539352685213089
+Current Time = 07:18:37
+Epoch: 0, Batch: 500， Loss:  0.12625190615653992
+Current Time = 07:20:49
+Epoch: 0, Batch: 600， Loss:  0.10735990107059479
+Current Time = 07:22:59
+Epoch: 0, Batch: 700， Loss:  0.09146397560834885
+Current Time = 07:25:11
+Epoch: 0, Batch: 800， Loss:  0.08528420329093933
+Current Time = 07:27:18
+Epoch: 0, Batch: 900， Loss:  0.07651108503341675
+Current Time = 07:29:28
+Epoch: 0, Batch: 1000， Loss:  0.0707789734005928
+Current Time = 07:31:38
+Epoch: 0, Batch: 1100， Loss:  0.06865579634904861
+Current Time = 07:33:48
+Epoch: 0, Batch: 1200， Loss:  0.06633975356817245
+Current Time = 07:35:58
+Epoch: 0, Batch: 1300， Loss:  0.059250608086586
+Current Time = 07:38:07
+Epoch: 0, Batch: 1400， Loss:  0.06072713062167168
+Current Time = 07:40:20
+Epoch: 0, Batch: 1500， Loss:  0.06152386963367462
+Current Time = 07:42:30
+Epoch: 0, Batch: 1600， Loss:  0.05541534349322319
+Current Time = 07:44:37
+Epoch: 0, Batch: 1700， Loss:  0.05338650569319725
+Current Time = 07:46:48
+Epoch: 0, Batch: 1800， Loss:  0.05333481356501579
+Current Time = 07:48:59
+Epoch: 0, Batch: 1900， Loss:  0.04873093590140343
+Current Time = 07:51:09
+Epoch: 0, Batch: 2000， Loss:  0.05071904510259628
+Current Time = 07:53:19
+Epoch: 0, Batch: 2100， Loss:  0.0512002557516098
+Current Time = 07:55:28
+Epoch: 0, Batch: 2200， Loss:  0.047841478139162064
+Current Time = 07:57:38
+Epoch: 0, Batch: 2300， Loss:  0.048372697085142136
+Current Time = 07:59:47
+Epoch: 0, Batch: 2400， Loss:  0.044108759611845016
+Current Time = 08:01:56
+Epoch: 0, Batch: 2500， Loss:  0.040461163967847824
+Current Time = 08:04:08
+Epoch: 0, Batch: 2600， Loss:  0.0433034785091877
+Current Time = 08:06:17
+Epoch: 0, Batch: 2700， Loss:  0.0464203916490078
+Current Time = 08:08:25
+Epoch: 0, Batch: 2800， Loss:  0.04328380152583122
+Current Time = 08:10:36
+Epoch: 0, Batch: 2900， Loss:  0.03657997399568558
+Current Time = 08:12:45
+Epoch: 0, Batch: 3000， Loss:  0.04307601973414421
+Current Time = 08:14:55
+Epoch: 0, Batch: 3100， Loss:  0.03960959613323212
+Current Time = 08:17:07
+Epoch: 0, Batch: 3200， Loss:  0.038245413452386856
+Current Time = 08:19:14
+Epoch: 0, Batch: 3300， Loss:  0.037291206419467926
+Current Time = 08:21:24
+Epoch: 0, Batch: 3400， Loss:  0.03974881395697594
+Current Time = 08:23:33
+Epoch: 0, Batch: 3500， Loss:  0.034591786563396454
+Current Time = 08:25:43
+Epoch: 0, Batch: 3600， Loss:  0.03363897278904915
+Current Time = 08:27:53
+Epoch: 0, Batch: 3700， Loss:  0.033296871930360794
+Current Time = 08:30:02
+Epoch: 0, Batch: 3800， Loss:  0.033371590077877045
+Current Time = 08:32:11
+Epoch: 0, Batch: 3900， Loss:  0.03555161505937576
+Current Time = 08:34:18
+Epoch: 0, Batch: 4000， Loss:  0.03083621896803379
+Current Time = 08:36:26
+Epoch: 0, Batch: 4100， Loss:  0.030221233144402504
+Current Time = 08:38:35
+Epoch: 0, Batch: 4200， Loss:  0.0302444938570261
+Current Time = 08:40:46
+Epoch: 0, Batch: 4300， Loss:  0.029906926676630974
+Current Time = 08:42:57
+Epoch: 0, Batch: 4400， Loss:  0.026637740433216095
+Current Time = 08:45:08
+############# Epoch 0: Training End     #############
+############# Epoch 0: Validation Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/metrics/_classification.py:1272: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+Accuracy Score = 0.2538197538197538
+F1 Score (Micro) = 0.5421272324434162
+F1 Score (Macro) = 0.16259174534356638
+Recall Score (Micro) = 0.3983916090206626
+Recall Score (Macro) = 0.13370182316657336
+Precision Score (Micro) = 0.848120415940558
+Precision Score (Macro) = 0.2678641702926985
+############# Epoch 0: Validation End     #############
+Epoch: 0 	Avgerage Training Loss: 0.000017 	Average Validation Loss: 0.000031
+Validation loss decreased (inf --> 0.000031).  Saving model ...
+############# Epoch 0  Done   #############
+
+############# Epoch 1: Training Start   #############
+Epoch: 1, Batch: 0， Loss:  0.0303520355373621
+Current Time = 09:05:08
+Epoch: 1, Batch: 100， Loss:  0.03071022592484951
+Current Time = 09:07:17
+Epoch: 1, Batch: 200， Loss:  0.027439942583441734
+Current Time = 09:09:28
+Epoch: 1, Batch: 300， Loss:  0.027016207575798035
+Current Time = 09:11:38
+Epoch: 1, Batch: 400， Loss:  0.024897364899516106
+Current Time = 09:13:49
+Epoch: 1, Batch: 500， Loss:  0.028086842969059944
+Current Time = 09:16:00
+Epoch: 1, Batch: 600， Loss:  0.027742521837353706
+Current Time = 09:18:10
+Epoch: 1, Batch: 700， Loss:  0.028628570958971977
+Current Time = 09:20:19
+Epoch: 1, Batch: 800， Loss:  0.026681257411837578
+Current Time = 09:22:30
+Epoch: 1, Batch: 900， Loss:  0.024569837376475334
+Current Time = 09:24:41
+Epoch: 1, Batch: 1000， Loss:  0.025175774469971657
+Current Time = 09:26:51
+Epoch: 1, Batch: 1100， Loss:  0.028307680040597916
+Current Time = 09:28:59
+Epoch: 1, Batch: 1200， Loss:  0.028283260762691498
+Current Time = 09:31:11
+Epoch: 1, Batch: 1300， Loss:  0.026873847469687462
+Current Time = 09:33:19
+Epoch: 1, Batch: 1400， Loss:  0.0244564451277256
+Current Time = 09:35:31
+Epoch: 1, Batch: 1500， Loss:  0.023302190005779266
+Current Time = 09:37:41
+Epoch: 1, Batch: 1600， Loss:  0.027226487174630165
+Current Time = 09:39:54
+Epoch: 1, Batch: 1700， Loss:  0.02443634159862995
+Current Time = 09:42:03
+Epoch: 1, Batch: 1800， Loss:  0.02522655948996544
+Current Time = 09:44:17
+Epoch: 1, Batch: 1900， Loss:  0.023775415495038033
+Current Time = 09:46:28
+Epoch: 1, Batch: 2000， Loss:  0.025120679289102554
+Current Time = 09:48:39
+Epoch: 1, Batch: 2100， Loss:  0.02742568776011467
+Current Time = 09:50:51
+Epoch: 1, Batch: 2200， Loss:  0.027263423427939415
+Current Time = 09:52:59
+Epoch: 1, Batch: 2300， Loss:  0.029902968555688858
+Current Time = 09:55:09
+Epoch: 1, Batch: 2400， Loss:  0.02072320319712162
+Current Time = 09:57:20
+Epoch: 1, Batch: 2500， Loss:  0.022607680410146713
+Current Time = 09:59:31
+Epoch: 1, Batch: 2600， Loss:  0.022494526579976082
+Current Time = 10:01:46
+Epoch: 1, Batch: 2700， Loss:  0.022219659760594368
+Current Time = 10:03:55
+Epoch: 1, Batch: 2800， Loss:  0.018251769244670868
+Current Time = 10:06:09
+Epoch: 1, Batch: 2900， Loss:  0.01932527869939804
+Current Time = 10:08:20
+Epoch: 1, Batch: 3000， Loss:  0.02199682593345642
+Current Time = 10:10:29
+Epoch: 1, Batch: 3100， Loss:  0.023106874898076057
+Current Time = 10:12:38
+Epoch: 1, Batch: 3200， Loss:  0.02287566475570202
+Current Time = 10:14:47
+Epoch: 1, Batch: 3300， Loss:  0.022570502012968063
+Current Time = 10:16:59
+Epoch: 1, Batch: 3400， Loss:  0.021112872287631035
+Current Time = 10:19:09
+Epoch: 1, Batch: 3500， Loss:  0.021969493478536606
+Current Time = 10:21:21
+Epoch: 1, Batch: 3600， Loss:  0.02254336327314377
+Current Time = 10:23:32
+Epoch: 1, Batch: 3700， Loss:  0.019907934591174126
+Current Time = 10:25:42
+Epoch: 1, Batch: 3800， Loss:  0.019780952483415604
+Current Time = 10:27:53
+Epoch: 1, Batch: 3900， Loss:  0.01977986842393875
+Current Time = 10:30:06
+Epoch: 1, Batch: 4000， Loss:  0.02073843404650688
+Current Time = 10:32:18
+Epoch: 1, Batch: 4100， Loss:  0.022832898423075676
+Current Time = 10:34:28
+Epoch: 1, Batch: 4200， Loss:  0.020938236266374588
+Current Time = 10:36:37
+Epoch: 1, Batch: 4300， Loss:  0.02137729711830616
+Current Time = 10:38:48
+Epoch: 1, Batch: 4400， Loss:  0.018753385171294212
+Current Time = 10:41:00
+############# Epoch 1: Training End     #############
+############# Epoch 1: Validation Start   #############
+Accuracy Score = 0.3708873708873709
+F1 Score (Micro) = 0.6806078437575795
+F1 Score (Macro) = 0.4706874333696618
+Recall Score (Micro) = 0.5805679743089226
+Recall Score (Macro) = 0.4064064082824427
+Precision Score (Micro) = 0.8223017824607897
+Precision Score (Macro) = 0.622275484494465
+############# Epoch 1: Validation End     #############
+Epoch: 1 	Avgerage Training Loss: 0.000005 	Average Validation Loss: 0.000021
+Validation loss decreased (0.000031 --> 0.000021).  Saving model ...
+############# Epoch 1  Done   #############
+
+############# Epoch 2: Training Start   #############
+Epoch: 2, Batch: 0， Loss:  0.018941175192594528
+Current Time = 11:01:11
+Epoch: 2, Batch: 100， Loss:  0.02010333724319935
+Current Time = 11:03:23
+Epoch: 2, Batch: 200， Loss:  0.020156342536211014
+Current Time = 11:05:32
+Epoch: 2, Batch: 300， Loss:  0.01932116597890854
+Current Time = 11:07:47
+Epoch: 2, Batch: 400， Loss:  0.019845087081193924
+Current Time = 11:09:56
+Epoch: 2, Batch: 500， Loss:  0.024708153679966927
+Current Time = 11:12:11
+Epoch: 2, Batch: 600， Loss:  0.02155051939189434
+Current Time = 11:14:22
+Epoch: 2, Batch: 700， Loss:  0.01700696349143982
+Current Time = 11:16:36
+Epoch: 2, Batch: 800， Loss:  0.01621595211327076
+Current Time = 11:18:47
+Epoch: 2, Batch: 900， Loss:  0.016931015998125076
+Current Time = 11:21:00
+Epoch: 2, Batch: 1000， Loss:  0.015925657004117966
+Current Time = 11:23:11
+Epoch: 2, Batch: 1100， Loss:  0.01973061077296734
+Current Time = 11:25:20
+Epoch: 2, Batch: 1200， Loss:  0.01760704442858696
+Current Time = 11:27:30
+Epoch: 2, Batch: 1300， Loss:  0.016661901026964188
+Current Time = 11:29:39
+Epoch: 2, Batch: 1400， Loss:  0.017507588490843773
+Current Time = 11:31:51
+Epoch: 2, Batch: 1500， Loss:  0.019295956939458847
+Current Time = 11:34:03
+Epoch: 2, Batch: 1600， Loss:  0.020259538665413857
+Current Time = 11:36:12
+Epoch: 2, Batch: 1700， Loss:  0.020801741629838943
+Current Time = 11:38:20
+Epoch: 2, Batch: 1800， Loss:  0.021980540826916695
+Current Time = 11:40:26
+Epoch: 2, Batch: 1900， Loss:  0.018290923908352852
+Current Time = 11:42:35
+Epoch: 2, Batch: 2000， Loss:  0.017747240141034126
+Current Time = 11:44:45
+Epoch: 2, Batch: 2100， Loss:  0.019561368972063065
+Current Time = 11:46:54
+Epoch: 2, Batch: 2200， Loss:  0.01772025041282177
+Current Time = 11:49:04
+Epoch: 2, Batch: 2300， Loss:  0.01922093890607357
+Current Time = 11:51:14
+Epoch: 2, Batch: 2400， Loss:  0.016957128420472145
+Current Time = 11:53:28
+Epoch: 2, Batch: 2500， Loss:  0.015748396515846252
+Current Time = 11:55:38
+Epoch: 2, Batch: 2600， Loss:  0.018203865736722946
+Current Time = 11:57:49
+Epoch: 2, Batch: 2700， Loss:  0.015297059901058674
+Current Time = 12:00:03
+Epoch: 2, Batch: 2800， Loss:  0.02204243838787079
+Current Time = 12:02:15
+Epoch: 2, Batch: 2900， Loss:  0.018353471532464027
+Current Time = 12:04:26
+Epoch: 2, Batch: 3000， Loss:  0.016931137070059776
+Current Time = 12:06:39
+Epoch: 2, Batch: 3100， Loss:  0.01718084141612053
+Current Time = 12:08:49
+Epoch: 2, Batch: 3200， Loss:  0.01838020607829094
+Current Time = 12:10:58
+Epoch: 2, Batch: 3300， Loss:  0.016750935465097427
+Current Time = 12:13:06
+Epoch: 2, Batch: 3400， Loss:  0.017364317551255226
+Current Time = 12:15:17
+Epoch: 2, Batch: 3500， Loss:  0.017897291108965874
+Current Time = 12:17:28
+Epoch: 2, Batch: 3600， Loss:  0.014374463818967342
+Current Time = 12:19:37
+Epoch: 2, Batch: 3700， Loss:  0.018674632534384727
+Current Time = 12:21:49
+Epoch: 2, Batch: 3800， Loss:  0.01915139891207218
+Current Time = 12:24:00
+Epoch: 2, Batch: 3900， Loss:  0.015798019245266914
+Current Time = 12:26:10
+Epoch: 2, Batch: 4000， Loss:  0.01855846866965294
+Current Time = 12:28:22
+Epoch: 2, Batch: 4100， Loss:  0.018160076811909676
+Current Time = 12:30:32
+Epoch: 2, Batch: 4200， Loss:  0.01723780855536461
+Current Time = 12:32:45
+Epoch: 2, Batch: 4300， Loss:  0.016561608761548996
+Current Time = 12:34:54
+Epoch: 2, Batch: 4400， Loss:  0.01556597650051117
+Current Time = 12:37:01
+############# Epoch 2: Training End     #############
+############# Epoch 2: Validation Start   #############
+Accuracy Score = 0.39766689766689767
+F1 Score (Micro) = 0.7095695097449286
+F1 Score (Macro) = 0.5496255046670872
+Recall Score (Micro) = 0.6258511968479855
+Recall Score (Macro) = 0.4978367737184122
+Precision Score (Micro) = 0.8191440513333725
+Precision Score (Macro) = 0.6762717645519025
+############# Epoch 2: Validation End     #############
+Epoch: 2 	Avgerage Training Loss: 0.000004 	Average Validation Loss: 0.000018
+Validation loss decreased (0.000021 --> 0.000018).  Saving model ...
+############# Epoch 2  Done   #############
+

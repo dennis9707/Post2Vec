@@ -93,3 +93,44 @@ class BERTQuestionDataset(Dataset):
             'token_type_ids': inputs["token_type_ids"].flatten(),
             'labels': torch.from_numpy(ret[0]).type(torch.FloatTensor)
         }
+
+
+class DistilBERTQuestionDataset(Dataset):
+
+    def __init__(self, df, mlb, tokenizer):
+        self.title = df['title']
+        self.text = df['desc_text']
+        self.code = df['desc_code']
+        self.targets = df['clean_tags']
+        self.tokenizer = tokenizer
+        self.mlb = mlb
+
+    def __len__(self):
+        return len(self.title)
+
+    def __getitem__(self, index):
+        title = str(self.title[index])
+        text = str(self.text[index])
+        code = str(self.code[index])
+
+        tokens = title + " " + text + " " + code
+
+        inputs = self.tokenizer(
+            tokens,
+            None,
+            add_special_tokens=True,
+            max_length=512,
+            padding='max_length',
+            truncation=True,
+            return_attention_mask=True,
+            return_tensors='pt'
+        )
+
+        tags = self.targets[index]
+        labels = set(ast.literal_eval(str(tags)))
+        ret = self.mlb.transform([labels])
+        return {
+            'input_ids': inputs['input_ids'].flatten(),
+            'mask': inputs['attention_mask'].flatten(),
+            'labels': torch.from_numpy(ret[0]).type(torch.FloatTensor)
+        }

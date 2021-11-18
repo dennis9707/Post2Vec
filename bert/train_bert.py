@@ -224,9 +224,9 @@ def main():
 
     parser.add_argument("--epoch", default=3, type=int,
                         help="The number of epoch")
-    parser.add_argument("--train_batch_size", default=64, type=int,
+    parser.add_argument("--train_batch_size", default=96, type=int,
                         help="Batch size for training.")
-    parser.add_argument("--valid_batch_size", default=64, type=int,
+    parser.add_argument("--valid_batch_size", default=96, type=int,
                         help="Batch size for evaluation.")
     parser.add_argument('-dropout', type=float, default=0.1,
                         help='the probability for dropout [default: 0.1]')

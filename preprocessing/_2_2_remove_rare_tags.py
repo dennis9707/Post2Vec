@@ -85,9 +85,9 @@ if __name__ == '__main__':
     # Input:
     source_corpus_fpath = "../data/questions/Questions54FilteredNA.csv"
     # rare_tags_fpath = "../data/tags/20211110/ts1000/_2_1_rareTags.csv"
-    common_tags_fpath = "../data/tags/20211110/top10/common.csv"
+    common_tags_fpath = "../data/tags/20211110/ts1000/_2_1_commonTags.csv"
     # Output:
-    target_corpus_fpath = "../data/questions/Questions54Top10"
+    target_corpus_fpath = "../data/questions/Questions54TS1000"
 
     # rare_tags = load_tags(rare_tags_fpath)
     common_tags = load_tags(common_tags_fpath)
