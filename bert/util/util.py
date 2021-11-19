@@ -9,8 +9,27 @@ import logging
 import multiprocessing
 import os
 import sys
-
+import random
+import numpy as np
 logger = logging.getLogger(__name__)
+
+
+def set_seed(seed, n_gpu):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if n_gpu > 0:
+        torch.cuda.manual_seed_all(seed)
+
+def seed_everything(seed=42):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+
 
 def load_ckp(checkpoint_fpath, model, optimizer):
     """
@@ -64,13 +83,6 @@ def vocab_to_index_dict(vocab):
     return vocab_dict
 
 
-
-def set_seed(seed, n_gpu):
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    if n_gpu > 0:
-        torch.cuda.manual_seed_all(seed)
 
 
 def save_examples(exampls, output_file):
