@@ -4,8 +4,16 @@ import os
 import torch
 import logging
 import numpy as np
-from transformers import get_linear_schedule_with_warmup
+import sys
+from transformers import BertConfig, get_linear_schedule_with_warmup
 from torch.optim import AdamW
+from model.model import TrinityBert
+import datetime
+import multiprocessing
+
+sys.path.append("../")
+sys.path.append("../..")
+logger = logging.getLogger(__name__)
 
 
 def seed_everything(seed=42):
@@ -22,9 +30,11 @@ def seed_everything(seed=42):
 
 def get_train_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--train_data_file", default="../data/questions/Train_Questions54TS1000.pkl", type=str,
-                        help="The input training data file.")
-    parser.add_argument("--valid_data_file", default="../data/questions/Valid_Questions54TS1000.pkl", type=str,
+    
+    parser.add_argument("--data_folder", default="../../data/train", type=str,
+                        help="The direcoty of the input training data files.")
+    
+    parser.add_argument("--data_file", default="../../data/train/train-0-20000.pkl", type=str,
                         help="The input training data file.")
     parser.add_argument("--vocab_file", default="../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
@@ -33,13 +43,12 @@ def get_train_args():
         help="path of checkpoint and trained model, if none will do training from scratch")
     parser.add_argument("--logging_steps", type=int,
                         default=500, help="Log every X updates steps.")
-    parser.add_argument("--no_cuda", action="store_true",
+    parser.add_argument("--no_cuda", action="store_false",
                         help="Whether not to use CUDA when available")
     parser.add_argument("--valid_num", type=int, default=100,
                         help="number of instances used for evaluating the checkpoint performance")
     parser.add_argument("--valid_step", type=int, default=50,
                         help="obtain validation accuracy every given steps")
-
     parser.add_argument("--train_num", type=int, default=None,
                         help="number of instances used for training")
     parser.add_argument("--overwrite", action="store_true",
@@ -79,7 +88,7 @@ def get_train_args():
         "--num_train_epochs", default=3.0, type=float, help="Total number of training epochs to perform."
     )
     parser.add_argument(
-        "--exp_name", type=str, help="name of this execution"
+        "--exe_name", type=str, help="name of this execution"
     )
     parser.add_argument("--warmup_steps", default=0, type=int,
                         help="Linear warmup over warmup_steps.")
@@ -170,13 +179,13 @@ def init_train_env(args, tbert_type):
         # Make sure only the first process in distributed training will download model & vocab
         torch.distributed.barrier()
     if tbert_type == 'trinity' or tbert_type == "T":
-        model = TBertT(BertConfig(), args.code_bert)
-    elif tbert_type == 'siamese' or tbert_type == "I":
-        model = TBertI(BertConfig(), args.code_bert)
-    elif tbert_type == 'siamese2' or tbert_type == "I2":
-        model = TBertI2(BertConfig(), args.code_bert)
-    elif tbert_type == 'single' or tbert_type == "S":
-        model = TBertS(BertConfig(), args.code_bert)
+        model = TrinityBert(BertConfig(), args.code_bert)
+    # elif tbert_type == 'siamese' or tbert_type == "I":
+    #     model = TBertI(BertConfig(), args.code_bert)
+    # elif tbert_type == 'siamese2' or tbert_type == "I2":
+    #     model = TBertI2(BertConfig(), args.code_bert)
+    # elif tbert_type == 'single' or tbert_type == "S":
+    #     model = TBertS(BertConfig(), args.code_bert)
     else:
         raise Exception("TBERT type not found")
     args.tbert_type = tbert_type

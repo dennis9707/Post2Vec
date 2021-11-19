@@ -5,7 +5,7 @@ from transformers import AutoTokenizer, AutoModel, PreTrainedModel, AutoModelFor
 from model.loss import loss_fn
 
 
-class TwinBert(PreTrainedModel):
+class TrinityBert(PreTrainedModel):
     def get_title_tokenizer(self):
         raise NotImplementedError
 
@@ -80,7 +80,7 @@ class RelationClassifyHeader(nn.Module):
         return x
 
 
-class TBertT(TwinBert):
+class TBertT(TrinityBert):
     def __init__(self, config, code_bert):
         super().__init__(config)
         # nbert_model = "huggingface/CodeBERTa-small-v1"
@@ -115,11 +115,7 @@ class TBertT(TwinBert):
 
         logits = self.cls(title_hidden=t_hidden,
                           text_hidden=n_hidden, code_hidden=c_hidden)
-        output_dict = {"logits": logits}
-        loss_fct = loss_fn()
-        rel_loss = loss_fct(logits.view(-1, 2), relation_label.view(-1))
-        output_dict['loss'] = rel_loss
-        return output_dict  # (rel_loss), rel_score
+        return logits 
 
     def get_sim_score(self, title_hidden, text_hidden, code_hidden):
         logits = self.cls(title_hidden=title_hidden,

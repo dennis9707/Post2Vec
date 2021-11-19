@@ -1,6 +1,3 @@
-from trace_single.train_trace_single import load_examples
-from code_search.twin.twin_train import train_with_neg_sampling, train, \
-    logger
 from train import get_train_args, init_train_env
 import logging
 import os
@@ -8,8 +5,8 @@ import sys
 from sklearn import preprocessing
 
 
-sys.path.append("..")
-sys.path.append("../..")
+sys.path.append("../")
+sys.path.append("../../")
 
 
 logger = logging.getLogger(__name__)

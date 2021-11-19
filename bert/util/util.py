@@ -2,7 +2,15 @@
 import shutil
 import sys
 import torch
+from torch import optim
+import argparse
+import datetime
+import logging
+import multiprocessing
+import os
+import sys
 
+logger = logging.getLogger(__name__)
 
 def load_ckp(checkpoint_fpath, model, optimizer):
     """
@@ -54,3 +62,56 @@ def vocab_to_index_dict(vocab):
     for i in range(len(vocab_list)):
         vocab_dict[vocab_list[i]] = i
     return vocab_dict
+
+
+
+def set_seed(seed, n_gpu):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if n_gpu > 0:
+        torch.cuda.manual_seed_all(seed)
+
+
+def save_examples(exampls, output_file):
+    nl = []
+    pl = []
+    df = pd.DataFrame()
+    for exmp in exampls:
+        nl.append(exmp['NL'])
+        pl.append(exmp['PL'])
+    df['NL'] = nl
+    df['PL'] = pl
+    df.to_csv(output_file)
+
+
+def save_check_point(model, ckpt_dir, args, optimizer, scheduler):
+    logger.info("Saving checkpoint to %s", ckpt_dir)
+    if not os.path.exists(ckpt_dir):
+        os.makedirs(ckpt_dir)
+    torch.save(model.state_dict(), os.path.join(ckpt_dir, MODEL_FNAME))
+    torch.save(args, os.path.join(ckpt_dir, ARG_FNAME))
+    torch.save(optimizer.state_dict(), os.path.join(ckpt_dir, OPTIMIZER_FNAME))
+    torch.save(scheduler.state_dict(), os.path.join(ckpt_dir, SCHED_FNAME))
+
+
+def load_check_point(model, ckpt_dir, optimizer, scheduler):
+    logger.info(
+        "Loading checkpoint from {}, remove optimizer and scheduler if you do not want to load them".format(ckpt_dir))
+    optmz_path = os.path.join(ckpt_dir, OPTIMIZER_FNAME)
+    sched_path = os.path.join(ckpt_dir, SCHED_FNAME)
+    model_path = os.path.join(ckpt_dir, MODEL_FNAME)
+    arg_path = os.path.join(ckpt_dir, ARG_FNAME)
+
+    model.load_state_dict(torch.load(model_path))
+    if os.path.isfile(optmz_path):
+        logger.info("Loading optimizer...")
+        optimizer.load_state_dict(torch.load(optmz_path))
+    if os.path.isfile(sched_path):
+        logger.info("Loading scheduler...")
+        scheduler.load_state_dict(torch.load(sched_path))
+
+    args = None
+    if os.path.isfile(arg_path):
+        args = torch.load(os.path.join(ckpt_dir, ARG_FNAME))
+    return {'model': model, "optimizer": optimizer, "scheduler": scheduler, "args": args}
