@@ -11,9 +11,10 @@ sys.path.append("../")
 sys.path.append("/usr/src/bert")
 from model.model import TrinityBert
 from model.loss import loss_fn
-from tdqm import tqdm, trange
+from tqdm import tqdm, trange
 from torch.utils.data import DataLoader
-from util.util import seed_everything
+from util.util import seed_everything, save_check_point
+from util.eval_util import evaluate_batch
 from sklearn import preprocessing
 import pandas as pd
 import multiprocessing
@@ -251,12 +252,8 @@ def train(args, training_set, valid_set, model):
     train_numbers = len(training_set)
     epoch_batch_num = train_numbers / args.train_batch_size
 
-    if args.max_steps > 0:
-        t_total = args.max_steps
-        args.num_train_epochs = args.max_steps // (
-            epoch_batch_num // args.gradient_accumulation_steps) + 1
-    else:
-        t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
+    
+    t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
 
     optimizer, scheduler = get_optimizer_scheduler(args, model, t_total)
     if args.fp16:
@@ -288,12 +285,12 @@ def train(args, training_set, valid_set, model):
     skip_n_steps_in_epoch = args.steps_trained_in_current_epoch
     model.zero_grad()
     for epoch in range(args.num_train_epochs):
-        skip_n_steps_in_epoch = 0
-        args.steps_trained_in_current_epoch = 0
-        
+        train_loss = 0
+        valid_loss = 0
+        steps_trained_in_current_epoch = 0
         print('############# Epoch {}: Training Start   #############'.format(epoch))
         model.train()
-        for batch_idx, data in enumerate(train_data_loader):
+        for step, data in enumerate(train_data_loader):
             title_ids = data['input_ids'].to(model.device, dtype=torch.long)
             title_mask = data['mask'].to(model.device, dtype=torch.long)
             text_ids = data['input_ids'].to(model.device, dtype=torch.long)
@@ -302,7 +299,6 @@ def train(args, training_set, valid_set, model):
             code_mask = data['mask'].to(model.device, dtype=torch.long)
             targets = data['labels'].to(model.device, dtype=torch.float)
 
-            optimizer.zero_grad()
             outputs = model(title_ids=title_ids,
                             title_attention_mask=title_mask,
                             text_ids=text_ids,
@@ -311,9 +307,9 @@ def train(args, training_set, valid_set, model):
                             code_attention_mask=code_mask)
 
             loss = loss_fn(outputs, targets)
-            if batch_idx % 100 == 0:
+            if steo % 100 == 0:
                 print(
-                    f'Epoch: {epoch}, Batch: {batch_idx}， Loss:  {loss.item()}')
+                    f'Epoch: {epoch}, Batch: {step}， Loss:  {loss.item()}')
                 current_time = datetime.now().strftime("%H:%M:%S")
                 print("Current Time =", current_time)
             
@@ -333,25 +329,17 @@ def train(args, training_set, valid_set, model):
                 loss.backward()
             tr_loss += loss.item()
 
-            # optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            scheduler.step()
-            train_loss = train_loss + \
-                ((1 / (batch_idx + 1)) * (loss.item() - train_loss))
-            
             
             if (step + 1) % args.gradient_accumulation_steps == 0:
                 if args.fp16:
-                torch.nn.utils.clip_grad_norm_(amp.master_params(optimizer), args.max_grad_norm)
-            else:
-                torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
-            optimizer.step()
-            scheduler.step()
-            model.zero_grad()
-            args.global_step += 1
-            step_bar.update()
-
+                    torch.nn.utils.clip_grad_norm_(amp.master_params(optimizer), args.max_grad_norm)
+                else:
+                    torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
+                optimizer.step()
+                scheduler.step()
+                model.zero_grad()
+                args.global_step += 1
+                
             if args.local_rank in [-1, 0] and args.logging_steps > 0 and args.global_step % args.logging_steps == 0:
                 tb_data = {
                     'lr': scheduler.get_last_lr()[0],
@@ -359,38 +347,49 @@ def train(args, training_set, valid_set, model):
                             args.train_batch_size * args.gradient_accumulation_steps),
                     'loss': tr_loss / args.logging_steps
                 }
-                write_tensor_board(tb_writer, tb_data, args.global_step)
+                print(tb_data)
                 tr_loss = 0.0
                 tr_ac = 0.0
-
+            
             # Save model checkpoint
             if args.local_rank in [-1, 0] and args.save_steps > 0 and args.global_step % args.save_steps == 1:
                 # step invoke checkpoint writing
                 ckpt_output_dir = os.path.join(args.output_dir, "checkpoint-{}".format(args.global_step))
                 save_check_point(model, ckpt_output_dir, args, optimizer, scheduler)
-
-            if args.valid_step > 0 and args.global_step % args.valid_step == 1:
-                # step invoke validation
-                valid_examples.update_embd(model)
-                valid_accuracy, valid_loss = evaluate_classification(valid_examples, model,
-                                                                     args.per_gpu_eval_batch_size,
-                                                                     "evaluation/{}/runtime_eval".format(
-                                                                         args.neg_sampling))
-                pk, best_f1, map = evaluate_retrival(model, valid_examples, args.per_gpu_eval_batch_size,
-                                                     "evaluation/{}/runtime_eval".format(args.neg_sampling))
-                tb_data = {
-                    "valid_accuracy": valid_accuracy,
-                    "valid_loss": valid_loss,
-                    "precision@3": pk,
-                    "best_f1": best_f1,
-                    "MAP": map
-                }
+                
         args.steps_trained_in_current_epoch += 1
-        if args.max_steps > 0 and args.global_step > args.max_steps:
-            break
 
         print('############# Epoch {}: Training End     #############'.format(epoch))
         print('############# Epoch {}: Validation Start   #############'.format(epoch))
+        model.eval()
+        fin_targets = []
+        fin_outputs = []
+        with torch.no_grad():
+            for batch_idx, data in enumerate(valid_data_loader, 0):
+                for step, data in enumerate(train_data_loader):
+                    title_ids = data['input_ids'].to(model.device, dtype=torch.long)
+                    title_mask = data['mask'].to(model.device, dtype=torch.long)
+                    text_ids = data['input_ids'].to(model.device, dtype=torch.long)
+                    text_mask = data['mask'].to(model.device, dtype=torch.long)
+                    code_ids = data['input_ids'].to(model.device, dtype=torch.long)
+                    code_mask = data['mask'].to(model.device, dtype=torch.long)
+                    targets = data['labels'].to(model.device, dtype=torch.float)
+
+                    outputs = model(title_ids=title_ids,
+                                title_attention_mask=title_mask,
+                                text_ids=text_ids,
+                                text_attention_mask=text_mask,
+                                code_ids=code_ids,
+                                code_attention_mask=code_mask)
+                fin_targets.extend(targets.cpu().detach().numpy().tolist())
+                fin_outputs.extend(torch.sigmoid(
+                    outputs).cpu().detach().numpy().tolist())
+                loss = loss_fn(outputs, targets)
+                valid_loss = valid_loss + \
+                    ((1 / (batch_idx + 1)) * (loss.item() - valid_loss))
+            print(type(fin_targets))
+            print(type(fin_outputs))
+            evaluate_batch(fin_outputs, fin_targets, [1,2,3,4,5])
 
     model_output = os.path.join(args.output_dir, "final_model")
     save_check_point(model, model_output, args, optimizer, scheduler)
