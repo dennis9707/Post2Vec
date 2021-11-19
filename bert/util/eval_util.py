@@ -70,11 +70,6 @@ def evaluate_standard(pred, label, topk):
         f1_k = 2 * pre_k * rec_k / (pre_k + rec_k)
     # return {'precision': pre_k, 'recall': rec_k, 'f1': f1_k}
     # print("num_of_true_in_topk {} num_of_true_in_all {} pre_k {} rec_k {} f1_k {} topk {}".format(num_of_true_in_topk, num_of_true_in_all, pre_k, rec_k, f1_k, topk))
-    # print("num_of_true_in_topk {} num_of_true_in_all {} pre_k {} rec_k {} f1_k {} topk {}".format(num_of_true_in_topk,
-                                                                      
-    #                                                                                                  num_of_true_in_all,
-    #                                                                                                 pre_k, rec_k, f1_k,
-    #                                                                                                topk))
     return pre_k, rec_k, f1_k
 
 
