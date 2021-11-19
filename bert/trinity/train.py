@@ -18,6 +18,39 @@ sys.path.append("../")
 sys.path.append("../..")
 logger = logging.getLogger(__name__)
 
+def load_examples(data_dir, data_type, model: TwinBert, overwrite=False, num_limit=None,
+                  cache_file_name="cached_classify_{}.dat"):
+    """
+    Create data set for training and evaluation purpose. Save the formated dataset as cache
+    :param args:
+    :param data_type:
+    :param tokenizer:
+    :param evaluate:
+    :param output_examples:
+    :param num_limit the max number of instances read from the data file
+    :param cache_file_name the name of cache this method may create
+    :return:
+    """
+    cache_dir = os.path.join(data_dir, "cache")
+    if not os.path.isdir(cache_dir):
+        os.mkdir(cache_dir)
+    cached_file = os.path.join(cache_dir, cache_file_name.format(data_type))
+    if os.path.exists(cached_file) and not overwrite:
+        logger.info("Loading examples from cached file {}".format(cached_file))
+        examples = torch.load(cached_file)
+    else:
+        logger.info("Creating examples from dataset file at {}".format(data_dir))
+        csn_reader = CodeSearchNetReader(data_dir)
+        raw_examples = csn_reader.get_examples(type=data_type, num_limit=num_limit, summary_only=True)
+        examples = Examples(raw_examples)
+        if isinstance(model, TBertT) or isinstance(model, TBertI):
+            examples.update_features(model, multiprocessing.cpu_count())
+        logger.info("Saving processed examples into cached file {}".format(cached_file))
+        torch.save(examples, cached_file)
+    return examples
+
+
+
 
 def get_train_args():
     parser = argparse.ArgumentParser()

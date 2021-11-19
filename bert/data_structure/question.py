@@ -47,42 +47,51 @@ class Question:
 
 class QuestionDataset(Dataset):
 
-    def __init__(self, df, mlb, tokenizer):
-        self.title = df['title']
-        self.text = df['desc_text']
-        self.code = df['desc_code']
-        self.targets = df['clean_tags']
+    def __init__(self, questions, mlb, tokenizer):
+        self.questions = questions
         self.tokenizer = tokenizer
         self.mlb = mlb
+        self.length = 0
 
     def __len__(self):
-        return len(self.title)
+        return len(self.questions)
 
     def __getitem__(self, index):
-        title = str(self.title[index])
-        text = str(self.text[index])
-        code = str(self.code[index])
-
-        tokens = title + " " + text + " " + code
-
-        inputs = self.tokenizer(
-            tokens,
-            None,
-            add_special_tokens=True,
-            max_length=512,
-            padding='max_length',
-            truncation=True,
-            return_tensors='pt'
-        )
-
-        tags = self.targets[index]
-        labels = set(ast.literal_eval(str(tags)))
+        question = self.questions[index]
+        title = question.get_comp_by_name("title")
+        text = question.get_comp_by_name("desc_text")
+        code = question.get_comp_by_name("desc_code")
+        labels = set(question.get_comp_by_name("tags"))
         ret = self.mlb.transform([labels])
+
+        title_feat = self._gen_feature(title)
+        text_feat = self._gen_feature(text)
+        code_feat = self._gen_feature(code)
+
         return {
-            'input_ids': inputs['input_ids'].flatten(),
-            'mask': inputs['attention_mask'].flatten(),
+            'titile_ids': title_feat['input_ids'],
+            'title_mask': title_feat['attention_mask'],
+            'text_ids': text_feat['input_ids'],
+            'text_mask': text_feat['attention_mask'],
+            'code_ids': code_feat['input_ids'],
+            'code_mask': code_feat['attention_mask'],
             'labels': torch.from_numpy(ret[0]).type(torch.FloatTensor)
         }
+
+    def _gen_feature(self, tokens):
+
+        feature = self.tokenizer(tokens, max_length=512,
+                                 pad_to_max_length=True, return_attention_mask=True,
+                                 return_token_type_ids=False, truncation=True,
+                                 return_tensors='pt')
+        res = {
+            "input_ids": feature["input_ids"].flatten(),
+            "attention_mask": feature["attention_mask"].flatten()}
+        return res
+
+    def add_question(self, question):
+        self.length += 1
+        self.questions.append(question)
 
 
 class BERTQuestionDataset(Dataset):
