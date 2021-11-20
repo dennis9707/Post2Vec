@@ -27,10 +27,8 @@ def main():
     
     train_size = int(0.95 * len(training_set))
     test_size = len(training_set) - train_size
-    train_dataset, test_dataset = torch.utils.data.random_split(training_set, [train_size, test_size])
-    
-    print(args)
-    # train(args, train_dataset, test_dataset, model)
+    train_dataset, test_dataset = torch.utils.data.random_split(training_set, [train_size, test_size])    
+    train(args, train_dataset, test_dataset, model)
     logger.info("Training finished")
 
 

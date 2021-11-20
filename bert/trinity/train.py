@@ -16,10 +16,10 @@ from torch.utils.data.distributed import DistributedSampler
 from util.util import seed_everything, save_check_point
 from util.eval_util import evaluate_batch
 from sklearn import preprocessing
+from apex.parallel import DistributedDataParallel as DDP
 import pandas as pd
 import datetime
 import gc
-
 
 
 logger = logging.getLogger(__name__)
@@ -279,7 +279,9 @@ def train(args, training_set, valid_set, model):
     #     model = torch.nn.DataParallel(model)
     # Distributed training (should be after apex fp16 initialization)
     if args.local_rank != -1:
-        model = torch.nn.parallel.DistributedDataParallel(
+        # model = torch.nn.parallel.DistributedDataParallel(
+        #     model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
+        model = DDP(
             model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
 
     # Train!
