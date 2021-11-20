@@ -9,7 +9,7 @@ import logging
 import numpy as np
 from transformers import BertConfig, get_linear_schedule_with_warmup
 from torch.optim import AdamW
-from model.model import TrinityBert
+from model.model import TBertT
 from model.loss import loss_fn
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
@@ -199,7 +199,7 @@ def init_train_env(args, tbert_type):
         # Make sure only the first process in distributed training will download model & vocab
         torch.distributed.barrier()
     if tbert_type == 'trinity' or tbert_type == "T":
-        model = TrinityBert(BertConfig(), args.code_bert)
+        model = TBertT(BertConfig(), args.code_bert)
     # elif tbert_type == 'siamese' or tbert_type == "I":
     #     model = TBertI(BertConfig(), args.code_bert)
     # elif tbert_type == 'siamese2' or tbert_type == "I2":
@@ -280,8 +280,7 @@ def train(args, training_set, valid_set, model):
     if args.local_rank != -1:
         # model = torch.nn.parallel.DistributedDataParallel(
         #     model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
-        model = DDP(
-            model)
+        model = DDP(model)
 
     # Train!
     log_train_info(args, train_numbers, t_total)
@@ -299,13 +298,13 @@ def train(args, training_set, valid_set, model):
         print('############# Epoch {}: Training Start   #############'.format(epoch))
         model.train()
         for step, data in enumerate(train_data_loader):
-            title_ids = data['titile_ids'].to(model.device, dtype=torch.long)
-            title_mask = data['title_mask'].to(model.device, dtype=torch.long)
-            text_ids = data['text_ids'].to(model.device, dtype=torch.long)
-            text_mask = data['text_mask'].to(model.device, dtype=torch.long)
-            code_ids = data['code_ids'].to(model.device, dtype=torch.long)
-            code_mask = data['code_mask'].to(model.device, dtype=torch.long)
-            targets = data['labels'].to(model.device, dtype=torch.float)
+            title_ids = data['titile_ids'].to(args.device, dtype=torch.long)
+            title_mask = data['title_mask'].to(args.device, dtype=torch.long)
+            text_ids = data['text_ids'].to(args.device, dtype=torch.long)
+            text_mask = data['text_mask'].to(args.device, dtype=torch.long)
+            code_ids = data['code_ids'].to(args.device, dtype=torch.long)
+            code_mask = data['code_mask'].to(args.device, dtype=torch.long)
+            targets = data['labels'].to(args.device, dtype=torch.float)
 
             outputs = model(title_ids=title_ids,
                             title_attention_mask=title_mask,
@@ -369,18 +368,18 @@ def train(args, training_set, valid_set, model):
         with torch.no_grad():
             for batch_idx, data in enumerate(valid_data_loader, 0):
                 for step, data in enumerate(train_data_loader):
-                    title_ids = data['input_ids'].to(
-                        model.device, dtype=torch.long)
-                    title_mask = data['mask'].to(
-                        model.device, dtype=torch.long)
-                    text_ids = data['input_ids'].to(
-                        model.device, dtype=torch.long)
-                    text_mask = data['mask'].to(model.device, dtype=torch.long)
-                    code_ids = data['input_ids'].to(
-                        model.device, dtype=torch.long)
-                    code_mask = data['mask'].to(model.device, dtype=torch.long)
+                    title_ids = data['titile_ids'].to(
+                        args.device, dtype=torch.long)
+                    title_mask = data['title_mask'].to(
+                        args.device, dtype=torch.long)
+                    text_ids = data['text_ids'].to(
+                        args.device, dtype=torch.long)
+                    text_mask = data['text_mask'].to(args.device, dtype=torch.long)
+                    code_ids = data['code_ids'].to(
+                        args.device, dtype=torch.long)
+                    code_mask = data['code_mask'].to(args.device, dtype=torch.long)
                     targets = data['labels'].to(
-                        model.device, dtype=torch.float)
+                        args.device, dtype=torch.float)
 
                     outputs = model(title_ids=title_ids,
                                     title_attention_mask=title_mask,
