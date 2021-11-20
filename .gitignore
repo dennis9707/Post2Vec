@@ -3,3 +3,4 @@ data/
 .vscode/
 results/
 bert/runs/
+bert/trinity/apex/
