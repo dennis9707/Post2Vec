@@ -8,5 +8,5 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python -m torch.distributed.launch \
     --logging_steps 10 \
     --save_steps 10000 \
     --gradient_accumulation_steps 16 \
-    --num_train_epochs 8 \
+    --num_train_epochs 3 \
     --learning_rate 4e-5  2>&1| tee train_trinity.log

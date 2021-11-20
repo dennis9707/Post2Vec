@@ -258,11 +258,13 @@ def train(args, training_set, valid_set, model):
 
     # the total number of batch per epoch
     train_numbers = len(training_set)
+    # 每个epoch有几个batch
     epoch_batch_num = train_numbers / args.train_batch_size
-
+    # 一共有几个step更新参数
     t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
 
     optimizer, scheduler = get_optimizer_scheduler(args, model, t_total)
+    
     if args.fp16:
         try:
             from apex import amp
@@ -289,12 +291,10 @@ def train(args, training_set, valid_set, model):
     args.steps_trained_in_current_epoch = 0
     logger.info("Start a new training")
     # in case we resume training
-    skip_n_steps_in_epoch = args.steps_trained_in_current_epoch
     model.zero_grad()
+    tr_loss = 0
     for epoch in range(args.num_train_epochs):
-        train_loss = 0
         valid_loss = 0
-        steps_trained_in_current_epoch = 0
         print('############# Epoch {}: Training Start   #############'.format(epoch))
         model.train()
         for step, data in enumerate(train_data_loader):
@@ -314,11 +314,6 @@ def train(args, training_set, valid_set, model):
                             code_attention_mask=code_mask)
 
             loss = loss_fn(outputs, targets)
-            if steo % 100 == 0:
-                print(
-                    f'Epoch: {epoch}, Batch: {step}， Loss:  {loss.item()}')
-                current_time = datetime.now().strftime("%H:%M:%S")
-                print("Current Time =", current_time)
 
             # if args.n_gpu > 1:
             #     loss = loss.mean()  # mean() to average on multi-gpu parallel (not distributed) training
@@ -349,26 +344,21 @@ def train(args, training_set, valid_set, model):
                 model.zero_grad()
                 args.global_step += 1
 
-            if args.local_rank in [-1, 0] and args.logging_steps > 0 and args.global_step % args.logging_steps == 0:
-                tb_data = {
-                    'lr': scheduler.get_last_lr()[0],
-                    'acc': tr_ac / args.logging_steps / (
-                        args.train_batch_size * args.gradient_accumulation_steps),
-                    'loss': tr_loss / args.logging_steps
-                }
-                print(tb_data)
-                tr_loss = 0.0
-                tr_ac = 0.0
+                if args.local_rank in [-1, 0] and args.logging_steps > 0 and step % args.logging_steps == 0:
+                    if step % 100 == 0:
+                        print(f'Epoch: {epoch}, Batch: {step}， Loss:  {loss.item()}')
+                        current_time = datetime.now().strftime("%H:%M:%S")
+                        print("Current Time =", current_time)
+                        print(f"LR = {scheduler.get_last_lr()[0]}, Loss Step = {tr_loss / args.logging_steps}")
+                    tr_loss = 0.0
 
-            # Save model checkpoint
-            if args.local_rank in [-1, 0] and args.save_steps > 0 and args.global_step % args.save_steps == 1:
-                # step invoke checkpoint writing
-                ckpt_output_dir = os.path.join(
-                    args.output_dir, "checkpoint-{}".format(args.global_step))
-                save_check_point(model, ckpt_output_dir,
-                                 args, optimizer, scheduler)
-
-        args.steps_trained_in_current_epoch += 1
+                # Save model checkpoint
+                if args.local_rank in [-1, 0] and args.save_steps > 0 and step % args.save_steps == 1:
+                    # step invoke checkpoint writing
+                    ckpt_output_dir = os.path.join(
+                        args.output_dir, "checkpoint-{}-{}".format(epoch, step))
+                    save_check_point(model, ckpt_output_dir,
+                                    args, optimizer, scheduler)
 
         print('############# Epoch {}: Training End     #############'.format(epoch))
         print('############# Epoch {}: Validation Start   #############'.format(epoch))
