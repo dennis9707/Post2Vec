@@ -11,11 +11,38 @@ WARNING:torch.distributed.run:
 *****************************************
 Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
 *****************************************
-11/20/2021 12:10:12 - WARNING - train -   Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 12:10:12 - WARNING - train -   Process rank: 7, device: cuda:7, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 12:10:12 - WARNING - train -   Process rank: 5, device: cuda:5, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 12:10:12 - WARNING - train -   Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 12:10:12 - WARNING - train -   Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 12:10:12 - WARNING - train -   Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 12:10:12 - WARNING - train -   Process rank: 6, device: cuda:6, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 12:10:12 - WARNING - train -   Process rank: 4, device: cuda:4, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 13:09:12 - WARNING - train -   Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 13:09:12 - WARNING - train -   Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 13:09:12 - WARNING - train -   Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 13:09:12 - WARNING - train -   Process rank: 5, device: cuda:5, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 13:09:12 - WARNING - train -   Process rank: 7, device: cuda:7, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 13:09:12 - WARNING - train -   Process rank: 6, device: cuda:6, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 13:09:12 - WARNING - train -   Process rank: 4, device: cuda:4, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 13:09:12 - WARNING - train -   Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 13:10:06 - INFO - train -   Training/evaluation parameters Namespace(adam_epsilon=1e-08, code_bert='microsoft/codebert-base', data_file='../../data/train/train-0-20000.pkl', data_folder='../../data/train', device=device(type='cuda', index=0), exe_name=None, fp16=True, fp16_opt_level='O1', gradient_accumulation_steps=16, learning_rate=8e-05, local_rank=0, logging_steps=10, max_grad_norm=1.0, mlb=MultiLabelBinarizer(classes=None, sparse_output=False), model_path=None, n_gpu=1, no_cuda=False, num_class=23686, num_train_epochs=3, output_dir='../../data/results', per_gpu_eval_batch_size=2, per_gpu_train_batch_size=2, save_steps=100, seed=42, tbert_type='trinity', valid_num=100, valid_step=50, vocab_file='../../data/tags/commonTags_post2vec.csv', warmup_steps=0, weight_decay=0.0)
+Selected optimization level O1:  Insert automatic casts around Pytorch functions and Tensor methods.
+
+Defaults for this optimization level are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+Processing user overrides (additional kwargs that are not None)...
+After processing overrides, optimization options are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+11/20/2021 13:10:10 - INFO - train -   ***** Running training *****
+11/20/2021 13:10:10 - INFO - train -     Num examples = 19000
+11/20/2021 13:10:10 - INFO - train -     Num Epochs = 3
+11/20/2021 13:10:10 - INFO - train -     Instantaneous batch size per GPU = 2
+11/20/2021 13:10:10 - INFO - train -     Total train batch size (w. parallel, distributed & accumulation) = 256
+11/20/2021 13:10:10 - INFO - train -     Gradient Accumulation steps = 16
+11/20/2021 13:10:10 - INFO - train -     Total optimization steps = 1779

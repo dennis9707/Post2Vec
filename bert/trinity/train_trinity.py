@@ -11,10 +11,9 @@ from data_structure.question import Question, QuestionDataset
 logger = logging.getLogger(__name__)
 
 def load_data(args):
-    tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base")
+    tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base", local_files_only=True)
     train = pd.read_pickle(args.data_file)
     training_set = QuestionDataset(train, args.mlb, tokenizer)
-    
     return training_set
 
 
