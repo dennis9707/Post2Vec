@@ -11,15 +11,15 @@ WARNING:torch.distributed.run:
 *****************************************
 Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
 *****************************************
-11/20/2021 13:09:12 - WARNING - train -   Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 13:09:12 - WARNING - train -   Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 13:09:12 - WARNING - train -   Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 13:09:12 - WARNING - train -   Process rank: 5, device: cuda:5, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 13:09:12 - WARNING - train -   Process rank: 7, device: cuda:7, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 13:09:12 - WARNING - train -   Process rank: 6, device: cuda:6, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 13:09:12 - WARNING - train -   Process rank: 4, device: cuda:4, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 13:09:12 - WARNING - train -   Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 13:10:06 - INFO - train -   Training/evaluation parameters Namespace(adam_epsilon=1e-08, code_bert='microsoft/codebert-base', data_file='../../data/train/train-0-20000.pkl', data_folder='../../data/train', device=device(type='cuda', index=0), exe_name=None, fp16=True, fp16_opt_level='O1', gradient_accumulation_steps=16, learning_rate=8e-05, local_rank=0, logging_steps=10, max_grad_norm=1.0, mlb=MultiLabelBinarizer(classes=None, sparse_output=False), model_path=None, n_gpu=1, no_cuda=False, num_class=23686, num_train_epochs=3, output_dir='../../data/results', per_gpu_eval_batch_size=2, per_gpu_train_batch_size=2, save_steps=100, seed=42, tbert_type='trinity', valid_num=100, valid_step=50, vocab_file='../../data/tags/commonTags_post2vec.csv', warmup_steps=0, weight_decay=0.0)
+11/20/2021 14:18:57 - WARNING - train -   Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 14:18:57 - WARNING - train -   Process rank: 6, device: cuda:6, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 14:18:57 - WARNING - train -   Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 14:18:57 - WARNING - train -   Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 14:18:57 - WARNING - train -   Process rank: 4, device: cuda:4, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 14:18:57 - WARNING - train -   Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 14:18:57 - WARNING - train -   Process rank: 5, device: cuda:5, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 14:18:57 - WARNING - train -   Process rank: 7, device: cuda:7, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 14:19:50 - INFO - train -   Training/evaluation parameters Namespace(adam_epsilon=1e-08, code_bert='microsoft/codebert-base', data_file='../../data/train/train-0-20000.pkl', data_folder='../../data/train', device=device(type='cuda', index=0), exe_name=None, fp16=True, fp16_opt_level='O1', gradient_accumulation_steps=4, learning_rate=8e-05, local_rank=0, logging_steps=100, max_grad_norm=1.0, mlb=MultiLabelBinarizer(classes=None, sparse_output=False), model_path=None, n_gpu=1, no_cuda=False, num_class=23686, num_train_epochs=3, output_dir='../../data/results', per_gpu_eval_batch_size=2, per_gpu_train_batch_size=2, save_steps=100, seed=42, tbert_type='trinity', valid_num=100, valid_step=50, vocab_file='../../data/tags/commonTags_post2vec.csv', warmup_steps=0, weight_decay=0.0)
 Selected optimization level O1:  Insert automatic casts around Pytorch functions and Tensor methods.
 
 Defaults for this optimization level are:
@@ -39,10 +39,128 @@ patch_torch_functions  : True
 keep_batchnorm_fp32    : None
 master_weights         : None
 loss_scale             : dynamic
-11/20/2021 13:10:10 - INFO - train -   ***** Running training *****
-11/20/2021 13:10:10 - INFO - train -     Num examples = 19000
-11/20/2021 13:10:10 - INFO - train -     Num Epochs = 3
-11/20/2021 13:10:10 - INFO - train -     Instantaneous batch size per GPU = 2
-11/20/2021 13:10:10 - INFO - train -     Total train batch size (w. parallel, distributed & accumulation) = 256
-11/20/2021 13:10:10 - INFO - train -     Gradient Accumulation steps = 16
-11/20/2021 13:10:10 - INFO - train -     Total optimization steps = 1779
+11/20/2021 14:19:54 - INFO - train -   ***** Running training *****
+11/20/2021 14:19:54 - INFO - train -     Num examples = 19000
+11/20/2021 14:19:54 - INFO - train -     Num Epochs = 3
+11/20/2021 14:19:54 - INFO - train -     Instantaneous batch size per GPU = 2
+11/20/2021 14:19:54 - INFO - train -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/20/2021 14:19:54 - INFO - train -     Gradient Accumulation steps = 4
+11/20/2021 14:19:54 - INFO - train -     Total optimization steps = 7125
+11/20/2021 14:20:41 - INFO - train -   Start a new training
+############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:125: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:125: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:125: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:125: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:125: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:125: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+Epoch: 0, Batch: 0， Loss:  0.006979734301567077
+Current Time = 14:20:43
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:125: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+/opt/conda/lib/python3.6/site-packages/torch/optim/lr_scheduler.py:125: UserWarning: Seems like `optimizer.step()` has been overridden after learning rate scheduler initialization. Please, make sure to call `optimizer.step()` before `lr_scheduler.step()`. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  "https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate", UserWarning)
+11/20/2021 14:20:44 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-1
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+Epoch: 0, Batch: 100， Loss:  0.17824057552963496
+Current Time = 14:21:44
+11/20/2021 14:21:44 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-101
+Epoch: 0, Batch: 200， Loss:  0.019543667100369932
+Current Time = 14:22:47
+11/20/2021 14:22:48 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-201
+Epoch: 0, Batch: 300， Loss:  0.00957664284389466
+Current Time = 14:23:49
+11/20/2021 14:23:50 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-301
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+Epoch: 0, Batch: 400， Loss:  0.006183289354667067
+Current Time = 14:24:49
+11/20/2021 14:24:50 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-401
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+Epoch: 0, Batch: 500， Loss:  0.004527168853674084
+Current Time = 14:25:50
+11/20/2021 14:25:51 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-501
+Epoch: 0, Batch: 600， Loss:  0.0034628776111640036
+Current Time = 14:26:52
+11/20/2021 14:26:53 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-601
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+Epoch: 0, Batch: 700， Loss:  0.0029085548012517393
+Current Time = 14:27:56
+11/20/2021 14:27:56 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-701
+Epoch: 0, Batch: 800， Loss:  0.0024962649354711174
+Current Time = 14:28:58
+11/20/2021 14:28:58 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-801
+Epoch: 0, Batch: 900， Loss:  0.00214189616846852
+Current Time = 14:30:00
+11/20/2021 14:30:01 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-901
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+Epoch: 0, Batch: 1000， Loss:  0.0019686576107051223
+Current Time = 14:31:01
+11/20/2021 14:31:01 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-1001
+Epoch: 0, Batch: 1100， Loss:  0.001774774808436632
+Current Time = 14:32:00
+11/20/2021 14:32:01 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-0-1101
+############# Epoch 0: Training End     #############
+############# Epoch 0: Validation Start   #############
+F1 Score = [0.064, 0.1, 0.10400000000000002, 0.104, 0.09599999999999995]
+Recall Score  = [0.064, 0.108, 0.1266666666666667, 0.14933333333333335, 0.17133333333333328]
+Precision Score  = [0.064, 0.10266666666666666, 0.11146666666666673, 0.11840000000000006, 0.11755555555555554]
+Count  = 125
+############# Epoch 0: Validation End     #############
+F1 Score = [0.096, 0.112, 0.09600000000000003, 0.09, 0.08639999999999998]
+Recall Score  = [0.096, 0.112, 0.11466666666666667, 0.128, 0.1518666666666667]
+Precision Score  = [0.096, 0.112, 0.1026666666666667, 0.10243809523809526, 0.10666031746031747]
+Count  = 125
+############# Epoch 0: Validation End     #############
+F1 Score = [0.144, 0.108, 0.10400000000000004, 0.092, 0.08479999999999996]
+Recall Score  = [0.144, 0.116, 0.1266666666666667, 0.14666666666666667, 0.1665333333333333]
+Precision Score  = [0.144, 0.11066666666666666, 0.11146666666666673, 0.10803809523809531, 0.10796190476190473]
+Count  = 125
+############# Epoch 0: Validation End     #############
+F1 Score = [0.152, 0.124, 0.12533333333333338, 0.11, 0.09279999999999997]
+Recall Score  = [0.152, 0.124, 0.136, 0.14133333333333328, 0.1461333333333333]
+Precision Score  = [0.152, 0.124, 0.12960000000000005, 0.12171428571428575, 0.11121269841269842]
+Count  = 125
+############# Epoch 0: Validation End     #############
+F1 Score = [0.104, 0.1, 0.09066666666666669, 0.088, 0.07840000000000001]
+Recall Score  = [0.104, 0.108, 0.116, 0.136, 0.14626666666666668]
+Precision Score  = [0.104, 0.10266666666666666, 0.09920000000000001, 0.10335238095238099, 0.09864761904761905]
+Count  = 125
+############# Epoch 0: Validation End     #############
+############# Epoch 1: Training Start   #############
+F1 Score = [0.12, 0.104, 0.10400000000000004, 0.084, 0.07519999999999999]
+Recall Score  = [0.12, 0.108, 0.12000000000000005, 0.11733333333333335, 0.132]
+Precision Score  = [0.12, 0.10533333333333333, 0.10880000000000004, 0.09440000000000004, 0.0914920634920635]
+Count  = 125
+############# Epoch 0: Validation End     #############
+F1 Score = [0.08, 0.1, 0.10933333333333338, 0.098, 0.08479999999999999]
+Recall Score  = [0.08, 0.112, 0.13866666666666666, 0.14733333333333332, 0.15826666666666664]
+Precision Score  = [0.08, 0.104, 0.11786666666666672, 0.11251428571428576, 0.10566349206349208]
+Count  = 125
+############# Epoch 0: Validation End     #############
+F1 Score = [0.104, 0.1, 0.088, 0.08, 0.08159999999999998]
+Recall Score  = [0.104, 0.112, 0.11333333333333337, 0.12266666666666669, 0.14599999999999994]
+Precision Score  = [0.104, 0.104, 0.09493333333333337, 0.09066666666666671, 0.09853968253968251]
+Count  = 125
+############# Epoch 0: Validation End     #############
+Epoch: 1, Batch: 0， Loss:  0.001458717337809503
+Current Time = 14:33:12
+11/20/2021 14:33:13 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-1-1
+Epoch: 1, Batch: 100， Loss:  0.001577212732518092
+Current Time = 14:34:15
+11/20/2021 14:34:16 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-1-101
+Epoch: 1, Batch: 200， Loss:  0.0015077322663273663
+Current Time = 14:35:18
+11/20/2021 14:35:18 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 14-19-54_/checkpoint-1-201

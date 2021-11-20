@@ -1,8 +1,6 @@
-import sys
-sys.path.append("../")
-sys.path.append("/usr/src/bert")
 from torch.utils.tensorboard import SummaryWriter
 import gc
+from sklearn import metrics
 from datetime import datetime
 import pandas as pd
 from apex.parallel import convert_syncbn_model
@@ -22,7 +20,9 @@ import torch
 import os
 import random
 import argparse
-
+import sys
+sys.path.append("../")
+sys.path.append("/usr/src/bert")
 
 
 logger = logging.getLogger(__name__)
@@ -78,7 +78,7 @@ def get_train_args():
                         help="random seed for initialization")
 
     parser.add_argument(
-        "--gradient_accumulation_steps", type=int, default=1,
+        "--gradient_accumulation_steps", type=int, default=4,
         help="Number of updates steps to accumulate before performing a backward/update pass.", )
     parser.add_argument("--weight_decay", default=0.0,
                         type=float, help="Weight decay if we apply some.")
@@ -226,6 +226,17 @@ def init_train_env(args, tbert_type):
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
 
+    # Before we do anything with models, we want to ensure that we get fp16 execution of torch.einsum if args.fp16 is set.
+    # Otherwise it'll default to "promote" mode, and we'll get fp32 operations. Note that running `--fp16_opt_level="O2"` will
+    # remove the need for this code, but it is still valid.
+    if args.fp16:
+        try:
+            import apex
+            apex.amp.register_half_function(torch, "einsum")
+        except ImportError:
+            raise ImportError(
+                "Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
+
     return model
 
 
@@ -255,7 +266,7 @@ def train(args, training_set, valid_set, model):
     args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
 
     train_sampler = DistributedSampler(training_set)
-    train_sampler = DistributedSampler(valid_set)
+    valid_sampler = DistributedSampler(valid_set)
 
     train_data_loader = DataLoader(training_set,
                                    batch_size=args.train_batch_size,
@@ -264,7 +275,7 @@ def train(args, training_set, valid_set, model):
 
     valid_data_loader = DataLoader(valid_set,
                                    batch_size=args.train_batch_size,
-                                   sampler=train_sampler,
+                                   sampler=valid_sampler,
                                    )
 
     # the total number of batch per epoch
@@ -312,7 +323,8 @@ def train(args, training_set, valid_set, model):
     tr_loss = 0
     for epoch in range(args.num_train_epochs):
         valid_loss = 0
-        print('############# Epoch {}: Training Start   #############'.format(epoch))
+        if args.local_rank in [-1, 0]:
+            print('############# Epoch {}: Training Start   #############'.format(epoch))
         model.train()
         for step, data in enumerate(train_data_loader):
             title_ids = data['titile_ids'].to(args.device, dtype=torch.long)
@@ -334,9 +346,10 @@ def train(args, training_set, valid_set, model):
 
             # if args.n_gpu > 1:
             #     loss = loss.mean()  # mean() to average on multi-gpu parallel (not distributed) training
+
             # if args.gradient_accumulation_steps > 1:
             #     loss = loss / args.gradient_accumulation_steps
-
+            # if (step + 1) % args.gradient_accumulation_steps == 0:
             if args.fp16:
                 try:
                     from apex import amp
@@ -366,6 +379,10 @@ def train(args, training_set, valid_set, model):
                     'loss': tr_loss / args.logging_steps
                 }
                 write_tensor_board(tb_writer, tb_data, args.global_step)
+                print(
+                    f'Epoch: {epoch}, Batch: {step}， Loss:  {tr_loss / args.logging_steps}')
+                current_time = datetime.now().strftime("%H:%M:%S")
+                print("Current Time =", current_time)
                 tr_loss = 0.0
 
             # Save model checkpoint
@@ -375,9 +392,10 @@ def train(args, training_set, valid_set, model):
                     args.output_dir, "checkpoint-{}-{}".format(epoch, step))
                 save_check_point(model, ckpt_output_dir,
                                  args, optimizer, scheduler)
-
-        print('############# Epoch {}: Training End     #############'.format(epoch))
-        print('############# Epoch {}: Validation Start   #############'.format(epoch))
+        if args.local_rank in [-1, 0]:
+            print('############# Epoch {}: Training End     #############'.format(epoch))
+            print(
+                '############# Epoch {}: Validation Start   #############'.format(epoch))
         model.eval()
         fin_targets = []
         fin_outputs = []
@@ -411,7 +429,7 @@ def train(args, training_set, valid_set, model):
                 fin_outputs.extend(torch.sigmoid(
                     outputs).cpu().detach().numpy().tolist())
             [pre, rc, f1, cnt] = evaluate_batch(
-                fin_targets, fin_outputs, [1, 2, 3, 4, 5])
+                fin_outputs, fin_targets, [1, 2, 3, 4, 5])
             print(f"F1 Score = {pre}")
             print(f"Recall Score  = {rc}")
             print(f"Precision Score  = {f1}")
