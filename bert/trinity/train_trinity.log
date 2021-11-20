@@ -11,11 +11,11 @@ WARNING:torch.distributed.run:
 *****************************************
 Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
 *****************************************
-11/20/2021 08:42:45 - WARNING - train -   Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 08:42:45 - WARNING - train -   Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 08:42:45 - WARNING - train -   Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 08:42:45 - WARNING - train -   Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 08:42:45 - WARNING - train -   Process rank: 4, device: cuda:4, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 08:42:45 - WARNING - train -   Process rank: 6, device: cuda:6, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 08:42:45 - WARNING - train -   Process rank: 7, device: cuda:7, n_gpu: 1, distributed training: True, 16-bits training: True
-11/20/2021 08:42:45 - WARNING - train -   Process rank: 5, device: cuda:5, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 12:10:12 - WARNING - train -   Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 12:10:12 - WARNING - train -   Process rank: 7, device: cuda:7, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 12:10:12 - WARNING - train -   Process rank: 5, device: cuda:5, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 12:10:12 - WARNING - train -   Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 12:10:12 - WARNING - train -   Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 12:10:12 - WARNING - train -   Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 12:10:12 - WARNING - train -   Process rank: 6, device: cuda:6, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 12:10:12 - WARNING - train -   Process rank: 4, device: cuda:4, n_gpu: 1, distributed training: True, 16-bits training: True

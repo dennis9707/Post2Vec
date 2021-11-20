@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from transformers import AutoTokenizer, AutoModel, PreTrainedModel, AutoModelForSequenceClassification
+from transformers import AutoTokenizer, AutoModel, PreTrainedModel
 from model.loss import loss_fn
 
 
@@ -49,7 +49,7 @@ class RelationClassifyHeader(nn.Module):
     use averaging pooling across tokens to replace first_token_pooling
     """
 
-    def __init__(self, config):
+    def __init__(self, config, num_class):
         super().__init__()
         self.hidden_size = config.hidden_size
         self.title_pooler = AvgPooler(config)
@@ -58,7 +58,7 @@ class RelationClassifyHeader(nn.Module):
 
         self.dense = nn.Linear(config.hidden_size * 5, config.hidden_size)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        self.output_layer = nn.Linear(config.hidden_size, config.num_class)
+        self.output_layer = nn.Linear(config.hidden_size, num_class)
 
     def forward(self, title_hidden, text_hidden, code_hidden):
         pool_title_hidden = self.title_pooler(title_hidden)
@@ -81,7 +81,7 @@ class RelationClassifyHeader(nn.Module):
 
 
 class TBertT(TrinityBert):
-    def __init__(self, config, code_bert):
+    def __init__(self, config, code_bert, num_class):
         super().__init__(config)
         # nbert_model = "huggingface/CodeBERTa-small-v1"
         tbert_model = code_bert
@@ -97,7 +97,7 @@ class TBertT(TrinityBert):
         self.ctokneizer = AutoTokenizer.from_pretrained(cbert_model)
         self.cbert = AutoModel.from_pretrained(cbert_model)
 
-        self.cls = RelationClassifyHeader(config)
+        self.cls = RelationClassifyHeader(config, num_class=num_class)
 
     def forward(
             self,

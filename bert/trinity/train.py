@@ -17,8 +17,9 @@ from util.util import seed_everything, save_check_point
 from util.eval_util import evaluate_batch
 from sklearn import preprocessing
 from apex.parallel import DistributedDataParallel as DDP
+from apex.parallel import convert_syncbn_model
 import pandas as pd
-import datetime
+from datetime import datetime
 import gc
 
 
@@ -144,7 +145,7 @@ def log_train_info(args, example_num, train_steps):
 
 def get_exe_name(args):
     exe_name = "{}_{}_{}"
-    time = datetime.datetime.now().strftime("%m-%d %H-%M-%S")
+    time = datetime.now().strftime("%m-%d %H-%M-%S")
 
     base_model = ""
     if args.model_path:
@@ -193,13 +194,14 @@ def init_train_env(args, tbert_type):
     mlb = preprocessing.MultiLabelBinarizer()
     mlb.fit([tag_list])
     args.mlb = mlb
+    args.num_class = len(mlb.classes_)
 
     # Load pretrained model and tokenizer
     if args.local_rank not in [-1, 0]:
         # Make sure only the first process in distributed training will download model & vocab
         torch.distributed.barrier()
     if tbert_type == 'trinity' or tbert_type == "T":
-        model = TBertT(BertConfig(), args.code_bert)
+        model = TBertT(BertConfig(), args.code_bert,args.num_class)
     # elif tbert_type == 'siamese' or tbert_type == "I":
     #     model = TBertI(BertConfig(), args.code_bert)
     # elif tbert_type == 'siamese2' or tbert_type == "I2":
@@ -270,6 +272,8 @@ def train(args, training_set, valid_set, model):
         except ImportError:
             raise ImportError(
                 "Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
+        
+        # model = convert_syncbn_model(model)
         model, optimizer = amp.initialize(
             model, optimizer, opt_level=args.fp16_opt_level)
 
@@ -278,12 +282,15 @@ def train(args, training_set, valid_set, model):
     #     model = torch.nn.DataParallel(model)
     # Distributed training (should be after apex fp16 initialization)
     if args.local_rank != -1:
-        # model = torch.nn.parallel.DistributedDataParallel(
-        #     model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
-        model = DDP(model)
+        model = torch.nn.parallel.DistributedDataParallel(
+            model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
+        # model = DDP(model)
 
     # Train!
     log_train_info(args, train_numbers, t_total)
+    
+    args.global_step = 0
+    args.epochs_trained = 0
 
     gc.collect()
     torch.cuda.empty_cache()
@@ -317,8 +324,8 @@ def train(args, training_set, valid_set, model):
 
             # if args.n_gpu > 1:
             #     loss = loss.mean()  # mean() to average on multi-gpu parallel (not distributed) training
-            if args.gradient_accumulation_steps > 1:
-                loss = loss / args.gradient_accumulation_steps
+            # if args.gradient_accumulation_steps > 1:
+            #     loss = loss / args.gradient_accumulation_steps
 
             if args.fp16:
                 try:
@@ -332,70 +339,67 @@ def train(args, training_set, valid_set, model):
                 loss.backward()
             tr_loss += loss.item()
 
-            if (step + 1) % args.gradient_accumulation_steps == 0:
-                if args.fp16:
-                    torch.nn.utils.clip_grad_norm_(
-                        amp.master_params(optimizer), args.max_grad_norm)
-                else:
-                    torch.nn.utils.clip_grad_norm_(
-                        model.parameters(), args.max_grad_norm)
-                optimizer.step()
-                scheduler.step()
-                model.zero_grad()
-                args.global_step += 1
+            # if (step + 1) % args.gradient_accumulation_steps == 0:
+            if args.fp16:
+                torch.nn.utils.clip_grad_norm_(
+                    amp.master_params(optimizer), args.max_grad_norm)
+            else:
+                torch.nn.utils.clip_grad_norm_(
+                    model.parameters(), args.max_grad_norm)
+            optimizer.step()
+            scheduler.step()
+            model.zero_grad()
+            print(f'step {step}')
+            if args.local_rank in [-1, 0] and args.logging_steps > 0 and step % args.logging_steps == 0:
+                if step % 100 == 0:
+                    print(f'Epoch: {epoch}, Batch: {step}， Loss:  {loss.item()}')
+                    current_time = datetime.now().strftime("%H:%M:%S")
+                    print("Current Time =", current_time)
+                    print(f"LR = {scheduler.get_last_lr()[0]}, Loss Step = {tr_loss / args.logging_steps}")
+                tr_loss = 0.0
 
-                if args.local_rank in [-1, 0] and args.logging_steps > 0 and step % args.logging_steps == 0:
-                    if step % 100 == 0:
-                        print(f'Epoch: {epoch}, Batch: {step}， Loss:  {loss.item()}')
-                        current_time = datetime.now().strftime("%H:%M:%S")
-                        print("Current Time =", current_time)
-                        print(f"LR = {scheduler.get_last_lr()[0]}, Loss Step = {tr_loss / args.logging_steps}")
-                    tr_loss = 0.0
-
-                # Save model checkpoint
-                if args.local_rank in [-1, 0] and args.save_steps > 0 and step % args.save_steps == 1:
-                    # step invoke checkpoint writing
-                    ckpt_output_dir = os.path.join(
-                        args.output_dir, "checkpoint-{}-{}".format(epoch, step))
-                    save_check_point(model, ckpt_output_dir,
-                                    args, optimizer, scheduler)
+            # Save model checkpoint
+            if args.local_rank in [-1, 0] and args.save_steps > 0 and step % args.save_steps == 1:
+                # step invoke checkpoint writing
+                ckpt_output_dir = os.path.join(
+                    args.output_dir, "checkpoint-{}-{}".format(epoch, step))
+                save_check_point(model, ckpt_output_dir,
+                                args, optimizer, scheduler)
 
         print('############# Epoch {}: Training End     #############'.format(epoch))
         print('############# Epoch {}: Validation Start   #############'.format(epoch))
-        model.eval()
-        fin_targets = []
-        fin_outputs = []
-        with torch.no_grad():
-            for batch_idx, data in enumerate(valid_data_loader, 0):
-                for step, data in enumerate(train_data_loader):
-                    title_ids = data['titile_ids'].to(
-                        args.device, dtype=torch.long)
-                    title_mask = data['title_mask'].to(
-                        args.device, dtype=torch.long)
-                    text_ids = data['text_ids'].to(
-                        args.device, dtype=torch.long)
-                    text_mask = data['text_mask'].to(args.device, dtype=torch.long)
-                    code_ids = data['code_ids'].to(
-                        args.device, dtype=torch.long)
-                    code_mask = data['code_mask'].to(args.device, dtype=torch.long)
-                    targets = data['labels'].to(
-                        args.device, dtype=torch.float)
+        # model.eval()
+        # fin_targets = []
+        # fin_outputs = []
+        # with torch.no_grad():
+        #     for batch_idx, data in enumerate(valid_data_loader, 0):
+        #         for step, data in enumerate(train_data_loader):
+        #             title_ids = data['titile_ids'].to(
+        #                 args.device, dtype=torch.long)
+        #             title_mask = data['title_mask'].to(
+        #                 args.device, dtype=torch.long)
+        #             text_ids = data['text_ids'].to(
+        #                 args.device, dtype=torch.long)
+        #             text_mask = data['text_mask'].to(args.device, dtype=torch.long)
+        #             code_ids = data['code_ids'].to(
+        #                 args.device, dtype=torch.long)
+        #             code_mask = data['code_mask'].to(args.device, dtype=torch.long)
+        #             targets = data['labels'].to(
+        #                 args.device, dtype=torch.float)
 
-                    outputs = model(title_ids=title_ids,
-                                    title_attention_mask=title_mask,
-                                    text_ids=text_ids,
-                                    text_attention_mask=text_mask,
-                                    code_ids=code_ids,
-                                    code_attention_mask=code_mask)
-                fin_targets.extend(targets.cpu().detach().numpy().tolist())
-                fin_outputs.extend(torch.sigmoid(
-                    outputs).cpu().detach().numpy().tolist())
-                loss = loss_fn(outputs, targets)
-                valid_loss = valid_loss + \
-                    ((1 / (batch_idx + 1)) * (loss.item() - valid_loss))
-            print(type(fin_targets))
-            print(type(fin_outputs))
-            evaluate_batch(fin_outputs, fin_targets, [1, 2, 3, 4, 5])
-
-    model_output = os.path.join(args.output_dir, "final_model")
-    save_check_point(model, model_output, args, optimizer, scheduler)
+        #             outputs = model(title_ids=title_ids,
+        #                             title_attention_mask=title_mask,
+        #                             text_ids=text_ids,
+        #                             text_attention_mask=text_mask,
+        #                             code_ids=code_ids,
+        #                             code_attention_mask=code_mask)
+        #         fin_targets.extend(targets.cpu().detach().numpy().tolist())
+        #         fin_outputs.extend(torch.sigmoid(
+        #             outputs).cpu().detach().numpy().tolist())
+        #     print(type(fin_targets))
+        #     print(type(fin_outputs))
+        #     evaluate_batch(fin_outputs, fin_targets, [1, 2, 3, 4, 5])
+    # Save model checkpoint
+    if args.local_rank in [-1, 0]:
+        model_output = os.path.join(args.output_dir, "final_model")
+        save_check_point(model, model_output, args, optimizer, scheduler)

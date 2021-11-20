@@ -32,7 +32,7 @@ def evaluate_batch(pred, label, topk_list=[1, 2, 3, 4, 5]):
     rc = [0.0] * len(topk_list)
     f1 = [0.0] * len(topk_list)
     cnt = 0
-    for i in range(0, pred.shape[0]):
+    for i in range(0, len(pred)):
         for idx, topk in enumerate(topk_list):
             pre_val, rc_val, f1_val = evaluate_ori(
                 pred=pred[i], label=label[i], topk=topk)

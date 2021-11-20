@@ -79,9 +79,9 @@ class QuestionDataset(Dataset):
         }
 
     def _gen_feature(self, tokens):
-
+    
         feature = self.tokenizer(tokens, max_length=512,
-                                 pad_to_max_length=True, return_attention_mask=True,
+                                 padding='max_length', return_attention_mask=True,
                                  return_token_type_ids=False, truncation=True,
                                  return_tensors='pt')
         res = {

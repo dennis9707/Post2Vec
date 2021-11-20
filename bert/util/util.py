@@ -13,7 +13,10 @@ import random
 import numpy as np
 logger = logging.getLogger(__name__)
 
-
+MODEL_FNAME = "t_bert.pt"
+OPTIMIZER_FNAME = "optimizer.pt"
+SCHED_FNAME = "scheduler.pt"
+ARG_FNAME = "training_args.bin"
 def set_seed(seed, n_gpu):
     random.seed(seed)
     np.random.seed(seed)
