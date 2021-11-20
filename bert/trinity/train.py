@@ -1,25 +1,25 @@
-from torch.optim import AdamW
-from transformers import BertConfig, get_linear_schedule_with_warmup
 import sys
-import numpy as np
-import logging
-import torch
-import os
-import random
-import argparse
 sys.path.append("../")
 sys.path.append("/usr/src/bert")
+import argparse
+import random
+import os
+import torch
+import logging
+import numpy as np
+from transformers import BertConfig, get_linear_schedule_with_warmup
+from torch.optim import AdamW
 from model.model import TrinityBert
 from model.loss import loss_fn
-from tqdm import tqdm, trange
 from torch.utils.data import DataLoader
+from torch.utils.data.distributed import DistributedSampler
 from util.util import seed_everything, save_check_point
 from util.eval_util import evaluate_batch
 from sklearn import preprocessing
 import pandas as pd
-import multiprocessing
 import datetime
 import gc
+
 
 
 logger = logging.getLogger(__name__)
@@ -154,14 +154,19 @@ def get_exe_name(args):
 
 def init_train_env(args, tbert_type):
     # Setup CUDA, GPU & distributed training
+
+    # no_cuda: whether or not to use cuda
+    # local_rank = 0
     if args.local_rank == -1 or args.no_cuda:
         device = torch.device(
             "cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
         args.n_gpu = 0 if args.no_cuda else torch.cuda.device_count()
     else:  # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
-        torch.cuda.set_device(args.local_rank)
-        device = torch.device("cuda", args.local_rank)
         torch.distributed.init_process_group(backend="nccl")
+        device = torch.device("cuda", args.local_rank)
+        torch.cuda.set_device(args.local_rank)
+        args.n_gpu = 1
+
     args.device = device
 
     # Setup logging
@@ -237,22 +242,24 @@ def train(args, training_set, valid_set, model):
     # get the train batch size
     args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
 
+    train_sampler = DistributedSampler(training_set)
+    train_sampler = DistributedSampler(valid_set)
+
     train_data_loader = DataLoader(training_set,
                                    batch_size=args.train_batch_size,
                                    shuffle=True,
-                                   num_workers=0
+                                   sampler=train_sampler,
                                    )
 
     valid_data_loader = DataLoader(valid_set,
                                    batch_size=args.train_batch_size,
-                                   num_workers=0
+                                   sampler=train_sampler,
                                    )
 
     # the total number of batch per epoch
     train_numbers = len(training_set)
     epoch_batch_num = train_numbers / args.train_batch_size
 
-    
     t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
 
     optimizer, scheduler = get_optimizer_scheduler(args, model, t_total)
@@ -266,8 +273,8 @@ def train(args, training_set, valid_set, model):
             model, optimizer, opt_level=args.fp16_opt_level)
 
     # multi-gpu training (should be after apex fp16 initialization)
-    if args.n_gpu > 1:
-        model = torch.nn.DataParallel(model)
+    # if args.n_gpu > 1:
+    #     model = torch.nn.DataParallel(model)
     # Distributed training (should be after apex fp16 initialization)
     if args.local_rank != -1:
         model = torch.nn.parallel.DistributedDataParallel(
@@ -278,7 +285,7 @@ def train(args, training_set, valid_set, model):
 
     gc.collect()
     torch.cuda.empty_cache()
-    
+
     args.steps_trained_in_current_epoch = 0
     logger.info("Start a new training")
     # in case we resume training
@@ -312,9 +319,9 @@ def train(args, training_set, valid_set, model):
                     f'Epoch: {epoch}, Batch: {step}， Loss:  {loss.item()}')
                 current_time = datetime.now().strftime("%H:%M:%S")
                 print("Current Time =", current_time)
-            
-            if args.n_gpu > 1:
-                loss = loss.mean()  # mean() to average on multi-gpu parallel (not distributed) training
+
+            # if args.n_gpu > 1:
+            #     loss = loss.mean()  # mean() to average on multi-gpu parallel (not distributed) training
             if args.gradient_accumulation_steps > 1:
                 loss = loss / args.gradient_accumulation_steps
 
@@ -324,39 +331,43 @@ def train(args, training_set, valid_set, model):
                     with amp.scale_loss(loss, optimizer) as scaled_loss:
                         scaled_loss.backward()
                 except ImportError:
-                    raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
+                    raise ImportError(
+                        "Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
             else:
                 loss.backward()
             tr_loss += loss.item()
 
-            
             if (step + 1) % args.gradient_accumulation_steps == 0:
                 if args.fp16:
-                    torch.nn.utils.clip_grad_norm_(amp.master_params(optimizer), args.max_grad_norm)
+                    torch.nn.utils.clip_grad_norm_(
+                        amp.master_params(optimizer), args.max_grad_norm)
                 else:
-                    torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
+                    torch.nn.utils.clip_grad_norm_(
+                        model.parameters(), args.max_grad_norm)
                 optimizer.step()
                 scheduler.step()
                 model.zero_grad()
                 args.global_step += 1
-                
+
             if args.local_rank in [-1, 0] and args.logging_steps > 0 and args.global_step % args.logging_steps == 0:
                 tb_data = {
                     'lr': scheduler.get_last_lr()[0],
                     'acc': tr_ac / args.logging_steps / (
-                            args.train_batch_size * args.gradient_accumulation_steps),
+                        args.train_batch_size * args.gradient_accumulation_steps),
                     'loss': tr_loss / args.logging_steps
                 }
                 print(tb_data)
                 tr_loss = 0.0
                 tr_ac = 0.0
-            
+
             # Save model checkpoint
             if args.local_rank in [-1, 0] and args.save_steps > 0 and args.global_step % args.save_steps == 1:
                 # step invoke checkpoint writing
-                ckpt_output_dir = os.path.join(args.output_dir, "checkpoint-{}".format(args.global_step))
-                save_check_point(model, ckpt_output_dir, args, optimizer, scheduler)
-                
+                ckpt_output_dir = os.path.join(
+                    args.output_dir, "checkpoint-{}".format(args.global_step))
+                save_check_point(model, ckpt_output_dir,
+                                 args, optimizer, scheduler)
+
         args.steps_trained_in_current_epoch += 1
 
         print('############# Epoch {}: Training End     #############'.format(epoch))
@@ -367,20 +378,25 @@ def train(args, training_set, valid_set, model):
         with torch.no_grad():
             for batch_idx, data in enumerate(valid_data_loader, 0):
                 for step, data in enumerate(train_data_loader):
-                    title_ids = data['input_ids'].to(model.device, dtype=torch.long)
-                    title_mask = data['mask'].to(model.device, dtype=torch.long)
-                    text_ids = data['input_ids'].to(model.device, dtype=torch.long)
+                    title_ids = data['input_ids'].to(
+                        model.device, dtype=torch.long)
+                    title_mask = data['mask'].to(
+                        model.device, dtype=torch.long)
+                    text_ids = data['input_ids'].to(
+                        model.device, dtype=torch.long)
                     text_mask = data['mask'].to(model.device, dtype=torch.long)
-                    code_ids = data['input_ids'].to(model.device, dtype=torch.long)
+                    code_ids = data['input_ids'].to(
+                        model.device, dtype=torch.long)
                     code_mask = data['mask'].to(model.device, dtype=torch.long)
-                    targets = data['labels'].to(model.device, dtype=torch.float)
+                    targets = data['labels'].to(
+                        model.device, dtype=torch.float)
 
                     outputs = model(title_ids=title_ids,
-                                title_attention_mask=title_mask,
-                                text_ids=text_ids,
-                                text_attention_mask=text_mask,
-                                code_ids=code_ids,
-                                code_attention_mask=code_mask)
+                                    title_attention_mask=title_mask,
+                                    text_ids=text_ids,
+                                    text_attention_mask=text_mask,
+                                    code_ids=code_ids,
+                                    code_attention_mask=code_mask)
                 fin_targets.extend(targets.cpu().detach().numpy().tolist())
                 fin_outputs.extend(torch.sigmoid(
                     outputs).cpu().detach().numpy().tolist())
@@ -389,7 +405,7 @@ def train(args, training_set, valid_set, model):
                     ((1 / (batch_idx + 1)) * (loss.item() - valid_loss))
             print(type(fin_targets))
             print(type(fin_outputs))
-            evaluate_batch(fin_outputs, fin_targets, [1,2,3,4,5])
+            evaluate_batch(fin_outputs, fin_targets, [1, 2, 3, 4, 5])
 
     model_output = os.path.join(args.output_dir, "final_model")
     save_check_point(model, model_output, args, optimizer, scheduler)

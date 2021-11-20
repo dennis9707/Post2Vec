@@ -22,13 +22,16 @@ def main():
     os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
 
     args = get_train_args()
+    print(args)
     model = init_train_env(args, tbert_type='trinity')
     training_set = load_data(args)
     
     train_size = int(0.95 * len(training_set))
     test_size = len(training_set) - train_size
     train_dataset, test_dataset = torch.utils.data.random_split(training_set, [train_size, test_size])
-    train(args, training_set, test_dataset, model)
+    
+    print(args)
+    # train(args, train_dataset, test_dataset, model)
     logger.info("Training finished")
 
 
