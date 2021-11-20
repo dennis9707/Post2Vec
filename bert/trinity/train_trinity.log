@@ -11,151 +11,131 @@ WARNING:torch.distributed.run:
 *****************************************
 Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
 *****************************************
+11/20/2021 08:24:17 - WARNING - train -   Process rank: 1, device: cuda:1, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 08:24:17 - WARNING - train -   Process rank: 5, device: cuda:5, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 08:24:17 - WARNING - train -   Process rank: 4, device: cuda:4, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 08:24:17 - WARNING - train -   Process rank: 2, device: cuda:2, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 08:24:17 - WARNING - train -   Process rank: 7, device: cuda:7, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 08:24:17 - WARNING - train -   Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 08:24:17 - WARNING - train -   Process rank: 6, device: cuda:6, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 08:24:17 - WARNING - train -   Process rank: 3, device: cuda:3, n_gpu: 1, distributed training: True, 16-bits training: True
+11/20/2021 08:24:26 - INFO - train -   Training/evaluation parameters Namespace(adam_epsilon=1e-08, code_bert='microsoft/codebert-base', data_file='../../data/train/train-0-20000.pkl', data_folder='../../data/train', device=device(type='cuda', index=0), exe_name=None, fp16=True, fp16_opt_level='O1', gradient_accumulation_steps=16, learning_rate=4e-05, local_rank=0, logging_steps=10, max_grad_norm=1.0, mlb=MultiLabelBinarizer(classes=None, sparse_output=False), model_path=None, n_gpu=1, no_cuda=False, num_train_epochs=3, output_dir='../../data/results', per_gpu_eval_batch_size=8, per_gpu_train_batch_size=8, save_steps=10000, seed=42, tbert_type='trinity', valid_num=100, valid_step=50, vocab_file='../../data/tags/commonTags_post2vec.csv', warmup_steps=0, weight_decay=0.0)
+Selected optimization level O1:  Insert automatic casts around Pytorch functions and Tensor methods.
+
+Defaults for this optimization level are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+Processing user overrides (additional kwargs that are not None)...
+After processing overrides, optimization options are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+11/20/2021 08:24:38 - INFO - train -   ***** Running training *****
+11/20/2021 08:24:38 - INFO - train -     Num examples = 19000
+11/20/2021 08:24:38 - INFO - train -     Num Epochs = 3
+11/20/2021 08:24:38 - INFO - train -     Instantaneous batch size per GPU = 8
+11/20/2021 08:24:38 - INFO - train -     Total train batch size (w. parallel, distributed & accumulation) = 1024
+11/20/2021 08:24:38 - INFO - train -     Gradient Accumulation steps = 16
+11/20/2021 08:24:38 - INFO - train -     Total optimization steps = 444
+############# Epoch 0: Training Start   #############
+############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/transformers/tokenization_utils_base.py:2218: FutureWarning: The `pad_to_max_length` argument is deprecated and will be removed in a future version, use `padding=True` or `padding='longest'` to pad to the longest sequence in the batch, or use `padding='max_length'` to pad to a max length. In this case, you can give a specific length with `max_length` (e.g. `max_length=45`) or leave max_length to None to pad to the maximal input size of the model (e.g. 512 for Bert).
+  FutureWarning,
+/opt/conda/lib/python3.6/site-packages/transformers/tokenization_utils_base.py:2218: FutureWarning: The `pad_to_max_length` argument is deprecated and will be removed in a future version, use `padding=True` or `padding='longest'` to pad to the longest sequence in the batch, or use `padding='max_length'` to pad to a max length. In this case, you can give a specific length with `max_length` (e.g. `max_length=45`) or leave max_length to None to pad to the maximal input size of the model (e.g. 512 for Bert).
+  FutureWarning,
 Traceback (most recent call last):
+  File "train_trinity.py", line 36, in <module>
+    main()
+  File "train_trinity.py", line 31, in main
+    train(args, train_dataset, test_dataset, model)
+  File "/usr/src/bert/trinity/train.py", line 302, in train
+    title_ids = data['input_ids'].to(model.device, dtype=torch.long)
+KeyError: 'input_ids'
 Traceback (most recent call last):
-  File "train_trinity.py", line 1, in <module>
-  File "train_trinity.py", line 1, in <module>
-    from train import get_train_args, init_train_env, train
-    from train import get_train_args, init_train_env, train
-  File "/usr/src/bert/trinity/train.py", line 19, in <module>
-  File "/usr/src/bert/trinity/train.py", line 19, in <module>
-    from apex.parallel import DistributedDataParallel as DDP
-    from apex.parallel import DistributedDataParallel as DDP
-  File "/opt/conda/lib/python3.6/site-packages/apex/__init__.py", line 8, in <module>
-  File "/opt/conda/lib/python3.6/site-packages/apex/__init__.py", line 8, in <module>
-    from . import amp
-    from . import amp
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/__init__.py", line 1, in <module>
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/__init__.py", line 1, in <module>
-    from .amp import init, half_function, float_function, promote_function,\
-    from .amp import init, half_function, float_function, promote_function,\
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/amp.py", line 1, in <module>
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/amp.py", line 1, in <module>
-    from . import compat, rnn_compat, utils, wrap
-    from . import compat, rnn_compat, utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/rnn_compat.py", line 1, in <module>
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/rnn_compat.py", line 1, in <module>
-    from . import utils, wrap
-    from . import utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/wrap.py", line 3, in <module>
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/wrap.py", line 3, in <module>
-    from ._amp_state import _amp_state
-    from ._amp_state import _amp_state
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/_amp_state.py", line 14, in <module>
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/_amp_state.py", line 14, in <module>
-    from torch._six import container_abcs
-    from torch._six import container_abcs
-ImportError: cannot import name 'container_abcs'
-ImportError: cannot import name 'container_abcs'
+  File "train_trinity.py", line 36, in <module>
+    main()
+  File "train_trinity.py", line 31, in main
+    train(args, train_dataset, test_dataset, model)
+  File "/usr/src/bert/trinity/train.py", line 302, in train
+    title_ids = data['input_ids'].to(model.device, dtype=torch.long)
+KeyError: 'input_ids'
+############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/transformers/tokenization_utils_base.py:2218: FutureWarning: The `pad_to_max_length` argument is deprecated and will be removed in a future version, use `padding=True` or `padding='longest'` to pad to the longest sequence in the batch, or use `padding='max_length'` to pad to a max length. In this case, you can give a specific length with `max_length` (e.g. `max_length=45`) or leave max_length to None to pad to the maximal input size of the model (e.g. 512 for Bert).
+  FutureWarning,
+11/20/2021 08:24:39 - INFO - train -   Start a new training
+############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/transformers/tokenization_utils_base.py:2218: FutureWarning: The `pad_to_max_length` argument is deprecated and will be removed in a future version, use `padding=True` or `padding='longest'` to pad to the longest sequence in the batch, or use `padding='max_length'` to pad to a max length. In this case, you can give a specific length with `max_length` (e.g. `max_length=45`) or leave max_length to None to pad to the maximal input size of the model (e.g. 512 for Bert).
+  FutureWarning,
 Traceback (most recent call last):
-  File "train_trinity.py", line 1, in <module>
-    from train import get_train_args, init_train_env, train
-  File "/usr/src/bert/trinity/train.py", line 19, in <module>
-    from apex.parallel import DistributedDataParallel as DDP
-  File "/opt/conda/lib/python3.6/site-packages/apex/__init__.py", line 8, in <module>
-    from . import amp
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/__init__.py", line 1, in <module>
-    from .amp import init, half_function, float_function, promote_function,\
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/amp.py", line 1, in <module>
-    from . import compat, rnn_compat, utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/rnn_compat.py", line 1, in <module>
-    from . import utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/wrap.py", line 3, in <module>
-    from ._amp_state import _amp_state
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/_amp_state.py", line 14, in <module>
+  File "train_trinity.py", line 36, in <module>
+    main()
+  File "train_trinity.py", line 31, in main
+    train(args, train_dataset, test_dataset, model)
+  File "/usr/src/bert/trinity/train.py", line 302, in train
+    title_ids = data['input_ids'].to(model.device, dtype=torch.long)
+KeyError: 'input_ids'
 Traceback (most recent call last):
-  File "train_trinity.py", line 1, in <module>
-    from torch._six import container_abcs
-ImportError: cannot import name 'container_abcs'
-    from train import get_train_args, init_train_env, train
-  File "/usr/src/bert/trinity/train.py", line 19, in <module>
-    from apex.parallel import DistributedDataParallel as DDP
-  File "/opt/conda/lib/python3.6/site-packages/apex/__init__.py", line 8, in <module>
-    from . import amp
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/__init__.py", line 1, in <module>
-    from .amp import init, half_function, float_function, promote_function,\
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/amp.py", line 1, in <module>
-    from . import compat, rnn_compat, utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/rnn_compat.py", line 1, in <module>
-    from . import utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/wrap.py", line 3, in <module>
-    from ._amp_state import _amp_state
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/_amp_state.py", line 14, in <module>
-    from torch._six import container_abcs
-ImportError: cannot import name 'container_abcs'
+  File "train_trinity.py", line 36, in <module>
+    main()
+  File "train_trinity.py", line 31, in main
+    train(args, train_dataset, test_dataset, model)
+  File "/usr/src/bert/trinity/train.py", line 302, in train
+    title_ids = data['input_ids'].to(model.device, dtype=torch.long)
+KeyError: 'input_ids'
+############# Epoch 0: Training Start   #############
+############# Epoch 0: Training Start   #############
+############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/transformers/tokenization_utils_base.py:2218: FutureWarning: The `pad_to_max_length` argument is deprecated and will be removed in a future version, use `padding=True` or `padding='longest'` to pad to the longest sequence in the batch, or use `padding='max_length'` to pad to a max length. In this case, you can give a specific length with `max_length` (e.g. `max_length=45`) or leave max_length to None to pad to the maximal input size of the model (e.g. 512 for Bert).
+  FutureWarning,
+/opt/conda/lib/python3.6/site-packages/transformers/tokenization_utils_base.py:2218: FutureWarning: The `pad_to_max_length` argument is deprecated and will be removed in a future version, use `padding=True` or `padding='longest'` to pad to the longest sequence in the batch, or use `padding='max_length'` to pad to a max length. In this case, you can give a specific length with `max_length` (e.g. `max_length=45`) or leave max_length to None to pad to the maximal input size of the model (e.g. 512 for Bert).
+  FutureWarning,
+/opt/conda/lib/python3.6/site-packages/transformers/tokenization_utils_base.py:2218: FutureWarning: The `pad_to_max_length` argument is deprecated and will be removed in a future version, use `padding=True` or `padding='longest'` to pad to the longest sequence in the batch, or use `padding='max_length'` to pad to a max length. In this case, you can give a specific length with `max_length` (e.g. `max_length=45`) or leave max_length to None to pad to the maximal input size of the model (e.g. 512 for Bert).
+  FutureWarning,
+############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/transformers/tokenization_utils_base.py:2218: FutureWarning: The `pad_to_max_length` argument is deprecated and will be removed in a future version, use `padding=True` or `padding='longest'` to pad to the longest sequence in the batch, or use `padding='max_length'` to pad to a max length. In this case, you can give a specific length with `max_length` (e.g. `max_length=45`) or leave max_length to None to pad to the maximal input size of the model (e.g. 512 for Bert).
+  FutureWarning,
 Traceback (most recent call last):
-  File "train_trinity.py", line 1, in <module>
-    from train import get_train_args, init_train_env, train
-  File "/usr/src/bert/trinity/train.py", line 19, in <module>
-    from apex.parallel import DistributedDataParallel as DDP
-  File "/opt/conda/lib/python3.6/site-packages/apex/__init__.py", line 8, in <module>
-    from . import amp
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/__init__.py", line 1, in <module>
-    from .amp import init, half_function, float_function, promote_function,\
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/amp.py", line 1, in <module>
-    from . import compat, rnn_compat, utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/rnn_compat.py", line 1, in <module>
-    from . import utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/wrap.py", line 3, in <module>
-    from ._amp_state import _amp_state
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/_amp_state.py", line 14, in <module>
-    from torch._six import container_abcs
-ImportError: cannot import name 'container_abcs'
+  File "train_trinity.py", line 36, in <module>
+    main()
+  File "train_trinity.py", line 31, in main
+    train(args, train_dataset, test_dataset, model)
+  File "/usr/src/bert/trinity/train.py", line 302, in train
+    title_ids = data['input_ids'].to(model.device, dtype=torch.long)
+KeyError: 'input_ids'
 Traceback (most recent call last):
-  File "train_trinity.py", line 1, in <module>
-    from train import get_train_args, init_train_env, train
-  File "/usr/src/bert/trinity/train.py", line 19, in <module>
-    from apex.parallel import DistributedDataParallel as DDP
+  File "train_trinity.py", line 36, in <module>
+    main()
+  File "train_trinity.py", line 31, in main
+    train(args, train_dataset, test_dataset, model)
+  File "/usr/src/bert/trinity/train.py", line 302, in train
+    title_ids = data['input_ids'].to(model.device, dtype=torch.long)
+KeyError: 'input_ids'
 Traceback (most recent call last):
-  File "/opt/conda/lib/python3.6/site-packages/apex/__init__.py", line 8, in <module>
-  File "train_trinity.py", line 1, in <module>
-    from . import amp
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/__init__.py", line 1, in <module>
-    from train import get_train_args, init_train_env, train
-  File "/usr/src/bert/trinity/train.py", line 19, in <module>
-    from .amp import init, half_function, float_function, promote_function,\
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/amp.py", line 1, in <module>
-    from apex.parallel import DistributedDataParallel as DDP
-    from . import compat, rnn_compat, utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/__init__.py", line 8, in <module>
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/rnn_compat.py", line 1, in <module>
-    from . import utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/wrap.py", line 3, in <module>
-    from . import amp
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/__init__.py", line 1, in <module>
-    from ._amp_state import _amp_state
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/_amp_state.py", line 14, in <module>
-    from .amp import init, half_function, float_function, promote_function,\
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/amp.py", line 1, in <module>
-    from torch._six import container_abcs
-    from . import compat, rnn_compat, utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/rnn_compat.py", line 1, in <module>
-ImportError: cannot import name 'container_abcs'
-    from . import utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/wrap.py", line 3, in <module>
-    from ._amp_state import _amp_state
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/_amp_state.py", line 14, in <module>
-    from torch._six import container_abcs
-ImportError: cannot import name 'container_abcs'
+  File "train_trinity.py", line 36, in <module>
+    main()
+  File "train_trinity.py", line 31, in main
+    train(args, train_dataset, test_dataset, model)
+  File "/usr/src/bert/trinity/train.py", line 302, in train
+    title_ids = data['input_ids'].to(model.device, dtype=torch.long)
+KeyError: 'input_ids'
 Traceback (most recent call last):
-  File "train_trinity.py", line 1, in <module>
-    from train import get_train_args, init_train_env, train
-  File "/usr/src/bert/trinity/train.py", line 19, in <module>
-    from apex.parallel import DistributedDataParallel as DDP
-  File "/opt/conda/lib/python3.6/site-packages/apex/__init__.py", line 8, in <module>
-    from . import amp
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/__init__.py", line 1, in <module>
-    from .amp import init, half_function, float_function, promote_function,\
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/amp.py", line 1, in <module>
-    from . import compat, rnn_compat, utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/rnn_compat.py", line 1, in <module>
-    from . import utils, wrap
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/wrap.py", line 3, in <module>
-    from ._amp_state import _amp_state
-  File "/opt/conda/lib/python3.6/site-packages/apex/amp/_amp_state.py", line 14, in <module>
-    from torch._six import container_abcs
-ImportError: cannot import name 'container_abcs'
-ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 29328) of binary: /opt/conda/bin/python
+  File "train_trinity.py", line 36, in <module>
+    main()
+  File "train_trinity.py", line 31, in main
+    train(args, train_dataset, test_dataset, model)
+  File "/usr/src/bert/trinity/train.py", line 302, in train
+    title_ids = data['input_ids'].to(model.device, dtype=torch.long)
+KeyError: 'input_ids'
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 71348) of binary: /opt/conda/bin/python
 Traceback (most recent call last):
   File "/opt/conda/lib/python3.6/runpy.py", line 193, in _run_module_as_main
     "__main__", mod_spec)
@@ -179,61 +159,61 @@ train_trinity.py FAILED
 ------------------------------------------------------------
 Failures:
 [1]:
-  time      : 2021-11-20_07:37:03
+  time      : 2021-11-20_08:24:42
   host      : e5c66601adf8
   rank      : 1 (local_rank: 1)
-  exitcode  : 1 (pid: 29329)
+  exitcode  : 1 (pid: 71349)
   error_file: <N/A>
   traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
 [2]:
-  time      : 2021-11-20_07:37:03
+  time      : 2021-11-20_08:24:42
   host      : e5c66601adf8
   rank      : 2 (local_rank: 2)
-  exitcode  : 1 (pid: 29330)
+  exitcode  : 1 (pid: 71350)
   error_file: <N/A>
   traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
 [3]:
-  time      : 2021-11-20_07:37:03
+  time      : 2021-11-20_08:24:42
   host      : e5c66601adf8
   rank      : 3 (local_rank: 3)
-  exitcode  : 1 (pid: 29331)
+  exitcode  : 1 (pid: 71351)
   error_file: <N/A>
   traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
 [4]:
-  time      : 2021-11-20_07:37:03
+  time      : 2021-11-20_08:24:42
   host      : e5c66601adf8
   rank      : 4 (local_rank: 4)
-  exitcode  : 1 (pid: 29332)
+  exitcode  : 1 (pid: 71352)
   error_file: <N/A>
   traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
 [5]:
-  time      : 2021-11-20_07:37:03
+  time      : 2021-11-20_08:24:42
   host      : e5c66601adf8
   rank      : 5 (local_rank: 5)
-  exitcode  : 1 (pid: 29333)
+  exitcode  : 1 (pid: 71353)
   error_file: <N/A>
   traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
 [6]:
-  time      : 2021-11-20_07:37:03
+  time      : 2021-11-20_08:24:42
   host      : e5c66601adf8
   rank      : 6 (local_rank: 6)
-  exitcode  : 1 (pid: 29335)
+  exitcode  : 1 (pid: 71354)
   error_file: <N/A>
   traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
 [7]:
-  time      : 2021-11-20_07:37:03
+  time      : 2021-11-20_08:24:42
   host      : e5c66601adf8
   rank      : 7 (local_rank: 7)
-  exitcode  : 1 (pid: 29336)
+  exitcode  : 1 (pid: 71355)
   error_file: <N/A>
   traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
 ------------------------------------------------------------
 Root Cause (first observed failure):
 [0]:
-  time      : 2021-11-20_07:37:03
+  time      : 2021-11-20_08:24:42
   host      : e5c66601adf8
   rank      : 0 (local_rank: 0)
-  exitcode  : 1 (pid: 29328)
+  exitcode  : 1 (pid: 71348)
   error_file: <N/A>
   traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
 ============================================================

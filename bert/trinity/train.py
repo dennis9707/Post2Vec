@@ -63,7 +63,7 @@ def get_train_args():
     parser.add_argument("--local_rank", type=int, default=-1,
                         help="local_rank for distributed training on gpus")
     parser.add_argument(
-        "--fp16", action="store_true",
+        "--fp16", action="store_false",
         help="Whether to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit", )
     parser.add_argument("--seed", type=int, default=42,
                         help="random seed for initialization")
@@ -85,7 +85,7 @@ def get_train_args():
     parser.add_argument("--learning_rate", default=5e-5,
                         type=float, help="The initial learning rate for Adam.")
     parser.add_argument(
-        "--num_train_epochs", default=3.0, type=float, help="Total number of training epochs to perform."
+        "--num_train_epochs", default=3, type=int, help="Total number of training epochs to perform."
     )
     parser.add_argument(
         "--exe_name", type=str, help="name of this execution"
@@ -247,7 +247,6 @@ def train(args, training_set, valid_set, model):
 
     train_data_loader = DataLoader(training_set,
                                    batch_size=args.train_batch_size,
-                                   shuffle=True,
                                    sampler=train_sampler,
                                    )
 
@@ -282,7 +281,7 @@ def train(args, training_set, valid_set, model):
         # model = torch.nn.parallel.DistributedDataParallel(
         #     model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
         model = DDP(
-            model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
+            model)
 
     # Train!
     log_train_info(args, train_numbers, t_total)
@@ -300,12 +299,12 @@ def train(args, training_set, valid_set, model):
         print('############# Epoch {}: Training Start   #############'.format(epoch))
         model.train()
         for step, data in enumerate(train_data_loader):
-            title_ids = data['input_ids'].to(model.device, dtype=torch.long)
-            title_mask = data['mask'].to(model.device, dtype=torch.long)
-            text_ids = data['input_ids'].to(model.device, dtype=torch.long)
-            text_mask = data['mask'].to(model.device, dtype=torch.long)
-            code_ids = data['input_ids'].to(model.device, dtype=torch.long)
-            code_mask = data['mask'].to(model.device, dtype=torch.long)
+            title_ids = data['titile_ids'].to(model.device, dtype=torch.long)
+            title_mask = data['title_mask'].to(model.device, dtype=torch.long)
+            text_ids = data['text_ids'].to(model.device, dtype=torch.long)
+            text_mask = data['text_mask'].to(model.device, dtype=torch.long)
+            code_ids = data['code_ids'].to(model.device, dtype=torch.long)
+            code_mask = data['code_mask'].to(model.device, dtype=torch.long)
             targets = data['labels'].to(model.device, dtype=torch.float)
 
             outputs = model(title_ids=title_ids,
