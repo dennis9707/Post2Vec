@@ -3420,3 +3420,172 @@ Epoch: 1, Batch: 500， Loss:  0.0008525251335231587
 Current Time = 06:57:08
 Epoch: 1, Batch: 600， Loss:  0.0009183260460849851
 Current Time = 06:57:58
+Epoch: 1, Batch: 700， Loss:  0.0009216591500444338
+Current Time = 06:58:48
+Epoch: 1, Batch: 800， Loss:  0.0009225553346914239
+Current Time = 06:59:38
+Epoch: 1, Batch: 900， Loss:  0.0009282793573220261
+Current Time = 07:00:33
+Epoch: 1, Batch: 1000， Loss:  0.0009160792274633422
+Current Time = 07:01:25
+11/21/2021 07:01:26 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 15-52-31_/checkpoint-1-1001
+Epoch: 1, Batch: 1100， Loss:  0.0009076542285038158
+Current Time = 07:02:59
+############# Epoch 1: Training End     #############
+############# Epoch 1: Validation Start   #############
+F1 Score = [0.072, 0.072, 0.07733333333333332, 0.072, 0.07679999999999998]
+Recall Score  = [0.072, 0.08, 0.10133333333333334, 0.12200000000000001, 0.16159999999999997]
+Precision Score  = [0.072, 0.07466666666666667, 0.08453333333333334, 0.08641904761904765, 0.09883809523809527]
+Count  = 125
+############# Epoch 1: Validation End     #############
+############# FILE 25 Epoch 2: Training Start   #############
+Epoch: 2, Batch: 0， Loss:  0.0007960113103035837
+Current Time = 07:04:00
+11/21/2021 07:04:01 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 15-52-31_/checkpoint-2-1
+Epoch: 2, Batch: 100， Loss:  0.000898136715113651
+Current Time = 07:05:27
+Epoch: 2, Batch: 200， Loss:  0.0009353674660087563
+Current Time = 07:06:17
+Epoch: 2, Batch: 300， Loss:  0.0008761436201166361
+Current Time = 07:07:07
+Epoch: 2, Batch: 400， Loss:  0.0009868908356293104
+Current Time = 07:07:58
+Epoch: 2, Batch: 500， Loss:  0.0008510618004947901
+Current Time = 07:08:51
+Epoch: 2, Batch: 600， Loss:  0.0009188173554139212
+Current Time = 07:09:47
+Epoch: 2, Batch: 700， Loss:  0.000921248592203483
+Current Time = 07:10:44
+Epoch: 2, Batch: 800， Loss:  0.0009214436556794681
+Current Time = 07:11:35
+Epoch: 2, Batch: 900， Loss:  0.0009300728290691041
+Current Time = 07:12:26
+Epoch: 2, Batch: 1000， Loss:  0.0009138722822535783
+Current Time = 07:13:19
+11/21/2021 07:13:19 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 15-52-31_/checkpoint-2-1001
+Epoch: 2, Batch: 1100， Loss:  0.0009078857375425287
+Current Time = 07:14:41
+../../data/train/train-1880000-1900000.pkl
+############# Epoch 2: Training End     #############
+############# Epoch 2: Validation Start   #############
+../../data/train/train-1880000-1900000.pkl
+../../data/train/train-1880000-1900000.pkl
+../../data/train/train-1880000-1900000.pkl
+../../data/train/train-1880000-1900000.pkl
+../../data/train/train-1880000-1900000.pkl
+../../data/train/train-1880000-1900000.pkl
+F1 Score = [0.072, 0.072, 0.07733333333333332, 0.072, 0.07679999999999998]
+Recall Score  = [0.072, 0.08, 0.10133333333333334, 0.12200000000000001, 0.16159999999999997]
+Precision Score  = [0.072, 0.07466666666666667, 0.08453333333333334, 0.08641904761904765, 0.09883809523809527]
+Count  = 125
+############# Epoch 2: Validation End     #############
+11/21/2021 07:15:42 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 15-52-31_/final_model-25
+../../data/train/train-1880000-1900000.pkl
+11/21/2021 07:15:56 - INFO - train -   ***** Running training *****
+11/21/2021 07:15:56 - INFO - train -     Num examples = 19000
+11/21/2021 07:15:56 - INFO - train -     Num Epochs = 3
+11/21/2021 07:15:56 - INFO - train -     Instantaneous batch size per GPU = 2
+11/21/2021 07:15:56 - INFO - train -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/21/2021 07:15:56 - INFO - train -     Gradient Accumulation steps = 4
+11/21/2021 07:15:56 - INFO - train -     Total optimization steps = 7125
+11/21/2021 07:15:56 - INFO - train -   Start a new training
+############# FILE 26 Epoch 0: Training Start   #############
+Epoch: 0, Batch: 0， Loss:  9.575114818289876e-06
+Current Time = 07:15:57
+11/21/2021 07:15:57 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 15-52-31_/checkpoint-0-1
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+Epoch: 0, Batch: 100， Loss:  0.0009234604038647376
+Current Time = 07:17:40
+Epoch: 0, Batch: 200， Loss:  0.0008633189793908969
+Current Time = 07:18:30
+Epoch: 0, Batch: 300， Loss:  0.0009300683453329839
+Current Time = 07:19:20
+Epoch: 0, Batch: 400， Loss:  0.0008633052988443523
+Current Time = 07:20:15
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+Epoch: 0, Batch: 500， Loss:  0.0008625540029606782
+Current Time = 07:21:10
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+Epoch: 0, Batch: 600， Loss:  0.0009453888924326748
+Current Time = 07:21:59
+Epoch: 0, Batch: 700， Loss:  0.0009525159583427012
+Current Time = 07:22:49
+Epoch: 0, Batch: 800， Loss:  0.0009081383221200667
+Current Time = 07:23:39
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+Epoch: 0, Batch: 900， Loss:  0.000894666652311571
+Current Time = 07:24:29
+Epoch: 0, Batch: 1000， Loss:  0.000906009120226372
+Current Time = 07:25:18
+11/21/2021 07:25:19 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 15-52-31_/checkpoint-0-1001
+Epoch: 0, Batch: 1100， Loss:  0.0008884076602407731
+Current Time = 07:26:49
+############# Epoch 0: Training End     #############
+############# Epoch 0: Validation Start   #############
+F1 Score = [0.128, 0.12, 0.10133333333333337, 0.102, 0.09599999999999993]
+Recall Score  = [0.128, 0.132, 0.1306666666666667, 0.16533333333333333, 0.18573333333333325]
+Precision Score  = [0.128, 0.124, 0.11066666666666672, 0.12000000000000006, 0.12039999999999998]
+Count  = 125
+############# Epoch 0: Validation End     #############
+############# FILE 26 Epoch 1: Training Start   #############
+Epoch: 1, Batch: 0， Loss:  0.0007912359145120718
+Current Time = 07:27:50
+11/21/2021 07:27:51 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 15-52-31_/checkpoint-1-1
+Epoch: 1, Batch: 100， Loss:  0.0009234873607056216
+Current Time = 07:29:30
+Epoch: 1, Batch: 200， Loss:  0.0008633269619895145
+Current Time = 07:30:19
+Epoch: 1, Batch: 300， Loss:  0.0009334756099269726
+Current Time = 07:31:09
+Epoch: 1, Batch: 400， Loss:  0.0008628392781247385
+Current Time = 07:32:02
+Epoch: 1, Batch: 500， Loss:  0.0008623240111046471
+Current Time = 07:32:51
+Epoch: 1, Batch: 600， Loss:  0.000944647793949116
+Current Time = 07:33:41
+Epoch: 1, Batch: 700， Loss:  0.0009544586998526939
+Current Time = 07:34:35
+Epoch: 1, Batch: 800， Loss:  0.0009096711332676932
+Current Time = 07:35:27
+Epoch: 1, Batch: 900， Loss:  0.00089318403537618
+Current Time = 07:36:17
+Epoch: 1, Batch: 1000， Loss:  0.0009053768750163727
+Current Time = 07:37:08
+11/21/2021 07:37:09 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 15-52-31_/checkpoint-1-1001
+Epoch: 1, Batch: 1100， Loss:  0.0008888972594286315
+Current Time = 07:38:44
+############# Epoch 1: Training End     #############
+############# Epoch 1: Validation Start   #############
+F1 Score = [0.128, 0.12, 0.10133333333333337, 0.102, 0.09599999999999993]
+Recall Score  = [0.128, 0.132, 0.1306666666666667, 0.16533333333333333, 0.18573333333333325]
+Precision Score  = [0.128, 0.124, 0.11066666666666672, 0.12000000000000006, 0.12039999999999998]
+Count  = 125
+############# Epoch 1: Validation End     #############
+############# FILE 26 Epoch 2: Training Start   #############
+Epoch: 2, Batch: 0， Loss:  0.0007930703047895804
+Current Time = 07:39:46
+11/21/2021 07:39:46 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-20 15-52-31_/checkpoint-2-1
+Epoch: 2, Batch: 100， Loss:  0.0009224396513309329
+Current Time = 07:41:11
+Epoch: 2, Batch: 200， Loss:  0.0008615701674716547
+Current Time = 07:41:59
+Epoch: 2, Batch: 300， Loss:  0.0009339894188451581
+Current Time = 07:42:49
+Epoch: 2, Batch: 400， Loss:  0.0008623590564820915
+Current Time = 07:43:42
+Epoch: 2, Batch: 500， Loss:  0.0008641131297918036
+Current Time = 07:44:32
+Epoch: 2, Batch: 600， Loss:  0.0009477524165413343
+Current Time = 07:45:24
+Epoch: 2, Batch: 700， Loss:  0.0009523309420910664
+Current Time = 07:46:15
+Epoch: 2, Batch: 800， Loss:  0.0009121424710610881
+Current Time = 07:47:06
