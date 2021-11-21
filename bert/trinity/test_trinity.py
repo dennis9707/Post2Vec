@@ -12,6 +12,7 @@ import pandas as pd
 import torch
 sys.path.append("..")
 from data_structure.question import Question, QuestionDataset
+from transformers import AutoTokenizer
 
 from torch.utils.data import DataLoader
 
@@ -92,10 +93,6 @@ if __name__ == "__main__":
     args = get_eval_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
-    res_file = os.path.join(args.output_dir, "./raw_res.csv")
-
-    cache_dir = os.path.join(args.data_dir, "cache")
-    cached_file = os.path.join(cache_dir, "test_examples_cache.dat".format())
 
     logging.basicConfig(level='INFO')
     logger = logging.getLogger(__name__)
