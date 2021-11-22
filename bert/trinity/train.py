@@ -74,7 +74,7 @@ def get_train_args():
     parser.add_argument("--save_steps", type=int, default=500,
                         help="Save checkpoint every X updates steps.")
     parser.add_argument(
-        "--output_dir", default="../results", type=str, required=True,
+        "--output_dir", default="../results", type=str,
         help="The output directory where the model checkpoints and predictions will be written.", )
     parser.add_argument("--learning_rate", default=1e-6,
                         type=float, help="The initial learning rate for Adam.")
@@ -370,12 +370,12 @@ def train(args, train_data_loader, valid_data_loader, model, optimizer, schedule
                     fin_targets.extend(targets.cpu().detach().numpy().tolist())
                     fin_outputs.extend(torch.sigmoid(
                         outputs).cpu().detach().numpy().tolist())
-                [pre, rc, f1, cnt] = evaluate_batch(
-                    fin_outputs, fin_targets, [1, 2, 3, 4, 5])
-                print(f"F1 Score = {pre}")
-                print(f"Recall Score  = {rc}")
-                print(f"Precision Score  = {f1}")
-                print(f"Count  = {cnt}")
-                print(
-                    '############# Epoch {}: Validation End     #############'.format(epoch))
+            [pre, rc, f1, cnt] = evaluate_batch(
+                fin_outputs, fin_targets, [1, 2, 3, 4, 5])
+            print(f"F1 Score = {pre}")
+            print(f"Recall Score  = {rc}")
+            print(f"Precision Score  = {f1}")
+            print(f"Count  = {cnt}")
+            print(
+                '############# Epoch {}: Validation End     #############'.format(epoch))
     return model, optimizer, scheduler
