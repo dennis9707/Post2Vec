@@ -5,35 +5,6 @@ from transformers import AutoTokenizer, AutoModel, PreTrainedModel
 from model.loss import loss_fn
 
 
-class TrinityBert(PreTrainedModel):
-    def get_title_tokenizer(self):
-        raise NotImplementedError
-
-    def get_text_tokenizer(self):
-        raise NotImplementedError
-
-    def get_code_tokenizer(self):
-        raise NotImplementedError
-
-    def create_title_embd(self, input_ids, attention_mask):
-        raise NotImplementedError
-
-    def create_text_embd(self, input_ids, attention_mask):
-        raise NotImplementedError
-
-    def create_code_embd(self, input_ids, attention_mask):
-        raise NotImplementedError
-
-    def get_title_sub_model(self):
-        raise NotImplementedError
-
-    def get_text_sub_model(self):
-        raise NotImplementedError
-
-    def get_code_sub_model(self):
-        raise NotImplementedError
-
-
 class AvgPooler(nn.Module):
     def __init__(self, config):
         super().__init__()
@@ -44,7 +15,17 @@ class AvgPooler(nn.Module):
         return self.pooler(hidden_states).view(-1, self.hidden_size)
 
 
-class RelationClassifyHeader(nn.Module):
+class MaxPooler(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.hidden_size = config.hidden_size
+        self.pooler = torch.nn.AdaptiveMaxPool2d((1, config.hidden_size))
+
+    def forward(self, hidden_states):
+        return self.pooler(hidden_states).view(-1, self.hidden_size)
+
+
+class ClassifyHeader(nn.Module):
     """
     use averaging pooling across tokens to replace first_token_pooling
     """
@@ -75,12 +56,11 @@ class RelationClassifyHeader(nn.Module):
         x = self.dropout(concated_hidden)
         x = self.dense(x)
         x = torch.tanh(x)
-        x = self.dropout(x)
         x = self.output_layer(x)
         return x
 
 
-class TBertT(TrinityBert):
+class TBertT(PreTrainedModel):
     def __init__(self, config, code_bert, num_class):
         super().__init__(config)
         # nbert_model = "huggingface/CodeBERTa-small-v1"
@@ -88,16 +68,11 @@ class TBertT(TrinityBert):
         cbert_model = code_bert
         nbert_model = code_bert
 
-        self.ttokenizer = AutoTokenizer.from_pretrained(tbert_model)
         self.tbert = AutoModel.from_pretrained(tbert_model)
-
-        self.ntokenizer = AutoTokenizer.from_pretrained(nbert_model)
         self.nbert = AutoModel.from_pretrained(nbert_model)
-
-        self.ctokneizer = AutoTokenizer.from_pretrained(cbert_model)
         self.cbert = AutoModel.from_pretrained(cbert_model)
 
-        self.cls = RelationClassifyHeader(config, num_class=num_class)
+        self.cls = ClassifyHeader(config, num_class=num_class)
 
     def forward(
             self,
@@ -116,36 +91,3 @@ class TBertT(TrinityBert):
         logits = self.cls(title_hidden=t_hidden,
                           text_hidden=n_hidden, code_hidden=c_hidden)
         return logits 
-
-    def get_sim_score(self, title_hidden, text_hidden, code_hidden):
-        logits = self.cls(title_hidden=title_hidden,
-                          text_hidden=text_hidden, code_hidden=code_hidden)
-        sim_scores = torch.softmax(logits, 1).data.tolist()
-        return [x[1] for x in sim_scores]
-
-    def get_title_tokenizer(self):
-        return self.ttokenizer
-
-    def get_text_tokenizer(self):
-        return self.ntokenizer
-
-    def get_code_tokenizer(self):
-        return self.ctokneizer
-
-    def create_title_embd(self, input_ids, attention_mask):
-        return self.tbert(input_ids, attention_mask)
-
-    def create_text_embd(self, input_ids, attention_mask):
-        return self.nbert(input_ids, attention_mask)
-
-    def create_code_embd(self, input_ids, attention_mask):
-        return self.cbert(input_ids, attention_mask)
-
-    def get_title_sub_model(self):
-        return self.tbert
-
-    def get_text_sub_model(self):
-        return self.nbert
-
-    def get_code_sub_model(self):
-        return self.cbert

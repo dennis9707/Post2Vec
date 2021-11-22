@@ -17,12 +17,19 @@ MODEL_FNAME = "t_bert.pt"
 OPTIMIZER_FNAME = "optimizer.pt"
 SCHED_FNAME = "scheduler.pt"
 ARG_FNAME = "training_args.bin"
-def set_seed(seed, n_gpu):
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    if n_gpu > 0:
-        torch.cuda.manual_seed_all(seed)
+
+def write_tensor_board(tb_writer, data, step):
+    for att_name in data.keys():
+        att_value = data[att_name]
+        tb_writer.add_scalar(att_name, att_value, step)
+
+
+def get_files_paths_from_directory(input_dir):
+    file_paths = []
+    for root, dirs, files in os.walk(input_dir):
+        for file_name in files:
+            file_paths.append(os.path.join(root, file_name))
+    return file_paths
 
 def seed_everything(seed=42):
     random.seed(seed)
@@ -67,37 +74,6 @@ def save_ckp(state, is_best, checkpoint_path, best_model_path):
         best_fpath = best_model_path
         # copy that checkpoint file to best path given, best_model_path
         shutil.copyfile(f_path, best_fpath)
-
-
-def vectorize_tags(tags, tag_idx_vocab):
-    tag_vec = np.zeros(len(tag_idx_vocab))
-    for t in tags:
-        tag_vec[tag_idx_vocab[t]] = 1
-    return tag_vec
-
-
-def vocab_to_index_dict(vocab):
-    # use sort because require consistent
-    vocab_list = list(vocab)
-    vocab_list.sort()
-    vocab_dict = dict()
-    for i in range(len(vocab_list)):
-        vocab_dict[vocab_list[i]] = i
-    return vocab_dict
-
-
-
-
-def save_examples(exampls, output_file):
-    nl = []
-    pl = []
-    df = pd.DataFrame()
-    for exmp in exampls:
-        nl.append(exmp['NL'])
-        pl.append(exmp['PL'])
-    df['NL'] = nl
-    df['PL'] = pl
-    df.to_csv(output_file)
 
 
 def save_check_point(model, ckpt_dir, args, optimizer, scheduler):

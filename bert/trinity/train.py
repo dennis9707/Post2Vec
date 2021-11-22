@@ -1,56 +1,32 @@
 import sys
 sys.path.append("../")
 sys.path.append("/usr/src/bert")
+import torch
+from torch.optim import AdamW
+from transformers import BertConfig, get_linear_schedule_with_warmup, AutoTokenizer
 from torch.utils.tensorboard import SummaryWriter
 import gc
-from sklearn import metrics
+from sklearn import metrics, preprocessing
 from datetime import datetime
 import pandas as pd
-from apex.parallel import convert_syncbn_model
-from apex.parallel import DistributedDataParallel as DDP
-from sklearn import preprocessing
+from apex.parallel import convert_syncbn_model, DistributedDataParallel as DDP
 from util.eval_util import evaluate_batch
 from util.util import seed_everything, save_check_point
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data import DataLoader
 from model.loss import loss_fn
 from model.model import TBertT
-from torch.optim import AdamW
-from transformers import BertConfig, get_linear_schedule_with_warmup
 import numpy as np
 import logging
-import torch
+
 import os
 import random
 import argparse
 from data_structure.question import Question, QuestionDataset
 import pandas as pd
-from transformers import AutoTokenizer
+from util.util import write_tensor_board
 
 logger = logging.getLogger(__name__)
-
-def load_data(args,file):
-    print(file)
-    tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base", local_files_only=True)
-    train = pd.read_pickle(file)
-    training_set = QuestionDataset(train, args.mlb, tokenizer)
-    return training_set
-
-
-def write_tensor_board(tb_writer, data, step):
-    for att_name in data.keys():
-        att_value = data[att_name]
-        tb_writer.add_scalar(att_name, att_value, step)
-
-
-def get_files_paths_from_directory(input_dir):
-    file_paths = []
-    for root, dirs, files in os.walk(input_dir):
-        for file_name in files:
-            file_paths.append(os.path.join(root, file_name))
-
-    return file_paths
-
 
 def get_train_args():
     parser = argparse.ArgumentParser()
@@ -81,7 +57,7 @@ def get_train_args():
     parser.add_argument("--local_rank", type=int, default=-1,
                         help="local_rank for distributed training on gpus")
     parser.add_argument(
-        "--fp16", action="store_false",
+        "--fp16", action="store_true",
         help="Whether to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit", )
     parser.add_argument("--seed", type=int, default=42,
                         help="random seed for initialization")
@@ -123,6 +99,7 @@ def get_train_args():
     args = parser.parse_args()
     return args
 
+
 def get_optimizer_scheduler(args, model, train_steps):
     no_decay = ["bias", "LayerNorm.weight"]
     optimizer_grouped_parameters = [
@@ -142,21 +119,16 @@ def get_optimizer_scheduler(args, model, train_steps):
     return optimizer, scheduler
 
 
-def log_train_info(args, example_num, train_steps):
+def log_train_info(args):
     logger.info("***** Running training *****")
-    logger.info("  Num examples = %d", example_num)
     logger.info("  Num Epochs = %d", args.num_train_epochs)
     logger.info("  Instantaneous batch size per GPU = %d",
                 args.per_gpu_train_batch_size)
     logger.info(
-        "  Total train batch size (w. parallel, distributed & accumulation) = %d",
+        "  Total train batch size (w. parallel, distributed) = %d",
         args.train_batch_size
-        * args.gradient_accumulation_steps
         * (torch.distributed.get_world_size() if args.local_rank != -1 else 1),
     )
-    logger.info("  Gradient Accumulation steps = %d",
-                args.gradient_accumulation_steps)
-    logger.info("  Total optimization steps = %d", train_steps)
 
 
 def get_exe_name(args):
@@ -167,6 +139,14 @@ def get_exe_name(args):
     if args.model_path:
         base_model = os.path.basename(args.model_path)
     return exe_name.format(args.tbert_type, time, base_model)
+
+def get_tag_encoder(vocab_file):
+    tab_vocab_path = vocab_file
+    tag_vocab = pd.read_csv(tab_vocab_path)
+    tag_list = tag_vocab["tag"].astype(str).tolist()
+    mlb = preprocessing.MultiLabelBinarizer()
+    mlb.fit([tag_list])
+    return mlb, len(mlb.classes_)
 
 
 def init_train_env(args, tbert_type):
@@ -200,27 +180,27 @@ def init_train_env(args, tbert_type):
         bool(args.local_rank != -1),
         args.fp16,
     )
+    
     # Set seed
     seed_everything(args.seed)
 
-    # set one hot tokenizer for labels
-    tab_vocab_path = args.vocab_file
-    tag_vocab = pd.read_csv(tab_vocab_path)
-    tag_list = tag_vocab["tag"].astype(str).tolist()
-    mlb = preprocessing.MultiLabelBinarizer()
-    mlb.fit([tag_list])
-    args.mlb = mlb
-    args.num_class = len(mlb.classes_)
 
     # Load pretrained model and tokenizer
     if args.local_rank not in [-1, 0]:
         # Make sure only the first process in distributed training will download model & vocab
         torch.distributed.barrier()
-    if tbert_type == 'trinity' or tbert_type == "T":
+    
+    # get the encoder for tags
+    mlb, num_class = get_tag_encoder(args.vocab_file)
+    args.mlb = mlb
+    args.num_class = num_class
+    
+    # get the model
+    if tbert_type == 'trinity':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
-
     else:
         raise Exception("TBERT type not found")
+    
     args.tbert_type = tbert_type
     if args.local_rank == 0:
         # Make sure only the first process in distributed training will download model & vocab
@@ -228,6 +208,7 @@ def init_train_env(args, tbert_type):
 
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
+    args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
 
     # Before we do anything with models, we want to ensure that we get fp16 execution of torch.einsum if args.fp16 is set.
     # Otherwise it'll default to "promote" mode, and we'll get fp32 operations. Note that running `--fp16_opt_level="O2"` will
@@ -243,13 +224,10 @@ def init_train_env(args, tbert_type):
     return model
 
 
-def train(args, model):
+def train(args, train_data_loader, valid_data_loader, model, optimizer, scheduler):
     """
     :param args:
-    :param train_examples:
-    :param valid_examples:
     :param model:
-    :param train_iter_method: method use for training in each iteration
     :return:
     """
 
@@ -265,18 +243,6 @@ def train(args, model):
         os.makedirs(args.output_dir)
     if args.local_rank in [-1, 0]:
         tb_writer = SummaryWriter(log_dir="../runs/{}".format(exp_name))
-    # get the train batch size
-    args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
-    
-
-    # the total number of batch per epoch
-    train_numbers = 19000
-    # 每个epoch有几个batch
-    epoch_batch_num = train_numbers / args.train_batch_size
-    # 一共有几个step更新参数
-    t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
-
-    optimizer, scheduler = get_optimizer_scheduler(args, model, t_total)
 
     if args.fp16:
         try:
@@ -288,166 +254,128 @@ def train(args, model):
         # model = convert_syncbn_model(model)
         model, optimizer = amp.initialize(
             model, optimizer, opt_level=args.fp16_opt_level)
-
-    # multi-gpu training (should be after apex fp16 initialization)
-    # if args.n_gpu > 1:
-    #     model = torch.nn.DataParallel(model)
+    
     # Distributed training (should be after apex fp16 initialization)
     if args.local_rank != -1:
         model = torch.nn.parallel.DistributedDataParallel(
             model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
         # model = DDP(model)
 
-    files = get_files_paths_from_directory(args.data_folder)
-    for file_cnt in range(len(files)):
-        training_set = load_data(args, files[file_cnt])
-        train_size = int(0.95 * len(training_set))
-        valid_size = len(training_set) - train_size
-        train_dataset, valid_dataset = torch.utils.data.random_split(training_set, [train_size, valid_size])  
+    
+    # Train!
+    log_train_info(args)
 
-        train_sampler = DistributedSampler(train_dataset)
-        valid_sampler = DistributedSampler(valid_dataset)
-
-        train_data_loader = DataLoader(training_set,
-                                    batch_size=args.train_batch_size,
-                                    sampler=train_sampler,
-                                    )
-
-        valid_data_loader = DataLoader(valid_dataset,
-                                    batch_size=args.train_batch_size,
-                                    sampler=valid_sampler,
-                                    )
-        
-        # Train!
-        log_train_info(args, train_numbers, t_total)
-
-        args.global_step = 0
-        args.epochs_trained = 0
-
-        gc.collect()
-        torch.cuda.empty_cache()
-
-        args.steps_trained_in_current_epoch = 0
-        logger.info("Start a new training")
-        # in case we resume training
-        model.zero_grad()
-        tr_loss = 0
-        for epoch in range(args.num_train_epochs):
-            valid_loss = 0
-            if args.local_rank in [-1, 0]:
-                print('############# FILE {} Epoch {}: Training Start   #############'.format(file_cnt, epoch))
-            model.train()
-            for step, data in enumerate(train_data_loader):
-                title_ids = data['titile_ids'].to(args.device, dtype=torch.long)
-                title_mask = data['title_mask'].to(args.device, dtype=torch.long)
-                text_ids = data['text_ids'].to(args.device, dtype=torch.long)
-                text_mask = data['text_mask'].to(args.device, dtype=torch.long)
-                code_ids = data['code_ids'].to(args.device, dtype=torch.long)
-                code_mask = data['code_mask'].to(args.device, dtype=torch.long)
-                targets = data['labels'].to(args.device, dtype=torch.float)
-
-                outputs = model(title_ids=title_ids,
-                                title_attention_mask=title_mask,
-                                text_ids=text_ids,
-                                text_attention_mask=text_mask,
-                                code_ids=code_ids,
-                                code_attention_mask=code_mask)
-
-                loss = loss_fn(outputs, targets)
-
-                # if args.n_gpu > 1:
-                #     loss = loss.mean()  # mean() to average on multi-gpu parallel (not distributed) training
-
-                # if args.gradient_accumulation_steps > 1:
-                #     loss = loss / args.gradient_accumulation_steps
-                # if (step + 1) % args.gradient_accumulation_steps == 0:
-                if args.fp16:
-                    try:
-                        from apex import amp
-                        with amp.scale_loss(loss, optimizer) as scaled_loss:
-                            scaled_loss.backward()
-                    except ImportError:
-                        raise ImportError(
-                            "Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
-                else:
-                    loss.backward()
-                tr_loss += loss.item()
-
-                # if (step + 1) % args.gradient_accumulation_steps == 0:
-                if args.fp16:
-                    torch.nn.utils.clip_grad_norm_(
-                        amp.master_params(optimizer), args.max_grad_norm)
-                else:
-                    torch.nn.utils.clip_grad_norm_(
-                        model.parameters(), args.max_grad_norm)
-                optimizer.step()
-                scheduler.step()
-                model.zero_grad()
-                args.global_step += 1
-                if args.local_rank in [-1, 0] and args.logging_steps > 0 and step % args.logging_steps == 0:
-                    tb_data = {
-                        'lr': scheduler.get_last_lr()[0],
-                        'loss': tr_loss / args.logging_steps
-                    }
-                    write_tensor_board(tb_writer, tb_data, args.global_step)
-                    print(
-                        f'Epoch: {epoch}, Batch: {step}， Loss:  {tr_loss / args.logging_steps}')
-                    current_time = datetime.now().strftime("%H:%M:%S")
-                    print("Current Time =", current_time)
-                    tr_loss = 0.0
-
-                # Save model checkpoint
-                if args.local_rank in [-1, 0] and args.save_steps > 0 and step % args.save_steps == 1:
-                    # step invoke checkpoint writing
-                    ckpt_output_dir = os.path.join(
-                        args.output_dir, "checkpoint-{}-{}".format(epoch, step))
-                    save_check_point(model, ckpt_output_dir,
-                                    args, optimizer, scheduler)
-            if args.local_rank in [-1, 0]:
-                print('############# Epoch {}: Training End     #############'.format(epoch))
-                print(
-                    '############# Epoch {}: Validation Start   #############'.format(epoch))
-                model.eval()
-                fin_targets = []
-                fin_outputs = []
-                with torch.no_grad():
-                    for batch_idx, data in enumerate(valid_data_loader, 0):
-                        title_ids = data['titile_ids'].to(
-                            args.device, dtype=torch.long)
-                        title_mask = data['title_mask'].to(
-                            args.device, dtype=torch.long)
-                        text_ids = data['text_ids'].to(
-                            args.device, dtype=torch.long)
-                        text_mask = data['text_mask'].to(
-                            args.device, dtype=torch.long)
-                        code_ids = data['code_ids'].to(
-                            args.device, dtype=torch.long)
-                        code_mask = data['code_mask'].to(
-                            args.device, dtype=torch.long)
-                        targets = data['labels'].to(
-                            args.device, dtype=torch.float)
-
-                        outputs = model(title_ids=title_ids,
-                                        title_attention_mask=title_mask,
-                                        text_ids=text_ids,
-                                        text_attention_mask=text_mask,
-                                        code_ids=code_ids,
-                                        code_attention_mask=code_mask)
-                        # target = targets.cpu().detach().numpy().tolist()
-                        # output = torch.sigmoid(
-                        #     outputs).cpu().detach().numpy().tolist()
-                        fin_targets.extend(targets.cpu().detach().numpy().tolist())
-                        fin_outputs.extend(torch.sigmoid(
-                            outputs).cpu().detach().numpy().tolist())
-                    [pre, rc, f1, cnt] = evaluate_batch(
-                        fin_outputs, fin_targets, [1, 2, 3, 4, 5])
-                    print(f"F1 Score = {pre}")
-                    print(f"Recall Score  = {rc}")
-                    print(f"Precision Score  = {f1}")
-                    print(f"Count  = {cnt}")
-                    print(
-                        '############# Epoch {}: Validation End     #############'.format(epoch))
-        # Save model checkpoint
+    args.steps_trained_in_current_epoch = 0
+    logger.info("Start a new training")
+    # in case we resume training
+    
+    tr_loss = 0
+    for epoch in range(args.num_train_epochs):
         if args.local_rank in [-1, 0]:
-            model_output = os.path.join(args.output_dir, "final_model-{}".format(file_cnt))
-            save_check_point(model, model_output, args, optimizer, scheduler)
+            print('############# Epoch {}: Training Start   #############'.format(epoch))
+        model.train()
+        for step, data in enumerate(train_data_loader):
+            title_ids = data['titile_ids'].to(args.device, dtype=torch.long)
+            title_mask = data['title_mask'].to(args.device, dtype=torch.long)
+            text_ids = data['text_ids'].to(args.device, dtype=torch.long)
+            text_mask = data['text_mask'].to(args.device, dtype=torch.long)
+            code_ids = data['code_ids'].to(args.device, dtype=torch.long)
+            code_mask = data['code_mask'].to(args.device, dtype=torch.long)
+            targets = data['labels'].to(args.device, dtype=torch.float)
+            model.zero_grad()
+            outputs = model(title_ids=title_ids,
+                            title_attention_mask=title_mask,
+                            text_ids=text_ids,
+                            text_attention_mask=text_mask,
+                            code_ids=code_ids,
+                            code_attention_mask=code_mask)
+
+            loss = loss_fn(outputs, targets)
+            if args.fp16:
+                try:
+                    from apex import amp
+                    with amp.scale_loss(loss, optimizer) as scaled_loss:
+                        scaled_loss.backward()
+                except ImportError:
+                    raise ImportError(
+                        "Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
+            else:
+                loss.backward()
+            tr_loss += loss.item()
+
+            if args.fp16:
+                torch.nn.utils.clip_grad_norm_(
+                    amp.master_params(optimizer), args.max_grad_norm)
+            else:
+                torch.nn.utils.clip_grad_norm_(
+                    model.parameters(), args.max_grad_norm)
+            optimizer.step()
+            scheduler.step()
+            args.global_step += 1
+            
+            if args.local_rank in [-1, 0] and args.logging_steps > 0 and step % args.logging_steps == 0:
+                tb_data = {
+                    'lr': scheduler.get_last_lr()[0],
+                    'loss': tr_loss / args.logging_steps
+                }
+                write_tensor_board(tb_writer, tb_data, args.global_step)
+                print(
+                    f'Epoch: {epoch}, Batch: {step}， Loss:  {tr_loss / args.logging_steps}')
+                current_time = datetime.now().strftime("%H:%M:%S")
+                print("Current Time =", current_time)
+                tr_loss = 0.0
+
+            # Save model checkpoint
+            if args.local_rank in [-1, 0] and args.save_steps > 0 and (step+1) % args.save_steps == 0:
+                # step invoke checkpoint writing
+                ckpt_output_dir = os.path.join(
+                    args.output_dir, "checkpoint-{}-{}".format(epoch, step))
+                save_check_point(model, ckpt_output_dir,
+                                args, optimizer, scheduler)
+                
+        # evaluation
+        if args.local_rank in [-1, 0]:
+            print('############# Epoch {}: Training End     #############'.format(epoch))
+            print(
+                '############# Epoch {}: Validation Start   #############'.format(epoch))
+            model.eval()
+            fin_targets = []
+            fin_outputs = []
+            with torch.no_grad():
+                for batch_idx, data in enumerate(valid_data_loader, 0):
+                    title_ids = data['titile_ids'].to(
+                        args.device, dtype=torch.long)
+                    title_mask = data['title_mask'].to(
+                        args.device, dtype=torch.long)
+                    text_ids = data['text_ids'].to(
+                        args.device, dtype=torch.long)
+                    text_mask = data['text_mask'].to(
+                        args.device, dtype=torch.long)
+                    code_ids = data['code_ids'].to(
+                        args.device, dtype=torch.long)
+                    code_mask = data['code_mask'].to(
+                        args.device, dtype=torch.long)
+                    targets = data['labels'].to(
+                        args.device, dtype=torch.float)
+
+                    outputs = model(title_ids=title_ids,
+                                    title_attention_mask=title_mask,
+                                    text_ids=text_ids,
+                                    text_attention_mask=text_mask,
+                                    code_ids=code_ids,
+                                    code_attention_mask=code_mask)
+                    # target = targets.cpu().detach().numpy().tolist()
+                    # output = torch.sigmoid(
+                    #     outputs).cpu().detach().numpy().tolist()
+                    fin_targets.extend(targets.cpu().detach().numpy().tolist())
+                    fin_outputs.extend(torch.sigmoid(
+                        outputs).cpu().detach().numpy().tolist())
+                [pre, rc, f1, cnt] = evaluate_batch(
+                    fin_outputs, fin_targets, [1, 2, 3, 4, 5])
+                print(f"F1 Score = {pre}")
+                print(f"Recall Score  = {rc}")
+                print(f"Precision Score  = {f1}")
+                print(f"Count  = {cnt}")
+                print(
+                    '############# Epoch {}: Validation End     #############'.format(epoch))
+    return model, optimizer, scheduler
