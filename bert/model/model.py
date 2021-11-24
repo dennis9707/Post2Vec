@@ -58,6 +58,7 @@ class ClassifyHeader(nn.Module):
         x = self.dropout(concated_hidden)
         x = self.dense(x)
         x = torch.tanh(x)
+        x = self.dropout(x)
         x = self.output_layer(x)
         return x
 

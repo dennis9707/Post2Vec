@@ -1,2 +1,1564 @@
-11/22/2021 07:18:47 - WARNING - train -   Process rank: -1, device: cuda, n_gpu: 8, distributed training: False, 16-bits training: False
-11/22/2021 07:19:05 - INFO - train -   Training/evaluation parameters Namespace(adam_epsilon=1e-08, code_bert='microsoft/codebert-base', data_file='../../data/train/train-0-20000.pkl', data_folder='../../data/train', device=device(type='cuda'), exe_name=None, fp16=False, fp16_opt_level='O1', gradient_accumulation_steps=4, learning_rate=1e-06, local_rank=-1, logging_steps=100, max_grad_norm=1.0, mlb=MultiLabelBinarizer(classes=None, sparse_output=False), model_path=None, n_gpu=8, no_cuda=False, num_class=23686, num_train_epochs=3, output_dir='../../data/results', per_gpu_eval_batch_size=2, per_gpu_train_batch_size=2, save_steps=1000, seed=42, tbert_type='trinity', valid_num=100, valid_step=50, vocab_file='../../data/tags/commonTags_post2vec.csv', warmup_steps=0, weight_decay=0.0)
+11/22/2021 14:23:31 - WARNING - train -   device: cuda, n_gpu: 8
+11/22/2021 14:23:50 - INFO - train -   Training/evaluation parameters Namespace(adam_epsilon=1e-08, code_bert='microsoft/codebert-base', data_file='../../data/train/train-0-20000.pkl', data_folder='../../data/train', device=device(type='cuda'), gradient_accumulation_steps=4, learning_rate=1e-05, logging_steps=100, max_grad_norm=1.0, mlb=MultiLabelBinarizer(classes=None, sparse_output=False), model_path=None, n_gpu=8, num_class=23686, num_train_epochs=3, output_dir='../../data/results', per_gpu_train_batch_size=2, save_steps=500, seed=42, tbert_type='trinity', vocab_file='../../data/tags/commonTags_post2vec.csv', warmup_steps=0, weight_decay=0.0)
+11/22/2021 14:23:51 - INFO - __main__ -   n_gpu: 8
+11/22/2021 14:23:54 - INFO - __main__ -   ############# FILE 0: Training Start   #############
+11/22/2021 14:23:54 - INFO - __main__ -   ***** Running training *****
+11/22/2021 14:23:54 - INFO - __main__ -     Num Epochs = 3
+11/22/2021 14:23:54 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/22/2021 14:23:54 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/22/2021 14:23:54 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/22/2021 14:23:54 - INFO - __main__ -   Start a new training
+11/22/2021 14:23:54 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/22/2021 14:32:41 - INFO - __main__ -   tb_data {'lr': 9.997815339376106e-06, 'loss': 0.361079894118011}
+11/22/2021 14:32:41 - INFO - __main__ -   Epoch: 0, Batch: 399， Loss:  0.361079894118011
+11/22/2021 14:40:44 - INFO - __main__ -   tb_data {'lr': 9.99563067875221e-06, 'loss': 0.08022102246060968}
+11/22/2021 14:40:44 - INFO - __main__ -   Epoch: 0, Batch: 799， Loss:  0.08022102246060968
+11/22/2021 14:48:29 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/22/2021 14:48:29 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/22/2021 14:50:42 - INFO - __main__ -   F1 Score = [0.105, 0.0525, 0.03499999999999997, 0.04975, 0.040200000000000034]
+11/22/2021 14:50:42 - INFO - __main__ -   Recall Score  = [0.105, 0.0545, 0.04150000000000002, 0.07466666666666667, 0.07341666666666674]
+11/22/2021 14:50:42 - INFO - __main__ -   Precision Score  = [0.105, 0.05316666666666667, 0.03719999999999999, 0.057271428571428536, 0.049567460317460316]
+11/22/2021 14:50:42 - INFO - __main__ -   Count  = 1000
+11/22/2021 14:50:42 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/22/2021 14:50:42 - INFO - __main__ -   Training finished
+11/22/2021 14:50:42 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/22/2021 14:50:58 - INFO - __main__ -   tb_data {'lr': 9.993446018128315e-06, 'loss': 0.03730295650660992}
+11/22/2021 14:50:58 - INFO - __main__ -   Epoch: 1, Batch: 11， Loss:  0.03730295650660992
+11/22/2021 14:59:59 - INFO - __main__ -   tb_data {'lr': 9.99126135750442e-06, 'loss': 0.022713085883297027}
+11/22/2021 14:59:59 - INFO - __main__ -   Epoch: 1, Batch: 411， Loss:  0.022713085883297027
+11/22/2021 15:08:59 - INFO - __main__ -   tb_data {'lr': 9.989076696880525e-06, 'loss': 0.01566854814765975}
+11/22/2021 15:08:59 - INFO - __main__ -   Epoch: 1, Batch: 811， Loss:  0.01566854814765975
+11/22/2021 15:17:25 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/22/2021 15:17:25 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/22/2021 15:19:37 - INFO - __main__ -   F1 Score = [0.105, 0.1, 0.09533333333333309, 0.09, 0.08580000000000057]
+11/22/2021 15:19:37 - INFO - __main__ -   Recall Score  = [0.105, 0.1065, 0.11683333333333304, 0.13541666666666655, 0.15643333333333337]
+11/22/2021 15:19:37 - INFO - __main__ -   Precision Score  = [0.105, 0.10216666666666668, 0.10213333333333317, 0.10380714285714303, 0.10593730158730195]
+11/22/2021 15:19:37 - INFO - __main__ -   Count  = 1000
+11/22/2021 15:19:37 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/22/2021 15:19:37 - INFO - __main__ -   Training finished
+11/22/2021 15:19:37 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/22/2021 15:20:10 - INFO - __main__ -   tb_data {'lr': 9.98689203625663e-06, 'loss': 0.011674674300011248}
+11/22/2021 15:20:10 - INFO - __main__ -   Epoch: 2, Batch: 23， Loss:  0.011674674300011248
+11/22/2021 15:29:09 - INFO - __main__ -   tb_data {'lr': 9.984707375632732e-06, 'loss': 0.00913637621793896}
+11/22/2021 15:29:09 - INFO - __main__ -   Epoch: 2, Batch: 423， Loss:  0.00913637621793896
+11/22/2021 15:38:09 - INFO - __main__ -   tb_data {'lr': 9.982522715008837e-06, 'loss': 0.007429892972577363}
+11/22/2021 15:38:09 - INFO - __main__ -   Epoch: 2, Batch: 823， Loss:  0.007429892972577363
+11/22/2021 15:46:18 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/22/2021 15:46:18 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/22/2021 15:48:31 - INFO - __main__ -   F1 Score = [0.105, 0.1, 0.09266666666666641, 0.09, 0.08580000000000056]
+11/22/2021 15:48:31 - INFO - __main__ -   Recall Score  = [0.105, 0.1065, 0.11449999999999971, 0.1354166666666665, 0.1564333333333333]
+11/22/2021 15:48:31 - INFO - __main__ -   Precision Score  = [0.105, 0.10216666666666667, 0.09949999999999985, 0.103807142857143, 0.10593730158730198]
+11/22/2021 15:48:31 - INFO - __main__ -   Count  = 1000
+11/22/2021 15:48:31 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/22/2021 15:48:31 - INFO - __main__ -   Training finished
+11/22/2021 15:48:31 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-0
+11/22/2021 15:48:50 - INFO - __main__ -   ############# FILE 1: Training Start   #############
+11/22/2021 15:48:50 - INFO - __main__ -   ***** Running training *****
+11/22/2021 15:48:50 - INFO - __main__ -     Num Epochs = 3
+11/22/2021 15:48:50 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/22/2021 15:48:50 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/22/2021 15:48:50 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/22/2021 15:48:50 - INFO - __main__ -   Start a new training
+11/22/2021 15:48:50 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+11/22/2021 15:49:39 - INFO - __main__ -   tb_data {'lr': 9.980338054384942e-06, 'loss': 0.0005183305696118623}
+11/22/2021 15:49:39 - INFO - __main__ -   Epoch: 0, Batch: 35， Loss:  0.0005183305696118623
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/22/2021 15:58:40 - INFO - __main__ -   tb_data {'lr': 9.978153393761048e-06, 'loss': 0.005287455188808962}
+11/22/2021 15:58:40 - INFO - __main__ -   Epoch: 0, Batch: 435， Loss:  0.005287455188808962
+11/22/2021 16:07:54 - INFO - __main__ -   tb_data {'lr': 9.975968733137151e-06, 'loss': 0.004593977958429605}
+11/22/2021 16:07:54 - INFO - __main__ -   Epoch: 0, Batch: 835， Loss:  0.004593977958429605
+11/22/2021 16:16:01 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/22/2021 16:16:01 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/22/2021 16:18:17 - INFO - __main__ -   F1 Score = [0.124, 0.1015, 0.09766666666666636, 0.09425, 0.08840000000000067]
+11/22/2021 16:18:17 - INFO - __main__ -   Recall Score  = [0.124, 0.1045, 0.11799999999999969, 0.14008333333333325, 0.15921666666666662]
+11/22/2021 16:18:17 - INFO - __main__ -   Precision Score  = [0.124, 0.10250000000000001, 0.10449999999999991, 0.10831666666666678, 0.10870873015873071]
+11/22/2021 16:18:17 - INFO - __main__ -   Count  = 1000
+11/22/2021 16:18:17 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/22/2021 16:18:17 - INFO - __main__ -   Training finished
+11/22/2021 16:18:17 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/22/2021 16:19:23 - INFO - __main__ -   tb_data {'lr': 9.973784072513256e-06, 'loss': 0.004054775445838459}
+11/22/2021 16:19:23 - INFO - __main__ -   Epoch: 1, Batch: 47， Loss:  0.004054775445838459
+11/22/2021 16:28:39 - INFO - __main__ -   tb_data {'lr': 9.971599411889361e-06, 'loss': 0.0036148666858207435}
+11/22/2021 16:28:39 - INFO - __main__ -   Epoch: 1, Batch: 447， Loss:  0.0036148666858207435
+11/22/2021 16:37:53 - INFO - __main__ -   tb_data {'lr': 9.969414751265466e-06, 'loss': 0.003258409241680056}
+11/22/2021 16:37:53 - INFO - __main__ -   Epoch: 1, Batch: 847， Loss:  0.003258409241680056
+11/22/2021 16:45:46 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/22/2021 16:45:46 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/22/2021 16:48:02 - INFO - __main__ -   F1 Score = [0.124, 0.1015, 0.09766666666666637, 0.09425, 0.08840000000000066]
+11/22/2021 16:48:02 - INFO - __main__ -   Recall Score  = [0.124, 0.1045, 0.11799999999999973, 0.14008333333333334, 0.1592166666666669]
+11/22/2021 16:48:02 - INFO - __main__ -   Precision Score  = [0.124, 0.10250000000000001, 0.10449999999999991, 0.10831666666666687, 0.10870873015873063]
+11/22/2021 16:48:02 - INFO - __main__ -   Count  = 1000
+11/22/2021 16:48:02 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/22/2021 16:48:02 - INFO - __main__ -   Training finished
+11/22/2021 16:48:02 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/22/2021 16:49:25 - INFO - __main__ -   tb_data {'lr': 9.96723009064157e-06, 'loss': 0.0029665620409650728}
+11/22/2021 16:49:25 - INFO - __main__ -   Epoch: 2, Batch: 59， Loss:  0.0029665620409650728
+11/22/2021 16:58:41 - INFO - __main__ -   tb_data {'lr': 9.965045430017675e-06, 'loss': 0.002727400251897052}
+11/22/2021 16:58:41 - INFO - __main__ -   Epoch: 2, Batch: 459， Loss:  0.002727400251897052
+11/22/2021 17:07:59 - INFO - __main__ -   tb_data {'lr': 9.96286076939378e-06, 'loss': 0.002522918548202142}
+11/22/2021 17:07:59 - INFO - __main__ -   Epoch: 2, Batch: 859， Loss:  0.002522918548202142
+11/22/2021 17:15:37 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/22/2021 17:15:37 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/22/2021 17:17:52 - INFO - __main__ -   F1 Score = [0.124, 0.1015, 0.09766666666666642, 0.08975, 0.08840000000000069]
+11/22/2021 17:17:52 - INFO - __main__ -   Recall Score  = [0.124, 0.1045, 0.11799999999999976, 0.13458333333333322, 0.15921666666666676]
+11/22/2021 17:17:52 - INFO - __main__ -   Precision Score  = [0.124, 0.10250000000000001, 0.10449999999999998, 0.10336428571428576, 0.10870873015873066]
+11/22/2021 17:17:52 - INFO - __main__ -   Count  = 1000
+11/22/2021 17:17:52 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/22/2021 17:17:52 - INFO - __main__ -   Training finished
+11/22/2021 17:17:52 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-1
+11/22/2021 17:18:10 - INFO - __main__ -   ############# FILE 2: Training Start   #############
+11/22/2021 17:18:10 - INFO - __main__ -   ***** Running training *****
+11/22/2021 17:18:10 - INFO - __main__ -     Num Epochs = 3
+11/22/2021 17:18:10 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/22/2021 17:18:10 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/22/2021 17:18:10 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/22/2021 17:18:10 - INFO - __main__ -   Start a new training
+11/22/2021 17:18:10 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/22/2021 17:19:50 - INFO - __main__ -   tb_data {'lr': 9.960676108769885e-06, 'loss': 0.00040987787360791117}
+11/22/2021 17:19:50 - INFO - __main__ -   Epoch: 0, Batch: 71， Loss:  0.00040987787360791117
+11/22/2021 17:29:09 - INFO - __main__ -   tb_data {'lr': 9.958491448145988e-06, 'loss': 0.002200263249105774}
+11/22/2021 17:29:09 - INFO - __main__ -   Epoch: 0, Batch: 471， Loss:  0.002200263249105774
+11/22/2021 17:38:22 - INFO - __main__ -   tb_data {'lr': 9.956306787522092e-06, 'loss': 0.0020637552515836433}
+11/22/2021 17:38:22 - INFO - __main__ -   Epoch: 0, Batch: 871， Loss:  0.0020637552515836433
+11/22/2021 17:45:43 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/22/2021 17:45:43 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/22/2021 17:47:58 - INFO - __main__ -   F1 Score = [0.108, 0.096, 0.0853333333333332, 0.0825, 0.07960000000000052]
+11/22/2021 17:47:58 - INFO - __main__ -   Recall Score  = [0.108, 0.1015, 0.10516666666666645, 0.12141666666666652, 0.14375]
+11/22/2021 17:47:58 - INFO - __main__ -   Precision Score  = [0.108, 0.09783333333333334, 0.09196666666666663, 0.09460714285714289, 0.09813095238095276]
+11/22/2021 17:47:58 - INFO - __main__ -   Count  = 1000
+11/22/2021 17:47:58 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/22/2021 17:47:58 - INFO - __main__ -   Training finished
+11/22/2021 17:47:58 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/22/2021 17:49:56 - INFO - __main__ -   tb_data {'lr': 9.954122126898197e-06, 'loss': 0.0019524516281671821}
+11/22/2021 17:49:56 - INFO - __main__ -   Epoch: 1, Batch: 83， Loss:  0.0019524516281671821
+11/22/2021 17:59:18 - INFO - __main__ -   tb_data {'lr': 9.951937466274304e-06, 'loss': 0.0018530643184203653}
+11/22/2021 17:59:18 - INFO - __main__ -   Epoch: 1, Batch: 483， Loss:  0.0018530643184203653
+11/22/2021 18:08:35 - INFO - __main__ -   tb_data {'lr': 9.949752805650407e-06, 'loss': 0.0017640585210756399}
+11/22/2021 18:08:35 - INFO - __main__ -   Epoch: 1, Batch: 883， Loss:  0.0017640585210756399
+11/22/2021 18:15:37 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/22/2021 18:15:37 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/22/2021 18:17:52 - INFO - __main__ -   F1 Score = [0.108, 0.096, 0.0853333333333332, 0.0815, 0.07960000000000053]
+11/22/2021 18:17:52 - INFO - __main__ -   Recall Score  = [0.108, 0.1015, 0.1051666666666664, 0.12316666666666651, 0.14375]
+11/22/2021 18:17:52 - INFO - __main__ -   Precision Score  = [0.108, 0.09783333333333334, 0.0919666666666666, 0.09412380952380957, 0.09813095238095278]
+11/22/2021 18:17:52 - INFO - __main__ -   Count  = 1000
+11/22/2021 18:17:52 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/22/2021 18:17:52 - INFO - __main__ -   Training finished
+11/22/2021 18:17:52 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/22/2021 18:20:07 - INFO - __main__ -   tb_data {'lr': 9.947568145026512e-06, 'loss': 0.0016919389305985533}
+11/22/2021 18:20:07 - INFO - __main__ -   Epoch: 2, Batch: 95， Loss:  0.0016919389305985533
+11/22/2021 18:29:24 - INFO - __main__ -   tb_data {'lr': 9.945383484402616e-06, 'loss': 0.0016157182605820708}
+11/22/2021 18:29:24 - INFO - __main__ -   Epoch: 2, Batch: 495， Loss:  0.0016157182605820708
+11/22/2021 18:38:42 - INFO - __main__ -   tb_data {'lr': 9.943198823778721e-06, 'loss': 0.0015484338061651215}
+11/22/2021 18:38:42 - INFO - __main__ -   Epoch: 2, Batch: 895， Loss:  0.0015484338061651215
+11/22/2021 18:45:28 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/22/2021 18:45:28 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/22/2021 18:47:43 - INFO - __main__ -   F1 Score = [0.108, 0.096, 0.08533333333333323, 0.0825, 0.07940000000000054]
+11/22/2021 18:47:43 - INFO - __main__ -   Recall Score  = [0.108, 0.1015, 0.1051666666666664, 0.1214166666666665, 0.1428333333333333]
+11/22/2021 18:47:43 - INFO - __main__ -   Precision Score  = [0.108, 0.09783333333333334, 0.0919666666666665, 0.09460714285714299, 0.09786507936507977]
+11/22/2021 18:47:43 - INFO - __main__ -   Count  = 1000
+11/22/2021 18:47:43 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/22/2021 18:47:43 - INFO - __main__ -   Training finished
+11/22/2021 18:47:43 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-2
+11/22/2021 18:48:18 - INFO - __main__ -   ############# FILE 3: Training Start   #############
+11/22/2021 18:48:18 - INFO - __main__ -   ***** Running training *****
+11/22/2021 18:48:18 - INFO - __main__ -     Num Epochs = 3
+11/22/2021 18:48:18 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/22/2021 18:48:18 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/22/2021 18:48:18 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/22/2021 18:48:18 - INFO - __main__ -   Start a new training
+11/22/2021 18:48:18 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+11/22/2021 18:50:48 - INFO - __main__ -   tb_data {'lr': 9.941014163154826e-06, 'loss': 0.0004023026561480947}
+11/22/2021 18:50:48 - INFO - __main__ -   Epoch: 0, Batch: 107， Loss:  0.0004023026561480947
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/22/2021 19:00:03 - INFO - __main__ -   tb_data {'lr': 9.93882950253093e-06, 'loss': 0.001443869982904289}
+11/22/2021 19:00:03 - INFO - __main__ -   Epoch: 0, Batch: 507， Loss:  0.001443869982904289
+11/22/2021 19:09:19 - INFO - __main__ -   tb_data {'lr': 9.936644841907035e-06, 'loss': 0.0013980699513922445}
+11/22/2021 19:09:19 - INFO - __main__ -   Epoch: 0, Batch: 907， Loss:  0.0013980699513922445
+11/22/2021 19:15:53 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/22/2021 19:15:53 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/22/2021 19:18:10 - INFO - __main__ -   F1 Score = [0.122, 0.1095, 0.09533333333333306, 0.089, 0.0846000000000006]
+11/22/2021 19:18:10 - INFO - __main__ -   Recall Score  = [0.122, 0.111, 0.11033333333333302, 0.12724999999999978, 0.14616666666666672]
+11/22/2021 19:18:10 - INFO - __main__ -   Precision Score  = [0.122, 0.11000000000000001, 0.10063333333333316, 0.10120714285714298, 0.10287698412698461]
+11/22/2021 19:18:10 - INFO - __main__ -   Count  = 1000
+11/22/2021 19:18:10 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/22/2021 19:18:10 - INFO - __main__ -   Training finished
+11/22/2021 19:18:10 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/22/2021 19:20:58 - INFO - __main__ -   tb_data {'lr': 9.93446018128314e-06, 'loss': 0.0013623494480270893}
+11/22/2021 19:20:58 - INFO - __main__ -   Epoch: 1, Batch: 119， Loss:  0.0013623494480270893
+11/22/2021 19:30:13 - INFO - __main__ -   tb_data {'lr': 9.932275520659243e-06, 'loss': 0.0013215184633736498}
+11/22/2021 19:30:13 - INFO - __main__ -   Epoch: 1, Batch: 519， Loss:  0.0013215184633736498
+11/22/2021 19:39:28 - INFO - __main__ -   tb_data {'lr': 9.930090860035348e-06, 'loss': 0.0012917045160429552}
+11/22/2021 19:39:28 - INFO - __main__ -   Epoch: 1, Batch: 919， Loss:  0.0012917045160429552
+11/22/2021 19:45:44 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/22/2021 19:45:44 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/22/2021 19:47:57 - INFO - __main__ -   F1 Score = [0.122, 0.1095, 0.09733333333333306, 0.089, 0.08620000000000064]
+11/22/2021 19:47:57 - INFO - __main__ -   Recall Score  = [0.122, 0.111, 0.11283333333333309, 0.12499999999999982, 0.15023333333333336]
+11/22/2021 19:47:57 - INFO - __main__ -   Precision Score  = [0.122, 0.11000000000000001, 0.10273333333333325, 0.10075714285714292, 0.10522142857142913]
+11/22/2021 19:47:57 - INFO - __main__ -   Count  = 1000
+11/22/2021 19:47:57 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/22/2021 19:47:57 - INFO - __main__ -   Training finished
+11/22/2021 19:47:57 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/22/2021 19:51:04 - INFO - __main__ -   tb_data {'lr': 9.927906199411453e-06, 'loss': 0.0012563682903419249}
+11/22/2021 19:51:04 - INFO - __main__ -   Epoch: 2, Batch: 131， Loss:  0.0012563682903419249
+11/22/2021 20:00:25 - INFO - __main__ -   tb_data {'lr': 9.925721538787559e-06, 'loss': 0.001223657115479}
+11/22/2021 20:00:25 - INFO - __main__ -   Epoch: 2, Batch: 531， Loss:  0.001223657115479
+11/22/2021 20:09:45 - INFO - __main__ -   tb_data {'lr': 9.923536878163662e-06, 'loss': 0.001208912495349068}
+11/22/2021 20:09:45 - INFO - __main__ -   Epoch: 2, Batch: 931， Loss:  0.001208912495349068
+11/22/2021 20:15:42 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/22/2021 20:15:42 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/22/2021 20:17:56 - INFO - __main__ -   F1 Score = [0.122, 0.1095, 0.0966666666666664, 0.08725, 0.08460000000000058]
+11/22/2021 20:17:56 - INFO - __main__ -   Recall Score  = [0.122, 0.111, 0.11366666666666629, 0.12291666666666648, 0.14616666666666672]
+11/22/2021 20:17:56 - INFO - __main__ -   Precision Score  = [0.122, 0.11, 0.10246666666666647, 0.09883571428571442, 0.10287698412698461]
+11/22/2021 20:17:56 - INFO - __main__ -   Count  = 1000
+11/22/2021 20:17:56 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/22/2021 20:17:56 - INFO - __main__ -   Training finished
+11/22/2021 20:17:56 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-3
+11/22/2021 20:18:27 - INFO - __main__ -   ############# FILE 4: Training Start   #############
+11/22/2021 20:18:27 - INFO - __main__ -   ***** Running training *****
+11/22/2021 20:18:27 - INFO - __main__ -     Num Epochs = 3
+11/22/2021 20:18:27 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/22/2021 20:18:27 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/22/2021 20:18:27 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/22/2021 20:18:27 - INFO - __main__ -   Start a new training
+11/22/2021 20:18:27 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/22/2021 20:21:49 - INFO - __main__ -   tb_data {'lr': 9.921352217539767e-06, 'loss': 0.00042462431141757404}
+11/22/2021 20:21:49 - INFO - __main__ -   Epoch: 0, Batch: 143， Loss:  0.00042462431141757404
+11/22/2021 20:31:07 - INFO - __main__ -   tb_data {'lr': 9.919167556915872e-06, 'loss': 0.0011556854180525989}
+11/22/2021 20:31:07 - INFO - __main__ -   Epoch: 0, Batch: 543， Loss:  0.0011556854180525989
+11/22/2021 20:40:28 - INFO - __main__ -   tb_data {'lr': 9.916982896291976e-06, 'loss': 0.0011341916296805721}
+11/22/2021 20:40:28 - INFO - __main__ -   Epoch: 0, Batch: 943， Loss:  0.0011341916296805721
+11/22/2021 20:46:09 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/22/2021 20:46:09 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/22/2021 20:48:24 - INFO - __main__ -   F1 Score = [0.102, 0.095, 0.08833333333333317, 0.08425, 0.08080000000000054]
+11/22/2021 20:48:24 - INFO - __main__ -   Recall Score  = [0.102, 0.1, 0.10799999999999976, 0.12799999999999984, 0.15033333333333337]
+11/22/2021 20:48:24 - INFO - __main__ -   Precision Score  = [0.102, 0.09666666666666666, 0.0948, 0.09737142857142861, 0.10026984126984173]
+11/22/2021 20:48:24 - INFO - __main__ -   Count  = 1000
+11/22/2021 20:48:24 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/22/2021 20:48:24 - INFO - __main__ -   Training finished
+11/22/2021 20:48:24 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/22/2021 20:52:04 - INFO - __main__ -   tb_data {'lr': 9.914798235668081e-06, 'loss': 0.0011113936368201394}
+11/22/2021 20:52:04 - INFO - __main__ -   Epoch: 1, Batch: 155， Loss:  0.0011113936368201394
+11/22/2021 21:01:23 - INFO - __main__ -   tb_data {'lr': 9.912613575044186e-06, 'loss': 0.001098321705503622}
+11/22/2021 21:01:23 - INFO - __main__ -   Epoch: 1, Batch: 555， Loss:  0.001098321705503622
+11/22/2021 21:10:47 - INFO - __main__ -   tb_data {'lr': 9.91042891442029e-06, 'loss': 0.001084776792122284}
+11/22/2021 21:10:47 - INFO - __main__ -   Epoch: 1, Batch: 955， Loss:  0.001084776792122284
+11/22/2021 21:16:13 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/22/2021 21:16:13 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/22/2021 21:18:29 - INFO - __main__ -   F1 Score = [0.102, 0.095, 0.08833333333333317, 0.08475, 0.08080000000000054]
+11/22/2021 21:18:29 - INFO - __main__ -   Recall Score  = [0.102, 0.1, 0.10799999999999975, 0.12891666666666654, 0.15033333333333337]
+11/22/2021 21:18:29 - INFO - __main__ -   Precision Score  = [0.102, 0.09666666666666669, 0.0947999999999999, 0.0980261904761906, 0.10026984126984158]
+11/22/2021 21:18:29 - INFO - __main__ -   Count  = 1000
+11/22/2021 21:18:29 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/22/2021 21:18:29 - INFO - __main__ -   Training finished
+11/22/2021 21:18:29 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/22/2021 21:22:25 - INFO - __main__ -   tb_data {'lr': 9.908244253796395e-06, 'loss': 0.0010660938944783993}
+11/22/2021 21:22:25 - INFO - __main__ -   Epoch: 2, Batch: 167， Loss:  0.0010660938944783993
+11/22/2021 21:31:45 - INFO - __main__ -   tb_data {'lr': 9.906059593172498e-06, 'loss': 0.0010505143244517968}
+11/22/2021 21:31:45 - INFO - __main__ -   Epoch: 2, Batch: 567， Loss:  0.0010505143244517968
+11/22/2021 21:41:07 - INFO - __main__ -   tb_data {'lr': 9.903874932548603e-06, 'loss': 0.0010388704610522837}
+11/22/2021 21:41:07 - INFO - __main__ -   Epoch: 2, Batch: 967， Loss:  0.0010388704610522837
+11/22/2021 21:46:16 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/22/2021 21:46:16 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/22/2021 21:48:31 - INFO - __main__ -   F1 Score = [0.102, 0.095, 0.08833333333333317, 0.08325, 0.08080000000000055]
+11/22/2021 21:48:31 - INFO - __main__ -   Recall Score  = [0.102, 0.1, 0.10799999999999978, 0.12516666666666648, 0.15033333333333346]
+11/22/2021 21:48:31 - INFO - __main__ -   Precision Score  = [0.102, 0.09666666666666666, 0.09479999999999997, 0.09615238095238102, 0.10026984126984169]
+11/22/2021 21:48:31 - INFO - __main__ -   Count  = 1000
+11/22/2021 21:48:31 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/22/2021 21:48:31 - INFO - __main__ -   Training finished
+11/22/2021 21:48:31 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-4
+11/22/2021 21:49:09 - INFO - __main__ -   ############# FILE 5: Training Start   #############
+11/22/2021 21:49:09 - INFO - __main__ -   ***** Running training *****
+11/22/2021 21:49:09 - INFO - __main__ -     Num Epochs = 3
+11/22/2021 21:49:09 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/22/2021 21:49:09 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/22/2021 21:49:09 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/22/2021 21:49:09 - INFO - __main__ -   Start a new training
+11/22/2021 21:49:09 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/22/2021 21:53:20 - INFO - __main__ -   tb_data {'lr': 9.901690271924708e-06, 'loss': 0.000460602008679416}
+11/22/2021 21:53:20 - INFO - __main__ -   Epoch: 0, Batch: 179， Loss:  0.000460602008679416
+11/22/2021 22:02:33 - INFO - __main__ -   tb_data {'lr': 9.899505611300814e-06, 'loss': 0.0010248880248400383}
+11/22/2021 22:02:33 - INFO - __main__ -   Epoch: 0, Batch: 579， Loss:  0.0010248880248400383
+11/22/2021 22:11:50 - INFO - __main__ -   tb_data {'lr': 9.897320950676917e-06, 'loss': 0.0010113058451679535}
+11/22/2021 22:11:50 - INFO - __main__ -   Epoch: 0, Batch: 979， Loss:  0.0010113058451679535
+11/22/2021 22:16:41 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/22/2021 22:16:41 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/22/2021 22:18:57 - INFO - __main__ -   F1 Score = [0.111, 0.106, 0.09133333333333314, 0.0835, 0.08320000000000062]
+11/22/2021 22:18:57 - INFO - __main__ -   Recall Score  = [0.111, 0.1115, 0.11349999999999967, 0.1263333333333331, 0.1552833333333334]
+11/22/2021 22:18:57 - INFO - __main__ -   Precision Score  = [0.111, 0.10783333333333336, 0.09829999999999987, 0.09644761904761917, 0.10359682539682578]
+11/22/2021 22:18:57 - INFO - __main__ -   Count  = 1000
+11/22/2021 22:18:57 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/22/2021 22:18:57 - INFO - __main__ -   Training finished
+11/22/2021 22:18:57 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/22/2021 22:23:24 - INFO - __main__ -   tb_data {'lr': 9.895136290053022e-06, 'loss': 0.0009980461515078788}
+11/22/2021 22:23:24 - INFO - __main__ -   Epoch: 1, Batch: 191， Loss:  0.0009980461515078788
+11/22/2021 22:32:44 - INFO - __main__ -   tb_data {'lr': 9.892951629429127e-06, 'loss': 0.0009917443712765817}
+11/22/2021 22:32:44 - INFO - __main__ -   Epoch: 1, Batch: 591， Loss:  0.0009917443712765817
+11/22/2021 22:42:03 - INFO - __main__ -   tb_data {'lr': 9.890766968805232e-06, 'loss': 0.0009830975187651346}
+11/22/2021 22:42:03 - INFO - __main__ -   Epoch: 1, Batch: 991， Loss:  0.0009830975187651346
+11/22/2021 22:46:38 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/22/2021 22:46:38 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/22/2021 22:48:53 - INFO - __main__ -   F1 Score = [0.111, 0.106, 0.09833333333333302, 0.0885, 0.08720000000000064]
+11/22/2021 22:48:53 - INFO - __main__ -   Recall Score  = [0.111, 0.1115, 0.12016666666666634, 0.13224999999999978, 0.16075000000000003]
+11/22/2021 22:48:53 - INFO - __main__ -   Precision Score  = [0.111, 0.10783333333333335, 0.10546666666666661, 0.10214047619047625, 0.10827380952381001]
+11/22/2021 22:48:53 - INFO - __main__ -   Count  = 1000
+11/22/2021 22:48:53 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/22/2021 22:48:53 - INFO - __main__ -   Training finished
+11/22/2021 22:48:53 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/22/2021 22:53:37 - INFO - __main__ -   tb_data {'lr': 9.888582308181336e-06, 'loss': 0.0009648835084226448}
+11/22/2021 22:53:37 - INFO - __main__ -   Epoch: 2, Batch: 203， Loss:  0.0009648835084226448
+11/22/2021 23:02:55 - INFO - __main__ -   tb_data {'lr': 9.886397647557441e-06, 'loss': 0.0009681577477022074}
+11/22/2021 23:02:55 - INFO - __main__ -   Epoch: 2, Batch: 603， Loss:  0.0009681577477022074
+11/22/2021 23:12:14 - INFO - __main__ -   tb_data {'lr': 9.884212986933546e-06, 'loss': 0.0009631674662523437}
+11/22/2021 23:12:14 - INFO - __main__ -   Epoch: 2, Batch: 1003， Loss:  0.0009631674662523437
+11/22/2021 23:16:33 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/22/2021 23:16:33 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/22/2021 23:18:47 - INFO - __main__ -   F1 Score = [0.111, 0.106, 0.09799999999999968, 0.0885, 0.08580000000000063]
+11/22/2021 23:18:47 - INFO - __main__ -   Recall Score  = [0.111, 0.1115, 0.11966666666666625, 0.13224999999999984, 0.1569666666666666]
+11/22/2021 23:18:47 - INFO - __main__ -   Precision Score  = [0.111, 0.10783333333333332, 0.10506666666666645, 0.10214047619047634, 0.10636349206349253]
+11/22/2021 23:18:47 - INFO - __main__ -   Count  = 1000
+11/22/2021 23:18:47 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/22/2021 23:18:47 - INFO - __main__ -   Training finished
+11/22/2021 23:18:47 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-5
+11/22/2021 23:19:18 - INFO - __main__ -   ############# FILE 6: Training Start   #############
+11/22/2021 23:19:18 - INFO - __main__ -   ***** Running training *****
+11/22/2021 23:19:18 - INFO - __main__ -     Num Epochs = 3
+11/22/2021 23:19:18 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/22/2021 23:19:18 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/22/2021 23:19:18 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/22/2021 23:19:18 - INFO - __main__ -   Start a new training
+11/22/2021 23:19:18 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/22/2021 23:24:20 - INFO - __main__ -   tb_data {'lr': 9.88202832630965e-06, 'loss': 0.0005193519066961017}
+11/22/2021 23:24:20 - INFO - __main__ -   Epoch: 0, Batch: 215， Loss:  0.0005193519066961017
+11/22/2021 23:33:33 - INFO - __main__ -   tb_data {'lr': 9.879843665685754e-06, 'loss': 0.0009540984978957568}
+11/22/2021 23:33:33 - INFO - __main__ -   Epoch: 0, Batch: 615， Loss:  0.0009540984978957568
+11/22/2021 23:42:55 - INFO - __main__ -   tb_data {'lr': 9.877659005061859e-06, 'loss': 0.0009478451783070341}
+11/22/2021 23:42:55 - INFO - __main__ -   Epoch: 0, Batch: 1015， Loss:  0.0009478451783070341
+11/22/2021 23:46:55 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/22/2021 23:46:55 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/22/2021 23:49:09 - INFO - __main__ -   F1 Score = [0.127, 0.1, 0.08699999999999983, 0.083, 0.08240000000000058]
+11/22/2021 23:49:09 - INFO - __main__ -   Recall Score  = [0.127, 0.104, 0.10716666666666641, 0.1267499999999999, 0.15330000000000002]
+11/22/2021 23:49:09 - INFO - __main__ -   Precision Score  = [0.127, 0.10133333333333334, 0.09376666666666658, 0.09629761904761915, 0.10248650793650835]
+11/22/2021 23:49:09 - INFO - __main__ -   Count  = 1000
+11/22/2021 23:49:09 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/22/2021 23:49:09 - INFO - __main__ -   Training finished
+11/22/2021 23:49:09 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/22/2021 23:54:31 - INFO - __main__ -   tb_data {'lr': 9.875474344437965e-06, 'loss': 0.0009436547890072689}
+11/22/2021 23:54:31 - INFO - __main__ -   Epoch: 1, Batch: 227， Loss:  0.0009436547890072689
+11/23/2021 00:03:51 - INFO - __main__ -   tb_data {'lr': 9.87328968381407e-06, 'loss': 0.000937436380336294}
+11/23/2021 00:03:51 - INFO - __main__ -   Epoch: 1, Batch: 627， Loss:  0.000937436380336294
+11/23/2021 00:13:07 - INFO - __main__ -   tb_data {'lr': 9.871105023190173e-06, 'loss': 0.0009323362978466321}
+11/23/2021 00:13:07 - INFO - __main__ -   Epoch: 1, Batch: 1027， Loss:  0.0009323362978466321
+11/23/2021 00:16:48 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 00:16:48 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 00:19:02 - INFO - __main__ -   F1 Score = [0.127, 0.1, 0.09333333333333307, 0.08875, 0.08520000000000062]
+11/23/2021 00:19:02 - INFO - __main__ -   Recall Score  = [0.127, 0.104, 0.11333333333333305, 0.13266666666666652, 0.15731666666666666]
+11/23/2021 00:19:02 - INFO - __main__ -   Precision Score  = [0.127, 0.10133333333333334, 0.10023333333333322, 0.10243809523809537, 0.10565396825396872]
+11/23/2021 00:19:02 - INFO - __main__ -   Count  = 1000
+11/23/2021 00:19:02 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 00:19:02 - INFO - __main__ -   Training finished
+11/23/2021 00:19:02 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 00:24:37 - INFO - __main__ -   tb_data {'lr': 9.868920362566278e-06, 'loss': 0.0009334003769617994}
+11/23/2021 00:24:37 - INFO - __main__ -   Epoch: 2, Batch: 239， Loss:  0.0009334003769617994
+11/23/2021 00:33:51 - INFO - __main__ -   tb_data {'lr': 9.866735701942382e-06, 'loss': 0.0009255004391889088}
+11/23/2021 00:33:51 - INFO - __main__ -   Epoch: 2, Batch: 639， Loss:  0.0009255004391889088
+11/23/2021 00:43:08 - INFO - __main__ -   tb_data {'lr': 9.864551041318487e-06, 'loss': 0.0009185047255596146}
+11/23/2021 00:43:08 - INFO - __main__ -   Epoch: 2, Batch: 1039， Loss:  0.0009185047255596146
+11/23/2021 00:46:35 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 00:46:35 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 00:48:50 - INFO - __main__ -   F1 Score = [0.127, 0.1, 0.0933333333333331, 0.08775, 0.08240000000000058]
+11/23/2021 00:48:50 - INFO - __main__ -   Recall Score  = [0.127, 0.104, 0.11333333333333302, 0.1323333333333332, 0.15329999999999994]
+11/23/2021 00:48:50 - INFO - __main__ -   Precision Score  = [0.127, 0.10133333333333334, 0.10023333333333326, 0.1015809523809525, 0.10248650793650838]
+11/23/2021 00:48:50 - INFO - __main__ -   Count  = 1000
+11/23/2021 00:48:50 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 00:48:50 - INFO - __main__ -   Training finished
+11/23/2021 00:48:50 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-6
+11/23/2021 00:49:28 - INFO - __main__ -   ############# FILE 7: Training Start   #############
+11/23/2021 00:49:28 - INFO - __main__ -   ***** Running training *****
+11/23/2021 00:49:28 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 00:49:28 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 00:49:28 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 00:49:28 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 00:49:28 - INFO - __main__ -   Start a new training
+11/23/2021 00:49:28 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 00:55:25 - INFO - __main__ -   tb_data {'lr': 9.862366380694592e-06, 'loss': 0.0005839043838204816}
+11/23/2021 00:55:25 - INFO - __main__ -   Epoch: 0, Batch: 251， Loss:  0.0005839043838204816
+11/23/2021 01:04:45 - INFO - __main__ -   tb_data {'lr': 9.860181720070697e-06, 'loss': 0.0009220997408556286}
+11/23/2021 01:04:45 - INFO - __main__ -   Epoch: 0, Batch: 651， Loss:  0.0009220997408556286
+11/23/2021 01:14:04 - INFO - __main__ -   tb_data {'lr': 9.857997059446801e-06, 'loss': 0.0009186708240304142}
+11/23/2021 01:14:04 - INFO - __main__ -   Epoch: 0, Batch: 1051， Loss:  0.0009186708240304142
+11/23/2021 01:17:16 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 01:17:16 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 01:19:31 - INFO - __main__ -   F1 Score = [0.116, 0.0985, 0.08899999999999984, 0.08475, 0.08060000000000055]
+11/23/2021 01:19:31 - INFO - __main__ -   Recall Score  = [0.116, 0.1035, 0.11199999999999977, 0.13016666666666651, 0.14998333333333339]
+11/23/2021 01:19:31 - INFO - __main__ -   Precision Score  = [0.116, 0.10016666666666668, 0.09619999999999984, 0.09851428571428589, 0.10003492063492095]
+11/23/2021 01:19:31 - INFO - __main__ -   Count  = 1000
+11/23/2021 01:19:31 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 01:19:31 - INFO - __main__ -   Training finished
+11/23/2021 01:19:31 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 01:25:39 - INFO - __main__ -   tb_data {'lr': 9.855812398822906e-06, 'loss': 0.0009144143227604218}
+11/23/2021 01:25:39 - INFO - __main__ -   Epoch: 1, Batch: 263， Loss:  0.0009144143227604218
+11/23/2021 01:34:58 - INFO - __main__ -   tb_data {'lr': 9.853627738199009e-06, 'loss': 0.00091149139450863}
+11/23/2021 01:34:58 - INFO - __main__ -   Epoch: 1, Batch: 663， Loss:  0.00091149139450863
+11/23/2021 01:44:23 - INFO - __main__ -   tb_data {'lr': 9.851443077575114e-06, 'loss': 0.0009077529466594569}
+11/23/2021 01:44:23 - INFO - __main__ -   Epoch: 1, Batch: 1063， Loss:  0.0009077529466594569
+11/23/2021 01:47:16 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 01:47:16 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 01:49:30 - INFO - __main__ -   F1 Score = [0.116, 0.0985, 0.08966666666666648, 0.08475, 0.08060000000000053]
+11/23/2021 01:49:30 - INFO - __main__ -   Recall Score  = [0.116, 0.1035, 0.1088333333333331, 0.1301666666666665, 0.14998333333333327]
+11/23/2021 01:49:30 - INFO - __main__ -   Precision Score  = [0.116, 0.10016666666666668, 0.0961333333333333, 0.09851428571428575, 0.10003492063492102]
+11/23/2021 01:49:30 - INFO - __main__ -   Count  = 1000
+11/23/2021 01:49:30 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 01:49:30 - INFO - __main__ -   Training finished
+11/23/2021 01:49:30 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 01:55:57 - INFO - __main__ -   tb_data {'lr': 9.84925841695122e-06, 'loss': 0.0009042708922061138}
+11/23/2021 01:55:57 - INFO - __main__ -   Epoch: 2, Batch: 275， Loss:  0.0009042708922061138
+11/23/2021 02:05:21 - INFO - __main__ -   tb_data {'lr': 9.847073756327325e-06, 'loss': 0.0008958393141801934}
+11/23/2021 02:05:21 - INFO - __main__ -   Epoch: 2, Batch: 675， Loss:  0.0008958393141801934
+11/23/2021 02:14:40 - INFO - __main__ -   tb_data {'lr': 9.844889095703428e-06, 'loss': 0.0009075876571296249}
+11/23/2021 02:14:40 - INFO - __main__ -   Epoch: 2, Batch: 1075， Loss:  0.0009075876571296249
+11/23/2021 02:17:18 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 02:17:18 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 02:19:33 - INFO - __main__ -   F1 Score = [0.116, 0.0985, 0.08699999999999988, 0.08325, 0.08080000000000054]
+11/23/2021 02:19:33 - INFO - __main__ -   Recall Score  = [0.116, 0.1035, 0.1058333333333332, 0.12358333333333325, 0.1501833333333334]
+11/23/2021 02:19:33 - INFO - __main__ -   Precision Score  = [0.116, 0.10016666666666668, 0.09313333333333336, 0.09588809523809522, 0.10023492063492105]
+11/23/2021 02:19:33 - INFO - __main__ -   Count  = 1000
+11/23/2021 02:19:33 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 02:19:33 - INFO - __main__ -   Training finished
+11/23/2021 02:19:33 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-7
+11/23/2021 02:20:04 - INFO - __main__ -   ############# FILE 8: Training Start   #############
+11/23/2021 02:20:04 - INFO - __main__ -   ***** Running training *****
+11/23/2021 02:20:04 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 02:20:04 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 02:20:04 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 02:20:04 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 02:20:04 - INFO - __main__ -   Start a new training
+11/23/2021 02:20:04 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+11/23/2021 02:26:40 - INFO - __main__ -   tb_data {'lr': 9.842704435079533e-06, 'loss': 0.0006452580966288224}
+11/23/2021 02:26:40 - INFO - __main__ -   Epoch: 0, Batch: 287， Loss:  0.0006452580966288224
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 02:35:41 - INFO - __main__ -   tb_data {'lr': 9.840519774455638e-06, 'loss': 0.0008966181983123534}
+11/23/2021 02:35:41 - INFO - __main__ -   Epoch: 0, Batch: 687， Loss:  0.0008966181983123534
+11/23/2021 02:45:02 - INFO - __main__ -   tb_data {'lr': 9.838335113831742e-06, 'loss': 0.0008939335787727032}
+11/23/2021 02:45:02 - INFO - __main__ -   Epoch: 0, Batch: 1087， Loss:  0.0008939335787727032
+11/23/2021 02:47:25 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 02:47:25 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 02:49:39 - INFO - __main__ -   F1 Score = [0.116, 0.102, 0.08499999999999992, 0.08175, 0.08020000000000053]
+11/23/2021 02:49:39 - INFO - __main__ -   Recall Score  = [0.116, 0.1055, 0.09999999999999983, 0.11883333333333314, 0.14313333333333345]
+11/23/2021 02:49:39 - INFO - __main__ -   Precision Score  = [0.116, 0.10316666666666668, 0.09009999999999994, 0.09358095238095258, 0.09874841269841296]
+11/23/2021 02:49:39 - INFO - __main__ -   Count  = 1000
+11/23/2021 02:49:39 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 02:49:39 - INFO - __main__ -   Training finished
+11/23/2021 02:49:39 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 02:56:36 - INFO - __main__ -   tb_data {'lr': 9.836150453207847e-06, 'loss': 0.0008913550229044631}
+11/23/2021 02:56:36 - INFO - __main__ -   Epoch: 1, Batch: 299， Loss:  0.0008913550229044631
+11/23/2021 03:05:56 - INFO - __main__ -   tb_data {'lr': 9.833965792583952e-06, 'loss': 0.0008867918569012545}
+11/23/2021 03:05:56 - INFO - __main__ -   Epoch: 1, Batch: 699， Loss:  0.0008867918569012545
+11/23/2021 03:15:22 - INFO - __main__ -   tb_data {'lr': 9.831781131960057e-06, 'loss': 0.0008799050307425205}
+11/23/2021 03:15:22 - INFO - __main__ -   Epoch: 1, Batch: 1099， Loss:  0.0008799050307425205
+11/23/2021 03:17:20 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 03:17:20 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 03:19:34 - INFO - __main__ -   F1 Score = [0.116, 0.102, 0.08666666666666654, 0.08175, 0.08060000000000056]
+11/23/2021 03:19:34 - INFO - __main__ -   Recall Score  = [0.116, 0.1055, 0.10166666666666649, 0.11883333333333321, 0.1439499999999999]
+11/23/2021 03:19:34 - INFO - __main__ -   Precision Score  = [0.116, 0.10316666666666667, 0.09186666666666664, 0.09358095238095242, 0.09932698412698454]
+11/23/2021 03:19:34 - INFO - __main__ -   Count  = 1000
+11/23/2021 03:19:34 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 03:19:34 - INFO - __main__ -   Training finished
+11/23/2021 03:19:34 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 03:26:45 - INFO - __main__ -   tb_data {'lr': 9.829596471336161e-06, 'loss': 0.0008771110528323334}
+11/23/2021 03:26:45 - INFO - __main__ -   Epoch: 2, Batch: 311， Loss:  0.0008771110528323334
+11/23/2021 03:36:05 - INFO - __main__ -   tb_data {'lr': 9.827411810712266e-06, 'loss': 0.0008736305343336426}
+11/23/2021 03:36:05 - INFO - __main__ -   Epoch: 2, Batch: 711， Loss:  0.0008736305343336426
+11/23/2021 03:45:28 - INFO - __main__ -   tb_data {'lr': 9.82522715008837e-06, 'loss': 0.000889104527886957}
+11/23/2021 03:45:28 - INFO - __main__ -   Epoch: 2, Batch: 1111， Loss:  0.000889104527886957
+11/23/2021 03:47:10 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 03:47:10 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 03:49:23 - INFO - __main__ -   F1 Score = [0.116, 0.102, 0.09199999999999979, 0.0815, 0.08020000000000053]
+11/23/2021 03:49:23 - INFO - __main__ -   Recall Score  = [0.116, 0.1055, 0.10999999999999979, 0.11849999999999984, 0.14313333333333342]
+11/23/2021 03:49:23 - INFO - __main__ -   Precision Score  = [0.116, 0.10316666666666667, 0.09809999999999994, 0.09329523809523821, 0.09874841269841306]
+11/23/2021 03:49:23 - INFO - __main__ -   Count  = 1000
+11/23/2021 03:49:23 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 03:49:23 - INFO - __main__ -   Training finished
+11/23/2021 03:49:23 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-8
+11/23/2021 03:49:55 - INFO - __main__ -   ############# FILE 9: Training Start   #############
+11/23/2021 03:49:55 - INFO - __main__ -   ***** Running training *****
+11/23/2021 03:49:55 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 03:49:55 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 03:49:55 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 03:49:55 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 03:49:55 - INFO - __main__ -   Start a new training
+11/23/2021 03:49:55 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 03:57:22 - INFO - __main__ -   tb_data {'lr': 9.823042489464476e-06, 'loss': 0.0007288202030758839}
+11/23/2021 03:57:22 - INFO - __main__ -   Epoch: 0, Batch: 323， Loss:  0.0007288202030758839
+11/23/2021 04:06:42 - INFO - __main__ -   tb_data {'lr': 9.82085782884058e-06, 'loss': 0.0008882203626853879}
+11/23/2021 04:06:42 - INFO - __main__ -   Epoch: 0, Batch: 723， Loss:  0.0008882203626853879
+11/23/2021 04:16:00 - INFO - __main__ -   tb_data {'lr': 9.818673168216685e-06, 'loss': 0.0008866195293376222}
+11/23/2021 04:16:00 - INFO - __main__ -   Epoch: 0, Batch: 1123， Loss:  0.0008866195293376222
+11/23/2021 04:17:30 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 04:17:30 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 04:19:44 - INFO - __main__ -   F1 Score = [0.101, 0.0875, 0.08833333333333315, 0.08375, 0.08080000000000057]
+11/23/2021 04:19:44 - INFO - __main__ -   Recall Score  = [0.101, 0.092, 0.10666666666666644, 0.12249999999999985, 0.14845000000000005]
+11/23/2021 04:19:44 - INFO - __main__ -   Precision Score  = [0.101, 0.08900000000000001, 0.09456666666666658, 0.09614761904761915, 0.10038650793650834]
+11/23/2021 04:19:44 - INFO - __main__ -   Count  = 1000
+11/23/2021 04:19:44 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 04:19:44 - INFO - __main__ -   Training finished
+11/23/2021 04:19:44 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 04:27:40 - INFO - __main__ -   tb_data {'lr': 9.816488507592788e-06, 'loss': 0.0008918857858225237}
+11/23/2021 04:27:40 - INFO - __main__ -   Epoch: 1, Batch: 335， Loss:  0.0008918857858225237
+11/23/2021 04:37:01 - INFO - __main__ -   tb_data {'lr': 9.814303846968893e-06, 'loss': 0.0008825284543854651}
+11/23/2021 04:37:01 - INFO - __main__ -   Epoch: 1, Batch: 735， Loss:  0.0008825284543854651
+11/23/2021 04:46:21 - INFO - __main__ -   tb_data {'lr': 9.812119186344998e-06, 'loss': 0.0008811844952288084}
+11/23/2021 04:46:21 - INFO - __main__ -   Epoch: 1, Batch: 1135， Loss:  0.0008811844952288084
+11/23/2021 04:47:34 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 04:47:34 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 04:49:48 - INFO - __main__ -   F1 Score = [0.101, 0.0955, 0.08833333333333315, 0.083, 0.08080000000000055]
+11/23/2021 04:49:48 - INFO - __main__ -   Recall Score  = [0.101, 0.099, 0.10666666666666641, 0.12741666666666648, 0.1484500000000001]
+11/23/2021 04:49:48 - INFO - __main__ -   Precision Score  = [0.101, 0.09666666666666665, 0.09456666666666652, 0.09673095238095256, 0.10038650793650833]
+11/23/2021 04:49:48 - INFO - __main__ -   Count  = 1000
+11/23/2021 04:49:48 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 04:49:48 - INFO - __main__ -   Training finished
+11/23/2021 04:49:48 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 04:58:00 - INFO - __main__ -   tb_data {'lr': 9.809934525721103e-06, 'loss': 0.0008864686227752827}
+11/23/2021 04:58:00 - INFO - __main__ -   Epoch: 2, Batch: 347， Loss:  0.0008864686227752827
+11/23/2021 05:07:22 - INFO - __main__ -   tb_data {'lr': 9.807749865097207e-06, 'loss': 0.000885201003839029}
+11/23/2021 05:07:22 - INFO - __main__ -   Epoch: 2, Batch: 747， Loss:  0.000885201003839029
+11/23/2021 05:16:54 - INFO - __main__ -   tb_data {'lr': 9.805565204473312e-06, 'loss': 0.0008715916681103408}
+11/23/2021 05:16:54 - INFO - __main__ -   Epoch: 2, Batch: 1147， Loss:  0.0008715916681103408
+11/23/2021 05:17:51 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 05:17:51 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 05:20:04 - INFO - __main__ -   F1 Score = [0.101, 0.0955, 0.0859999999999999, 0.08375, 0.08180000000000058]
+11/23/2021 05:20:04 - INFO - __main__ -   Recall Score  = [0.101, 0.099, 0.10683333333333316, 0.12641666666666654, 0.1516]
+11/23/2021 05:20:04 - INFO - __main__ -   Precision Score  = [0.101, 0.09666666666666666, 0.09283333333333328, 0.09685000000000012, 0.10174285714285748]
+11/23/2021 05:20:04 - INFO - __main__ -   Count  = 1000
+11/23/2021 05:20:04 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 05:20:04 - INFO - __main__ -   Training finished
+11/23/2021 05:20:04 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-9
+11/23/2021 05:20:37 - INFO - __main__ -   ############# FILE 10: Training Start   #############
+11/23/2021 05:20:37 - INFO - __main__ -   ***** Running training *****
+11/23/2021 05:20:37 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 05:20:37 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 05:20:37 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 05:20:37 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 05:20:37 - INFO - __main__ -   Start a new training
+11/23/2021 05:20:37 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 05:29:01 - INFO - __main__ -   tb_data {'lr': 9.803380543849417e-06, 'loss': 0.0007990789877658244}
+11/23/2021 05:29:01 - INFO - __main__ -   Epoch: 0, Batch: 359， Loss:  0.0007990789877658244
+11/23/2021 05:38:20 - INFO - __main__ -   tb_data {'lr': 9.801195883225522e-06, 'loss': 0.0008798363400273956}
+11/23/2021 05:38:20 - INFO - __main__ -   Epoch: 0, Batch: 759， Loss:  0.0008798363400273956
+11/23/2021 05:47:43 - INFO - __main__ -   tb_data {'lr': 9.799011222601625e-06, 'loss': 0.0008798299037152902}
+11/23/2021 05:47:43 - INFO - __main__ -   Epoch: 0, Batch: 1159， Loss:  0.0008798299037152902
+11/23/2021 05:48:22 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 05:48:22 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 05:50:37 - INFO - __main__ -   F1 Score = [0.111, 0.098, 0.09233333333333311, 0.0865, 0.08420000000000062]
+11/23/2021 05:50:37 - INFO - __main__ -   Recall Score  = [0.111, 0.1055, 0.1124999999999997, 0.12908333333333316, 0.15776666666666667]
+11/23/2021 05:50:37 - INFO - __main__ -   Precision Score  = [0.111, 0.10050000000000002, 0.09869999999999983, 0.09918809523809537, 0.10446507936507972]
+11/23/2021 05:50:37 - INFO - __main__ -   Count  = 1000
+11/23/2021 05:50:37 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 05:50:37 - INFO - __main__ -   Training finished
+11/23/2021 05:50:37 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 05:59:19 - INFO - __main__ -   tb_data {'lr': 9.796826561977731e-06, 'loss': 0.0008764013236213941}
+11/23/2021 05:59:19 - INFO - __main__ -   Epoch: 1, Batch: 371， Loss:  0.0008764013236213941
+11/23/2021 06:08:39 - INFO - __main__ -   tb_data {'lr': 9.794641901353836e-06, 'loss': 0.0008782689143845345}
+11/23/2021 06:08:39 - INFO - __main__ -   Epoch: 1, Batch: 771， Loss:  0.0008782689143845345
+11/23/2021 06:18:01 - INFO - __main__ -   tb_data {'lr': 9.79245724072994e-06, 'loss': 0.0008737455058144406}
+11/23/2021 06:18:01 - INFO - __main__ -   Epoch: 1, Batch: 1171， Loss:  0.0008737455058144406
+11/23/2021 06:18:23 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 06:18:23 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 06:20:38 - INFO - __main__ -   F1 Score = [0.111, 0.098, 0.09033333333333313, 0.085, 0.08140000000000053]
+11/23/2021 06:20:38 - INFO - __main__ -   Recall Score  = [0.111, 0.1055, 0.11549999999999977, 0.13258333333333325, 0.1517999999999999]
+11/23/2021 06:20:38 - INFO - __main__ -   Precision Score  = [0.111, 0.10050000000000003, 0.09799999999999989, 0.09858333333333341, 0.10077222222222255]
+11/23/2021 06:20:38 - INFO - __main__ -   Count  = 1000
+11/23/2021 06:20:38 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 06:20:38 - INFO - __main__ -   Training finished
+11/23/2021 06:20:38 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 06:29:40 - INFO - __main__ -   tb_data {'lr': 9.790272580106044e-06, 'loss': 0.0008643024766934104}
+11/23/2021 06:29:40 - INFO - __main__ -   Epoch: 2, Batch: 383， Loss:  0.0008643024766934104
+11/23/2021 06:39:04 - INFO - __main__ -   tb_data {'lr': 9.788087919482148e-06, 'loss': 0.0008752714419097174}
+11/23/2021 06:39:04 - INFO - __main__ -   Epoch: 2, Batch: 783， Loss:  0.0008752714419097174
+11/23/2021 06:48:28 - INFO - __main__ -   tb_data {'lr': 9.785903258858253e-06, 'loss': 0.0008751666551688686}
+11/23/2021 06:48:28 - INFO - __main__ -   Epoch: 2, Batch: 1183， Loss:  0.0008751666551688686
+11/23/2021 06:48:34 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 06:48:34 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 06:50:48 - INFO - __main__ -   F1 Score = [0.111, 0.098, 0.08833333333333324, 0.0865, 0.08420000000000058]
+11/23/2021 06:50:48 - INFO - __main__ -   Recall Score  = [0.111, 0.1055, 0.11066666666666647, 0.1290833333333332, 0.15776666666666678]
+11/23/2021 06:50:48 - INFO - __main__ -   Precision Score  = [0.111, 0.10050000000000002, 0.09516666666666657, 0.09918809523809538, 0.10446507936507977]
+11/23/2021 06:50:48 - INFO - __main__ -   Count  = 1000
+11/23/2021 06:50:48 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 06:50:48 - INFO - __main__ -   Training finished
+11/23/2021 06:50:48 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-10
+11/23/2021 06:51:16 - INFO - __main__ -   ############# FILE 11: Training Start   #############
+11/23/2021 06:51:16 - INFO - __main__ -   ***** Running training *****
+11/23/2021 06:51:16 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 06:51:16 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 06:51:16 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 06:51:16 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 06:51:16 - INFO - __main__ -   Start a new training
+11/23/2021 06:51:16 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 07:00:35 - INFO - __main__ -   tb_data {'lr': 9.783718598234358e-06, 'loss': 0.0008770847288542427}
+11/23/2021 07:00:35 - INFO - __main__ -   Epoch: 0, Batch: 395， Loss:  0.0008770847288542427
+11/23/2021 07:09:57 - INFO - __main__ -   tb_data {'lr': 9.781533937610463e-06, 'loss': 0.0008812542012310587}
+11/23/2021 07:09:57 - INFO - __main__ -   Epoch: 0, Batch: 795， Loss:  0.0008812542012310587
+11/23/2021 07:18:56 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 07:18:56 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 07:21:04 - INFO - __main__ -   F1 Score = [0.125, 0.106, 0.09199999999999979, 0.087, 0.0834000000000006]
+11/23/2021 07:21:04 - INFO - __main__ -   Recall Score  = [0.125, 0.113, 0.11099999999999967, 0.12924999999999978, 0.15075]
+11/23/2021 07:21:04 - INFO - __main__ -   Precision Score  = [0.125, 0.10833333333333335, 0.0978999999999998, 0.09966428571428594, 0.10256746031746064]
+11/23/2021 07:21:04 - INFO - __main__ -   Count  = 1000
+11/23/2021 07:21:04 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 07:21:04 - INFO - __main__ -   Training finished
+11/23/2021 07:21:04 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 07:21:15 - INFO - __main__ -   tb_data {'lr': 9.779349276986567e-06, 'loss': 0.0008813356886093971}
+11/23/2021 07:21:15 - INFO - __main__ -   Epoch: 1, Batch: 7， Loss:  0.0008813356886093971
+11/23/2021 07:29:59 - INFO - __main__ -   tb_data {'lr': 9.777164616362672e-06, 'loss': 0.0008770916334469803}
+11/23/2021 07:29:59 - INFO - __main__ -   Epoch: 1, Batch: 407， Loss:  0.0008770916334469803
+11/23/2021 07:39:18 - INFO - __main__ -   tb_data {'lr': 9.774979955738777e-06, 'loss': 0.0008746024023275822}
+11/23/2021 07:39:18 - INFO - __main__ -   Epoch: 1, Batch: 807， Loss:  0.0008746024023275822
+11/23/2021 07:48:18 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 07:48:18 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 07:50:28 - INFO - __main__ -   F1 Score = [0.125, 0.106, 0.09199999999999976, 0.087, 0.0844000000000006]
+11/23/2021 07:50:28 - INFO - __main__ -   Recall Score  = [0.125, 0.113, 0.11099999999999968, 0.12924999999999984, 0.1558666666666668]
+11/23/2021 07:50:28 - INFO - __main__ -   Precision Score  = [0.125, 0.10833333333333335, 0.09789999999999988, 0.09966428571428587, 0.10473174603174643]
+11/23/2021 07:50:28 - INFO - __main__ -   Count  = 1000
+11/23/2021 07:50:28 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 07:50:28 - INFO - __main__ -   Training finished
+11/23/2021 07:50:28 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 07:50:57 - INFO - __main__ -   tb_data {'lr': 9.772795295114882e-06, 'loss': 0.0008770582267607096}
+11/23/2021 07:50:57 - INFO - __main__ -   Epoch: 2, Batch: 19， Loss:  0.0008770582267607096
+11/23/2021 08:00:24 - INFO - __main__ -   tb_data {'lr': 9.770610634490986e-06, 'loss': 0.000870461990707554}
+11/23/2021 08:00:24 - INFO - __main__ -   Epoch: 2, Batch: 419， Loss:  0.000870461990707554
+11/23/2021 08:09:50 - INFO - __main__ -   tb_data {'lr': 9.768425973867091e-06, 'loss': 0.0008702818721940275}
+11/23/2021 08:09:50 - INFO - __main__ -   Epoch: 2, Batch: 819， Loss:  0.0008702818721940275
+11/23/2021 08:18:34 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 08:18:34 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 08:20:49 - INFO - __main__ -   F1 Score = [0.125, 0.106, 0.09199999999999983, 0.0875, 0.08440000000000063]
+11/23/2021 08:20:49 - INFO - __main__ -   Recall Score  = [0.125, 0.113, 0.11099999999999972, 0.1301666666666665, 0.15586666666666665]
+11/23/2021 08:20:49 - INFO - __main__ -   Precision Score  = [0.125, 0.10833333333333335, 0.09789999999999988, 0.10049523809523826, 0.10473174603174637]
+11/23/2021 08:20:49 - INFO - __main__ -   Count  = 1000
+11/23/2021 08:20:49 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 08:20:49 - INFO - __main__ -   Training finished
+11/23/2021 08:20:49 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-11
+11/23/2021 08:21:23 - INFO - __main__ -   ############# FILE 12: Training Start   #############
+11/23/2021 08:21:23 - INFO - __main__ -   ***** Running training *****
+11/23/2021 08:21:23 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 08:21:23 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 08:21:23 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 08:21:23 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 08:21:23 - INFO - __main__ -   Start a new training
+11/23/2021 08:21:23 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+11/23/2021 08:22:10 - INFO - __main__ -   tb_data {'lr': 9.766241313243196e-06, 'loss': 7.128053301130421e-05}
+11/23/2021 08:22:10 - INFO - __main__ -   Epoch: 0, Batch: 31， Loss:  7.128053301130421e-05
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 08:31:32 - INFO - __main__ -   tb_data {'lr': 9.764056652619299e-06, 'loss': 0.0008748774837295059}
+11/23/2021 08:31:32 - INFO - __main__ -   Epoch: 0, Batch: 431， Loss:  0.0008748774837295059
+11/23/2021 08:40:58 - INFO - __main__ -   tb_data {'lr': 9.761871991995404e-06, 'loss': 0.000880869713582797}
+11/23/2021 08:40:58 - INFO - __main__ -   Epoch: 0, Batch: 831， Loss:  0.000880869713582797
+11/23/2021 08:49:16 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 08:49:16 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 08:51:30 - INFO - __main__ -   F1 Score = [0.132, 0.108, 0.09533333333333306, 0.09175, 0.08680000000000063]
+11/23/2021 08:51:30 - INFO - __main__ -   Recall Score  = [0.132, 0.1105, 0.11366666666666635, 0.1335833333333332, 0.15806666666666677]
+11/23/2021 08:51:30 - INFO - __main__ -   Precision Score  = [0.132, 0.10883333333333334, 0.10186666666666654, 0.10518809523809536, 0.10726111111111158]
+11/23/2021 08:51:30 - INFO - __main__ -   Count  = 1000
+11/23/2021 08:51:30 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 08:51:30 - INFO - __main__ -   Training finished
+11/23/2021 08:51:30 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 08:52:32 - INFO - __main__ -   tb_data {'lr': 9.759687331371508e-06, 'loss': 0.000881837909691967}
+11/23/2021 08:52:32 - INFO - __main__ -   Epoch: 1, Batch: 43， Loss:  0.000881837909691967
+11/23/2021 09:01:26 - INFO - __main__ -   tb_data {'lr': 9.757502670747613e-06, 'loss': 0.0008678683500329498}
+11/23/2021 09:01:26 - INFO - __main__ -   Epoch: 1, Batch: 443， Loss:  0.0008678683500329498
+11/23/2021 09:09:48 - INFO - __main__ -   tb_data {'lr': 9.755318010123718e-06, 'loss': 0.0008706873156188521}
+11/23/2021 09:09:48 - INFO - __main__ -   Epoch: 1, Batch: 843， Loss:  0.0008706873156188521
+11/23/2021 09:17:12 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 09:17:12 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 09:19:20 - INFO - __main__ -   F1 Score = [0.132, 0.108, 0.09533333333333305, 0.09175, 0.08840000000000066]
+11/23/2021 09:19:20 - INFO - __main__ -   Recall Score  = [0.132, 0.1105, 0.11366666666666635, 0.1335833333333332, 0.1578666666666666]
+11/23/2021 09:19:20 - INFO - __main__ -   Precision Score  = [0.132, 0.10883333333333334, 0.10186666666666658, 0.10518809523809532, 0.10900555555555608]
+11/23/2021 09:19:20 - INFO - __main__ -   Count  = 1000
+11/23/2021 09:19:20 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 09:19:20 - INFO - __main__ -   Training finished
+11/23/2021 09:19:20 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 09:20:31 - INFO - __main__ -   tb_data {'lr': 9.753133349499823e-06, 'loss': 0.0008806340259616263}
+11/23/2021 09:20:31 - INFO - __main__ -   Epoch: 2, Batch: 55， Loss:  0.0008806340259616263
+11/23/2021 09:29:27 - INFO - __main__ -   tb_data {'lr': 9.750948688875927e-06, 'loss': 0.000870177474716911}
+11/23/2021 09:29:27 - INFO - __main__ -   Epoch: 2, Batch: 455， Loss:  0.000870177474716911
+11/23/2021 09:38:33 - INFO - __main__ -   tb_data {'lr': 9.748764028252032e-06, 'loss': 0.00086562784970738}
+11/23/2021 09:38:33 - INFO - __main__ -   Epoch: 2, Batch: 855， Loss:  0.00086562784970738
+11/23/2021 09:46:24 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 09:46:24 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 09:48:38 - INFO - __main__ -   F1 Score = [0.132, 0.108, 0.09533333333333306, 0.09175, 0.08680000000000061]
+11/23/2021 09:48:38 - INFO - __main__ -   Recall Score  = [0.132, 0.1105, 0.11366666666666637, 0.1335833333333332, 0.15806666666666672]
+11/23/2021 09:48:38 - INFO - __main__ -   Precision Score  = [0.132, 0.10883333333333335, 0.10186666666666655, 0.10518809523809536, 0.1072611111111116]
+11/23/2021 09:48:38 - INFO - __main__ -   Count  = 1000
+11/23/2021 09:48:38 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 09:48:38 - INFO - __main__ -   Training finished
+11/23/2021 09:48:38 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-12
+11/23/2021 09:49:10 - INFO - __main__ -   ############# FILE 13: Training Start   #############
+11/23/2021 09:49:10 - INFO - __main__ -   ***** Running training *****
+11/23/2021 09:49:10 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 09:49:10 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 09:49:10 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 09:49:10 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 09:49:10 - INFO - __main__ -   Start a new training
+11/23/2021 09:49:10 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 09:50:48 - INFO - __main__ -   tb_data {'lr': 9.746579367628137e-06, 'loss': 0.0001496141178358812}
+11/23/2021 09:50:48 - INFO - __main__ -   Epoch: 0, Batch: 67， Loss:  0.0001496141178358812
+11/23/2021 10:00:14 - INFO - __main__ -   tb_data {'lr': 9.744394707004242e-06, 'loss': 0.0008840262633748353}
+11/23/2021 10:00:14 - INFO - __main__ -   Epoch: 0, Batch: 467， Loss:  0.0008840262633748353
+11/23/2021 10:09:42 - INFO - __main__ -   tb_data {'lr': 9.742210046380346e-06, 'loss': 0.0008899042212578934}
+11/23/2021 10:09:42 - INFO - __main__ -   Epoch: 0, Batch: 867， Loss:  0.0008899042212578934
+11/23/2021 10:17:12 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 10:17:12 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 10:19:27 - INFO - __main__ -   F1 Score = [0.118, 0.0985, 0.08499999999999988, 0.0835, 0.08060000000000053]
+11/23/2021 10:19:27 - INFO - __main__ -   Recall Score  = [0.118, 0.1045, 0.10533333333333317, 0.12474999999999985, 0.14858333333333335]
+11/23/2021 10:19:27 - INFO - __main__ -   Precision Score  = [0.118, 0.10050000000000003, 0.09153333333333327, 0.0961642857142859, 0.09995238095238126]
+11/23/2021 10:19:27 - INFO - __main__ -   Count  = 1000
+11/23/2021 10:19:27 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 10:19:27 - INFO - __main__ -   Training finished
+11/23/2021 10:19:27 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 10:21:21 - INFO - __main__ -   tb_data {'lr': 9.740025385756451e-06, 'loss': 0.0008814138843445108}
+11/23/2021 10:21:21 - INFO - __main__ -   Epoch: 1, Batch: 79， Loss:  0.0008814138843445108
+11/23/2021 10:30:46 - INFO - __main__ -   tb_data {'lr': 9.737840725132554e-06, 'loss': 0.0008738592619920382}
+11/23/2021 10:30:46 - INFO - __main__ -   Epoch: 1, Batch: 479， Loss:  0.0008738592619920382
+11/23/2021 10:40:10 - INFO - __main__ -   tb_data {'lr': 9.735656064508659e-06, 'loss': 0.0008794395261793398}
+11/23/2021 10:40:10 - INFO - __main__ -   Epoch: 1, Batch: 879， Loss:  0.0008794395261793398
+11/23/2021 10:47:29 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 10:47:29 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 10:49:43 - INFO - __main__ -   F1 Score = [0.118, 0.0985, 0.08499999999999991, 0.081, 0.08060000000000053]
+11/23/2021 10:49:43 - INFO - __main__ -   Recall Score  = [0.118, 0.1045, 0.1053333333333332, 0.12349999999999986, 0.1485833333333334]
+11/23/2021 10:49:43 - INFO - __main__ -   Precision Score  = [0.118, 0.10050000000000002, 0.0915333333333333, 0.09380476190476203, 0.09995238095238126]
+11/23/2021 10:49:43 - INFO - __main__ -   Count  = 1000
+11/23/2021 10:49:43 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 10:49:43 - INFO - __main__ -   Training finished
+11/23/2021 10:49:43 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 10:51:54 - INFO - __main__ -   tb_data {'lr': 9.733471403884764e-06, 'loss': 0.0008745682034350466}
+11/23/2021 10:51:54 - INFO - __main__ -   Epoch: 2, Batch: 91， Loss:  0.0008745682034350466
+11/23/2021 11:01:19 - INFO - __main__ -   tb_data {'lr': 9.731286743260869e-06, 'loss': 0.0008728179927857127}
+11/23/2021 11:01:19 - INFO - __main__ -   Epoch: 2, Batch: 491， Loss:  0.0008728179927857127
+11/23/2021 11:10:44 - INFO - __main__ -   tb_data {'lr': 9.729102082636973e-06, 'loss': 0.000880860616452992}
+11/23/2021 11:10:44 - INFO - __main__ -   Epoch: 2, Batch: 891， Loss:  0.000880860616452992
+11/23/2021 11:17:45 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 11:17:45 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 11:19:59 - INFO - __main__ -   F1 Score = [0.118, 0.0985, 0.08499999999999995, 0.081, 0.08080000000000057]
+11/23/2021 11:19:59 - INFO - __main__ -   Recall Score  = [0.118, 0.1045, 0.10533333333333322, 0.12349999999999987, 0.14891666666666675]
+11/23/2021 11:19:59 - INFO - __main__ -   Precision Score  = [0.118, 0.10050000000000003, 0.0915333333333333, 0.09380476190476202, 0.10020238095238135]
+11/23/2021 11:19:59 - INFO - __main__ -   Count  = 1000
+11/23/2021 11:19:59 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 11:19:59 - INFO - __main__ -   Training finished
+11/23/2021 11:19:59 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-13
+11/23/2021 11:20:34 - INFO - __main__ -   ############# FILE 14: Training Start   #############
+11/23/2021 11:20:34 - INFO - __main__ -   ***** Running training *****
+11/23/2021 11:20:34 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 11:20:34 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 11:20:34 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 11:20:34 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 11:20:34 - INFO - __main__ -   Start a new training
+11/23/2021 11:20:34 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+11/23/2021 11:23:00 - INFO - __main__ -   tb_data {'lr': 9.726917422013078e-06, 'loss': 0.00022713007099810058}
+11/23/2021 11:23:00 - INFO - __main__ -   Epoch: 0, Batch: 103， Loss:  0.00022713007099810058
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 11:32:30 - INFO - __main__ -   tb_data {'lr': 9.724732761389183e-06, 'loss': 0.0008818661262921523}
+11/23/2021 11:32:30 - INFO - __main__ -   Epoch: 0, Batch: 503， Loss:  0.0008818661262921523
+11/23/2021 11:41:59 - INFO - __main__ -   tb_data {'lr': 9.722548100765288e-06, 'loss': 0.0008811164791404735}
+11/23/2021 11:41:59 - INFO - __main__ -   Epoch: 0, Batch: 903， Loss:  0.0008811164791404735
+11/23/2021 11:48:41 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 11:48:41 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 11:50:56 - INFO - __main__ -   F1 Score = [0.128, 0.103, 0.0909999999999998, 0.08625, 0.08200000000000057]
+11/23/2021 11:50:56 - INFO - __main__ -   Recall Score  = [0.128, 0.1085, 0.11016666666666645, 0.1281666666666665, 0.14728333333333343]
+11/23/2021 11:50:56 - INFO - __main__ -   Precision Score  = [0.128, 0.10483333333333336, 0.09736666666666657, 0.09930000000000015, 0.1011801587301591]
+11/23/2021 11:50:56 - INFO - __main__ -   Count  = 1000
+11/23/2021 11:50:56 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 11:50:56 - INFO - __main__ -   Training finished
+11/23/2021 11:50:56 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 11:53:42 - INFO - __main__ -   tb_data {'lr': 9.720363440141392e-06, 'loss': 0.0008735824729956221}
+11/23/2021 11:53:42 - INFO - __main__ -   Epoch: 1, Batch: 115， Loss:  0.0008735824729956221
+11/23/2021 12:03:04 - INFO - __main__ -   tb_data {'lr': 9.718178779517497e-06, 'loss': 0.0008657861320534721}
+11/23/2021 12:03:04 - INFO - __main__ -   Epoch: 1, Batch: 515， Loss:  0.0008657861320534721
+11/23/2021 12:12:26 - INFO - __main__ -   tb_data {'lr': 9.715994118893602e-06, 'loss': 0.0008762424452288542}
+11/23/2021 12:12:26 - INFO - __main__ -   Epoch: 1, Batch: 915， Loss:  0.0008762424452288542
+11/23/2021 12:18:49 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 12:18:49 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 12:21:03 - INFO - __main__ -   F1 Score = [0.128, 0.103, 0.09099999999999982, 0.085, 0.08260000000000058]
+11/23/2021 12:21:03 - INFO - __main__ -   Recall Score  = [0.128, 0.1085, 0.1101666666666664, 0.12724999999999992, 0.15178333333333333]
+11/23/2021 12:21:03 - INFO - __main__ -   Precision Score  = [0.128, 0.10483333333333336, 0.0973666666666666, 0.09794523809523811, 0.10252936507936558]
+11/23/2021 12:21:03 - INFO - __main__ -   Count  = 1000
+11/23/2021 12:21:03 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 12:21:03 - INFO - __main__ -   Training finished
+11/23/2021 12:21:03 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 12:24:04 - INFO - __main__ -   tb_data {'lr': 9.713809458269707e-06, 'loss': 0.0008757163054542616}
+11/23/2021 12:24:04 - INFO - __main__ -   Epoch: 2, Batch: 127， Loss:  0.0008757163054542616
+11/23/2021 12:33:28 - INFO - __main__ -   tb_data {'lr': 9.71162479764581e-06, 'loss': 0.0008666793914744631}
+11/23/2021 12:33:28 - INFO - __main__ -   Epoch: 2, Batch: 527， Loss:  0.0008666793914744631
+11/23/2021 12:42:51 - INFO - __main__ -   tb_data {'lr': 9.709440137021914e-06, 'loss': 0.0008657304648659192}
+11/23/2021 12:42:51 - INFO - __main__ -   Epoch: 2, Batch: 927， Loss:  0.0008657304648659192
+11/23/2021 12:48:58 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 12:48:58 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 12:51:15 - INFO - __main__ -   F1 Score = [0.128, 0.1, 0.09266666666666645, 0.08625, 0.08200000000000059]
+11/23/2021 12:51:15 - INFO - __main__ -   Recall Score  = [0.128, 0.1035, 0.1146666666666664, 0.12816666666666648, 0.1482166666666666]
+11/23/2021 12:51:15 - INFO - __main__ -   Precision Score  = [0.128, 0.10116666666666667, 0.09996666666666658, 0.09930000000000005, 0.1013634920634925]
+11/23/2021 12:51:15 - INFO - __main__ -   Count  = 1000
+11/23/2021 12:51:15 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 12:51:15 - INFO - __main__ -   Training finished
+11/23/2021 12:51:15 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-14
+11/23/2021 12:51:48 - INFO - __main__ -   ############# FILE 15: Training Start   #############
+11/23/2021 12:51:48 - INFO - __main__ -   ***** Running training *****
+11/23/2021 12:51:48 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 12:51:48 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 12:51:48 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 12:51:48 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 12:51:48 - INFO - __main__ -   Start a new training
+11/23/2021 12:51:48 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 12:55:07 - INFO - __main__ -   tb_data {'lr': 9.707255476398019e-06, 'loss': 0.0003074347486835904}
+11/23/2021 12:55:07 - INFO - __main__ -   Epoch: 0, Batch: 139， Loss:  0.0003074347486835904
+11/23/2021 13:04:32 - INFO - __main__ -   tb_data {'lr': 9.705070815774124e-06, 'loss': 0.0008682860076078214}
+11/23/2021 13:04:32 - INFO - __main__ -   Epoch: 0, Batch: 539， Loss:  0.0008682860076078214
+11/23/2021 13:13:57 - INFO - __main__ -   tb_data {'lr': 9.702886155150229e-06, 'loss': 0.0008776689850492403}
+11/23/2021 13:13:57 - INFO - __main__ -   Epoch: 0, Batch: 939， Loss:  0.0008776689850492403
+11/23/2021 13:19:48 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 13:19:48 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 13:22:02 - INFO - __main__ -   F1 Score = [0.127, 0.1035, 0.09499999999999974, 0.09, 0.08680000000000064]
+11/23/2021 13:22:02 - INFO - __main__ -   Recall Score  = [0.127, 0.111, 0.12016666666666634, 0.13891666666666652, 0.1626666666666667]
+11/23/2021 13:22:02 - INFO - __main__ -   Precision Score  = [0.127, 0.10600000000000001, 0.10266666666666656, 0.10440238095238112, 0.10795238095238141]
+11/23/2021 13:22:02 - INFO - __main__ -   Count  = 1000
+11/23/2021 13:22:02 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 13:22:02 - INFO - __main__ -   Training finished
+11/23/2021 13:22:02 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 13:25:38 - INFO - __main__ -   tb_data {'lr': 9.700701494526333e-06, 'loss': 0.0008706438606895972}
+11/23/2021 13:25:38 - INFO - __main__ -   Epoch: 1, Batch: 151， Loss:  0.0008706438606895972
+11/23/2021 13:35:01 - INFO - __main__ -   tb_data {'lr': 9.698516833902438e-06, 'loss': 0.0008690141713304911}
+11/23/2021 13:35:01 - INFO - __main__ -   Epoch: 1, Batch: 551， Loss:  0.0008690141713304911
+11/23/2021 13:44:22 - INFO - __main__ -   tb_data {'lr': 9.696332173278543e-06, 'loss': 0.0008694138730061241}
+11/23/2021 13:44:22 - INFO - __main__ -   Epoch: 1, Batch: 951， Loss:  0.0008694138730061241
+11/23/2021 13:49:56 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 13:49:56 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 13:52:11 - INFO - __main__ -   F1 Score = [0.127, 0.1035, 0.09499999999999983, 0.08875, 0.08680000000000063]
+11/23/2021 13:52:11 - INFO - __main__ -   Recall Score  = [0.127, 0.111, 0.12016666666666644, 0.13633333333333314, 0.16266666666666668]
+11/23/2021 13:52:11 - INFO - __main__ -   Precision Score  = [0.127, 0.10600000000000001, 0.10266666666666663, 0.10277619047619063, 0.10795238095238135]
+11/23/2021 13:52:11 - INFO - __main__ -   Count  = 1000
+11/23/2021 13:52:11 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 13:52:11 - INFO - __main__ -   Training finished
+11/23/2021 13:52:11 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 13:55:58 - INFO - __main__ -   tb_data {'lr': 9.694147512654648e-06, 'loss': 0.0008620965226145927}
+11/23/2021 13:55:58 - INFO - __main__ -   Epoch: 2, Batch: 163， Loss:  0.0008620965226145927
+11/23/2021 14:04:23 - INFO - __main__ -   tb_data {'lr': 9.691962852030752e-06, 'loss': 0.000863611410750309}
+11/23/2021 14:04:23 - INFO - __main__ -   Epoch: 2, Batch: 563， Loss:  0.000863611410750309
+11/23/2021 14:13:37 - INFO - __main__ -   tb_data {'lr': 9.689778191406857e-06, 'loss': 0.0008685314281319734}
+11/23/2021 14:13:37 - INFO - __main__ -   Epoch: 2, Batch: 963， Loss:  0.0008685314281319734
+11/23/2021 14:18:46 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 14:18:46 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 14:20:52 - INFO - __main__ -   F1 Score = [0.127, 0.1035, 0.09233333333333311, 0.089, 0.08680000000000065]
+11/23/2021 14:20:52 - INFO - __main__ -   Recall Score  = [0.127, 0.111, 0.11366666666666635, 0.13399999999999984, 0.1626666666666668]
+11/23/2021 14:20:52 - INFO - __main__ -   Precision Score  = [0.127, 0.10600000000000002, 0.09906666666666654, 0.10272857142857168, 0.10795238095238135]
+11/23/2021 14:20:52 - INFO - __main__ -   Count  = 1000
+11/23/2021 14:20:52 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 14:20:52 - INFO - __main__ -   Training finished
+11/23/2021 14:20:52 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-15
+11/23/2021 14:21:26 - INFO - __main__ -   ############# FILE 16: Training Start   #############
+11/23/2021 14:21:26 - INFO - __main__ -   ***** Running training *****
+11/23/2021 14:21:26 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 14:21:26 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 14:21:26 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 14:21:26 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 14:21:26 - INFO - __main__ -   Start a new training
+11/23/2021 14:21:26 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 14:25:37 - INFO - __main__ -   tb_data {'lr': 9.687593530782962e-06, 'loss': 0.0003914709588570986}
+11/23/2021 14:25:37 - INFO - __main__ -   Epoch: 0, Batch: 175， Loss:  0.0003914709588570986
+11/23/2021 14:34:52 - INFO - __main__ -   tb_data {'lr': 9.685408870159065e-06, 'loss': 0.0008650825372023973}
+11/23/2021 14:34:52 - INFO - __main__ -   Epoch: 0, Batch: 575， Loss:  0.0008650825372023973
+11/23/2021 14:43:56 - INFO - __main__ -   tb_data {'lr': 9.68322420953517e-06, 'loss': 0.0008817306741548236}
+11/23/2021 14:43:56 - INFO - __main__ -   Epoch: 0, Batch: 975， Loss:  0.0008817306741548236
+11/23/2021 14:48:55 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 14:48:55 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 14:51:10 - INFO - __main__ -   F1 Score = [0.113, 0.1075, 0.09599999999999972, 0.0905, 0.08460000000000059]
+11/23/2021 14:51:10 - INFO - __main__ -   Recall Score  = [0.113, 0.115, 0.11949999999999975, 0.14058333333333328, 0.16288333333333344]
+11/23/2021 14:51:10 - INFO - __main__ -   Precision Score  = [0.113, 0.11000000000000001, 0.10339999999999991, 0.1054309523809525, 0.10613333333333372]
+11/23/2021 14:51:10 - INFO - __main__ -   Count  = 1000
+11/23/2021 14:51:10 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 14:51:10 - INFO - __main__ -   Training finished
+11/23/2021 14:51:10 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 14:55:33 - INFO - __main__ -   tb_data {'lr': 9.681039548911275e-06, 'loss': 0.0008821136139158625}
+11/23/2021 14:55:33 - INFO - __main__ -   Epoch: 1, Batch: 187， Loss:  0.0008821136139158625
+11/23/2021 15:04:18 - INFO - __main__ -   tb_data {'lr': 9.67885488828738e-06, 'loss': 0.0008707870634680148}
+11/23/2021 15:04:18 - INFO - __main__ -   Epoch: 1, Batch: 587， Loss:  0.0008707870634680148
+11/23/2021 15:12:42 - INFO - __main__ -   tb_data {'lr': 9.676670227663486e-06, 'loss': 0.0008689816939295269}
+11/23/2021 15:12:42 - INFO - __main__ -   Epoch: 1, Batch: 987， Loss:  0.0008689816939295269
+11/23/2021 15:16:53 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 15:16:53 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 15:18:59 - INFO - __main__ -   F1 Score = [0.113, 0.1075, 0.09633333333333309, 0.08975, 0.08640000000000067]
+11/23/2021 15:18:59 - INFO - __main__ -   Recall Score  = [0.113, 0.115, 0.12033333333333304, 0.14074999999999988, 0.16451666666666664]
+11/23/2021 15:18:59 - INFO - __main__ -   Precision Score  = [0.113, 0.11000000000000001, 0.10383333333333326, 0.10453095238095254, 0.1079253968253973]
+11/23/2021 15:18:59 - INFO - __main__ -   Count  = 1000
+11/23/2021 15:18:59 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 15:18:59 - INFO - __main__ -   Training finished
+11/23/2021 15:18:59 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 15:23:10 - INFO - __main__ -   tb_data {'lr': 9.674485567039589e-06, 'loss': 0.0008664072708052117}
+11/23/2021 15:23:10 - INFO - __main__ -   Epoch: 2, Batch: 199， Loss:  0.0008664072708052117
+11/23/2021 15:31:36 - INFO - __main__ -   tb_data {'lr': 9.672300906415694e-06, 'loss': 0.00086695777848945}
+11/23/2021 15:31:36 - INFO - __main__ -   Epoch: 2, Batch: 599， Loss:  0.00086695777848945
+11/23/2021 15:39:59 - INFO - __main__ -   tb_data {'lr': 9.670116245791798e-06, 'loss': 0.0008703952825453598}
+11/23/2021 15:39:59 - INFO - __main__ -   Epoch: 2, Batch: 999， Loss:  0.0008703952825453598
+11/23/2021 15:43:56 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 15:43:56 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 15:46:02 - INFO - __main__ -   F1 Score = [0.113, 0.1075, 0.0963333333333331, 0.09025, 0.08640000000000062]
+11/23/2021 15:46:02 - INFO - __main__ -   Recall Score  = [0.113, 0.115, 0.12033333333333304, 0.14024999999999987, 0.16639999999999996]
+11/23/2021 15:46:02 - INFO - __main__ -   Precision Score  = [0.113, 0.11000000000000004, 0.1038333333333332, 0.10514523809523826, 0.10820158730158765]
+11/23/2021 15:46:02 - INFO - __main__ -   Count  = 1000
+11/23/2021 15:46:02 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 15:46:02 - INFO - __main__ -   Training finished
+11/23/2021 15:46:02 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-16
+11/23/2021 15:46:34 - INFO - __main__ -   ############# FILE 17: Training Start   #############
+11/23/2021 15:46:34 - INFO - __main__ -   ***** Running training *****
+11/23/2021 15:46:34 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 15:46:34 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 15:46:34 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 15:46:34 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 15:46:34 - INFO - __main__ -   Start a new training
+11/23/2021 15:46:34 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 15:51:00 - INFO - __main__ -   tb_data {'lr': 9.667931585167903e-06, 'loss': 0.0004667994326155167}
+11/23/2021 15:51:00 - INFO - __main__ -   Epoch: 0, Batch: 211， Loss:  0.0004667994326155167
+11/23/2021 15:59:23 - INFO - __main__ -   tb_data {'lr': 9.665746924544008e-06, 'loss': 0.000882698636414716}
+11/23/2021 15:59:23 - INFO - __main__ -   Epoch: 0, Batch: 611， Loss:  0.000882698636414716
+11/23/2021 16:07:43 - INFO - __main__ -   tb_data {'lr': 9.663562263920113e-06, 'loss': 0.0008808968617813661}
+11/23/2021 16:07:43 - INFO - __main__ -   Epoch: 0, Batch: 1011， Loss:  0.0008808968617813661
+11/23/2021 16:10:08 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 16:10:08 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 16:12:09 - INFO - __main__ -   F1 Score = [0.10515247108307045, 0.08990536277602523, 0.08937960042060976, 0.08280757097791798, 0.08033648790746632]
+11/23/2021 16:12:09 - INFO - __main__ -   Recall Score  = [0.10515247108307045, 0.09411146161934805, 0.1083070452155623, 0.12136347704171034, 0.14206098843322812]
+11/23/2021 16:12:09 - INFO - __main__ -   Precision Score  = [0.10515247108307045, 0.09130739572379952, 0.09547844374342786, 0.0945646186971109, 0.09799292307178784]
+11/23/2021 16:12:09 - INFO - __main__ -   Count  = 951
+11/23/2021 16:12:09 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 16:12:09 - INFO - __main__ -   Training finished
+11/23/2021 16:12:09 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 16:18:01 - INFO - __main__ -   tb_data {'lr': 9.661377603296217e-06, 'loss': 0.0008700095054518897}
+11/23/2021 16:18:01 - INFO - __main__ -   Epoch: 1, Batch: 283， Loss:  0.0008700095054518897
+11/23/2021 16:27:08 - INFO - __main__ -   tb_data {'lr': 9.659192942672322e-06, 'loss': 0.0008698647392157}
+11/23/2021 16:27:08 - INFO - __main__ -   Epoch: 1, Batch: 683， Loss:  0.0008698647392157
+11/23/2021 16:36:25 - INFO - __main__ -   tb_data {'lr': 9.657008282048425e-06, 'loss': 0.0008742453304876108}
+11/23/2021 16:36:25 - INFO - __main__ -   Epoch: 1, Batch: 1083， Loss:  0.0008742453304876108
+11/23/2021 16:37:27 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 16:37:27 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 16:39:34 - INFO - __main__ -   F1 Score = [0.11146161934805468, 0.09674027339642481, 0.09533824044865034, 0.09121976866456362, 0.08391167192429079]
+11/23/2021 16:39:34 - INFO - __main__ -   Recall Score  = [0.11146161934805468, 0.10147213459516298, 0.11338941465124402, 0.1307395723799508, 0.14780932351910267]
+11/23/2021 16:39:34 - INFO - __main__ -   Precision Score  = [0.11146161934805468, 0.09831756046267087, 0.10119172800560798, 0.10336487907465833, 0.10228497988750394]
+11/23/2021 16:39:34 - INFO - __main__ -   Count  = 951
+11/23/2021 16:39:34 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 16:39:34 - INFO - __main__ -   Training finished
+11/23/2021 16:39:34 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 16:47:55 - INFO - __main__ -   tb_data {'lr': 9.65482362142453e-06, 'loss': 0.0008639791479799897}
+11/23/2021 16:47:55 - INFO - __main__ -   Epoch: 2, Batch: 355， Loss:  0.0008639791479799897
+11/23/2021 16:57:16 - INFO - __main__ -   tb_data {'lr': 9.652638960800636e-06, 'loss': 0.0008556796138873324}
+11/23/2021 16:57:16 - INFO - __main__ -   Epoch: 2, Batch: 755， Loss:  0.0008556796138873324
+11/23/2021 17:05:58 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 17:05:58 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 17:08:04 - INFO - __main__ -   F1 Score = [0.1619348054679285, 0.13932702418506834, 0.12828601472134535, 0.12066246056782334, 0.11019978969505866]
+11/23/2021 17:08:04 - INFO - __main__ -   Recall Score  = [0.1619348054679285, 0.1456361724500526, 0.1528215913073957, 0.17288818787241508, 0.1905713284262182]
+11/23/2021 17:08:04 - INFO - __main__ -   Precision Score  = [0.1619348054679285, 0.1414300736067298, 0.1364178058184365, 0.13670071603825565, 0.13352611286365296]
+11/23/2021 17:08:04 - INFO - __main__ -   Count  = 951
+11/23/2021 17:08:04 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 17:08:04 - INFO - __main__ -   Training finished
+11/23/2021 17:08:04 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-17
+11/23/2021 17:08:40 - INFO - __main__ -   ############# FILE 18: Training Start   #############
+11/23/2021 17:08:40 - INFO - __main__ -   ***** Running training *****
+11/23/2021 17:08:40 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 17:08:40 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 17:08:40 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 17:08:40 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 17:08:40 - INFO - __main__ -   Start a new training
+11/23/2021 17:08:40 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 17:09:19 - INFO - __main__ -   tb_data {'lr': 9.650454300176741e-06, 'loss': 6.048090202966705e-05}
+11/23/2021 17:09:19 - INFO - __main__ -   Epoch: 0, Batch: 27， Loss:  6.048090202966705e-05
+11/23/2021 17:18:38 - INFO - __main__ -   tb_data {'lr': 9.648269639552844e-06, 'loss': 0.0008651423017727211}
+11/23/2021 17:18:38 - INFO - __main__ -   Epoch: 0, Batch: 427， Loss:  0.0008651423017727211
+11/23/2021 17:28:03 - INFO - __main__ -   tb_data {'lr': 9.646084978928949e-06, 'loss': 0.0008459092544944724}
+11/23/2021 17:28:03 - INFO - __main__ -   Epoch: 0, Batch: 827， Loss:  0.0008459092544944724
+11/23/2021 17:36:28 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 17:36:28 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 17:38:44 - INFO - __main__ -   F1 Score = [0.206, 0.181, 0.15900000000000028, 0.14, 0.12100000000000094]
+11/23/2021 17:38:44 - INFO - __main__ -   Recall Score  = [0.206, 0.1935, 0.19733333333333392, 0.20775000000000043, 0.21788333333333368]
+11/23/2021 17:38:44 - INFO - __main__ -   Precision Score  = [0.206, 0.18516666666666662, 0.17103333333333393, 0.16073571428571468, 0.14890714285714318]
+11/23/2021 17:38:44 - INFO - __main__ -   Count  = 1000
+11/23/2021 17:38:44 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 17:38:44 - INFO - __main__ -   Training finished
+11/23/2021 17:38:44 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 17:39:40 - INFO - __main__ -   tb_data {'lr': 9.643900318305054e-06, 'loss': 0.0008589308051159605}
+11/23/2021 17:39:40 - INFO - __main__ -   Epoch: 1, Batch: 39， Loss:  0.0008589308051159605
+11/23/2021 17:49:03 - INFO - __main__ -   tb_data {'lr': 9.641715657681158e-06, 'loss': 0.0008424701320473105}
+11/23/2021 17:49:03 - INFO - __main__ -   Epoch: 1, Batch: 439， Loss:  0.0008424701320473105
+11/23/2021 17:58:30 - INFO - __main__ -   tb_data {'lr': 9.639530997057263e-06, 'loss': 0.0008441994707391132}
+11/23/2021 17:58:30 - INFO - __main__ -   Epoch: 1, Batch: 839， Loss:  0.0008441994707391132
+11/23/2021 18:06:38 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 18:06:38 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 18:08:52 - INFO - __main__ -   F1 Score = [0.248, 0.182, 0.16800000000000032, 0.14825, 0.12480000000000098]
+11/23/2021 18:08:52 - INFO - __main__ -   Recall Score  = [0.248, 0.196, 0.20633333333333376, 0.2187500000000005, 0.22451666666666711]
+11/23/2021 18:08:52 - INFO - __main__ -   Precision Score  = [0.248, 0.18666666666666662, 0.18003333333333382, 0.16984523809523844, 0.1534571428571433]
+11/23/2021 18:08:52 - INFO - __main__ -   Count  = 1000
+11/23/2021 18:08:52 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 18:08:52 - INFO - __main__ -   Training finished
+11/23/2021 18:08:52 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 18:10:08 - INFO - __main__ -   tb_data {'lr': 9.637346336433368e-06, 'loss': 0.0008361210962175391}
+11/23/2021 18:10:08 - INFO - __main__ -   Epoch: 2, Batch: 51， Loss:  0.0008361210962175391
+11/23/2021 18:19:30 - INFO - __main__ -   tb_data {'lr': 9.635161675809473e-06, 'loss': 0.0008320877862570342}
+11/23/2021 18:19:30 - INFO - __main__ -   Epoch: 2, Batch: 451， Loss:  0.0008320877862570342
+11/23/2021 18:28:52 - INFO - __main__ -   tb_data {'lr': 9.632977015185577e-06, 'loss': 0.0008259649120736868}
+11/23/2021 18:28:52 - INFO - __main__ -   Epoch: 2, Batch: 851， Loss:  0.0008259649120736868
+11/23/2021 18:36:46 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 18:36:46 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 18:39:01 - INFO - __main__ -   F1 Score = [0.268, 0.2315, 0.18766666666666734, 0.15725, 0.13560000000000058]
+11/23/2021 18:39:01 - INFO - __main__ -   Recall Score  = [0.268, 0.248, 0.23066666666666757, 0.2365833333333339, 0.2490000000000004]
+11/23/2021 18:39:01 - INFO - __main__ -   Precision Score  = [0.268, 0.2369999999999999, 0.20116666666666766, 0.18116904761904778, 0.16780952380952424]
+11/23/2021 18:39:01 - INFO - __main__ -   Count  = 1000
+11/23/2021 18:39:01 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 18:39:01 - INFO - __main__ -   Training finished
+11/23/2021 18:39:01 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-18
+11/23/2021 18:39:32 - INFO - __main__ -   ############# FILE 19: Training Start   #############
+11/23/2021 18:39:32 - INFO - __main__ -   ***** Running training *****
+11/23/2021 18:39:32 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 18:39:32 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 18:39:32 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 18:39:32 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 18:39:32 - INFO - __main__ -   Start a new training
+11/23/2021 18:39:32 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+11/23/2021 18:41:05 - INFO - __main__ -   tb_data {'lr': 9.63079235456168e-06, 'loss': 0.00013358284690184518}
+11/23/2021 18:41:05 - INFO - __main__ -   Epoch: 0, Batch: 63， Loss:  0.00013358284690184518
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 18:50:27 - INFO - __main__ -   tb_data {'lr': 9.628607693937785e-06, 'loss': 0.0008364701129903551}
+11/23/2021 18:50:27 - INFO - __main__ -   Epoch: 0, Batch: 463， Loss:  0.0008364701129903551
+11/23/2021 18:59:49 - INFO - __main__ -   tb_data {'lr': 9.626423033313892e-06, 'loss': 0.0008326070166367571}
+11/23/2021 18:59:49 - INFO - __main__ -   Epoch: 0, Batch: 863， Loss:  0.0008326070166367571
+11/23/2021 19:07:29 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 19:07:29 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 19:09:44 - INFO - __main__ -   F1 Score = [0.32, 0.248, 0.20066666666666746, 0.17125, 0.14660000000000023]
+11/23/2021 19:09:44 - INFO - __main__ -   Recall Score  = [0.32, 0.26, 0.250000000000001, 0.2600833333333338, 0.27154999999999996]
+11/23/2021 19:09:44 - INFO - __main__ -   Precision Score  = [0.32, 0.2519999999999999, 0.2170000000000013, 0.1986880952380954, 0.1823515873015879]
+11/23/2021 19:09:44 - INFO - __main__ -   Count  = 1000
+11/23/2021 19:09:44 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 19:09:44 - INFO - __main__ -   Training finished
+11/23/2021 19:09:44 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 19:11:31 - INFO - __main__ -   tb_data {'lr': 9.624238372689996e-06, 'loss': 0.0008189321006648242}
+11/23/2021 19:11:31 - INFO - __main__ -   Epoch: 1, Batch: 75， Loss:  0.0008189321006648242
+11/23/2021 19:20:51 - INFO - __main__ -   tb_data {'lr': 9.6220537120661e-06, 'loss': 0.0008126761352468748}
+11/23/2021 19:20:51 - INFO - __main__ -   Epoch: 1, Batch: 475， Loss:  0.0008126761352468748
+11/23/2021 19:30:19 - INFO - __main__ -   tb_data {'lr': 9.619869051442204e-06, 'loss': 0.0008147083179210312}
+11/23/2021 19:30:19 - INFO - __main__ -   Epoch: 1, Batch: 875， Loss:  0.0008147083179210312
+11/23/2021 19:37:38 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 19:37:38 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 19:39:53 - INFO - __main__ -   F1 Score = [0.353, 0.277, 0.21766666666666803, 0.1765, 0.15260000000000004]
+11/23/2021 19:39:53 - INFO - __main__ -   Recall Score  = [0.353, 0.293, 0.26933333333333387, 0.26733333333333353, 0.28153333333333314]
+11/23/2021 19:39:53 - INFO - __main__ -   Precision Score  = [0.353, 0.2823333333333332, 0.23473333333333501, 0.20465238095238114, 0.18962857142857178]
+11/23/2021 19:39:53 - INFO - __main__ -   Count  = 1000
+11/23/2021 19:39:53 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 19:39:53 - INFO - __main__ -   Training finished
+11/23/2021 19:39:53 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 19:41:58 - INFO - __main__ -   tb_data {'lr': 9.617684390818309e-06, 'loss': 0.0008061788986378815}
+11/23/2021 19:41:58 - INFO - __main__ -   Epoch: 2, Batch: 87， Loss:  0.0008061788986378815
+11/23/2021 19:51:24 - INFO - __main__ -   tb_data {'lr': 9.615499730194414e-06, 'loss': 0.0008030918776057661}
+11/23/2021 19:51:24 - INFO - __main__ -   Epoch: 2, Batch: 487， Loss:  0.0008030918776057661
+11/23/2021 20:00:50 - INFO - __main__ -   tb_data {'lr': 9.613315069570518e-06, 'loss': 0.0007938393963559065}
+11/23/2021 20:00:50 - INFO - __main__ -   Epoch: 2, Batch: 887， Loss:  0.0007938393963559065
+11/23/2021 20:07:54 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 20:07:54 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 20:10:09 - INFO - __main__ -   F1 Score = [0.397, 0.2925, 0.2343333333333346, 0.193, 0.1665999999999999]
+11/23/2021 20:10:09 - INFO - __main__ -   Recall Score  = [0.397, 0.31, 0.2910000000000003, 0.29333333333333333, 0.30736666666666607]
+11/23/2021 20:10:09 - INFO - __main__ -   Precision Score  = [0.397, 0.29833333333333323, 0.2531000000000016, 0.22408571428571444, 0.20711269841269897]
+11/23/2021 20:10:09 - INFO - __main__ -   Count  = 1000
+11/23/2021 20:10:09 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 20:10:09 - INFO - __main__ -   Training finished
+11/23/2021 20:10:09 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-19
+11/23/2021 20:10:41 - INFO - __main__ -   ############# FILE 20: Training Start   #############
+11/23/2021 20:10:41 - INFO - __main__ -   ***** Running training *****
+11/23/2021 20:10:41 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 20:10:41 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 20:10:41 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 20:10:41 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 20:10:41 - INFO - __main__ -   Start a new training
+11/23/2021 20:10:41 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+11/23/2021 20:13:03 - INFO - __main__ -   tb_data {'lr': 9.611130408946623e-06, 'loss': 0.00020434271165868268}
+11/23/2021 20:13:03 - INFO - __main__ -   Epoch: 0, Batch: 99， Loss:  0.00020434271165868268
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 20:22:25 - INFO - __main__ -   tb_data {'lr': 9.608945748322728e-06, 'loss': 0.0008071541281242389}
+11/23/2021 20:22:25 - INFO - __main__ -   Epoch: 0, Batch: 499， Loss:  0.0008071541281242389
+11/23/2021 20:31:52 - INFO - __main__ -   tb_data {'lr': 9.606761087698833e-06, 'loss': 0.0008058206728310324}
+11/23/2021 20:31:52 - INFO - __main__ -   Epoch: 0, Batch: 899， Loss:  0.0008058206728310324
+11/23/2021 20:38:39 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 20:38:39 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 20:40:54 - INFO - __main__ -   F1 Score = [0.462, 0.311, 0.23833333333333492, 0.198, 0.16679999999999978]
+11/23/2021 20:40:54 - INFO - __main__ -   Recall Score  = [0.462, 0.3315, 0.29733333333333345, 0.2998333333333336, 0.3111999999999996]
+11/23/2021 20:40:54 - INFO - __main__ -   Precision Score  = [0.462, 0.3178333333333333, 0.257333333333335, 0.22903809523809554, 0.207676190476191]
+11/23/2021 20:40:54 - INFO - __main__ -   Count  = 1000
+11/23/2021 20:40:54 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 20:40:54 - INFO - __main__ -   Training finished
+11/23/2021 20:40:54 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 20:43:33 - INFO - __main__ -   tb_data {'lr': 9.604576427074936e-06, 'loss': 0.000796979753067717}
+11/23/2021 20:43:33 - INFO - __main__ -   Epoch: 1, Batch: 111， Loss:  0.000796979753067717
+11/23/2021 20:53:00 - INFO - __main__ -   tb_data {'lr': 9.60239176645104e-06, 'loss': 0.0007921712892130017}
+11/23/2021 20:53:00 - INFO - __main__ -   Epoch: 1, Batch: 511， Loss:  0.0007921712892130017
+11/23/2021 21:02:27 - INFO - __main__ -   tb_data {'lr': 9.600207105827147e-06, 'loss': 0.0007822999908239581}
+11/23/2021 21:02:27 - INFO - __main__ -   Epoch: 1, Batch: 911， Loss:  0.0007822999908239581
+11/23/2021 21:08:59 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 21:08:59 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 21:11:13 - INFO - __main__ -   F1 Score = [0.487, 0.33, 0.24900000000000164, 0.20575, 0.17139999999999952]
+11/23/2021 21:11:13 - INFO - __main__ -   Recall Score  = [0.487, 0.3535, 0.3138333333333327, 0.31508333333333316, 0.32136666666666625]
+11/23/2021 21:11:13 - INFO - __main__ -   Precision Score  = [0.487, 0.3378333333333334, 0.2697333333333342, 0.23863571428571478, 0.2135571428571433]
+11/23/2021 21:11:13 - INFO - __main__ -   Count  = 1000
+11/23/2021 21:11:13 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 21:11:13 - INFO - __main__ -   Training finished
+11/23/2021 21:11:13 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 21:14:10 - INFO - __main__ -   tb_data {'lr': 9.598022445203252e-06, 'loss': 0.000779256260357215}
+11/23/2021 21:14:10 - INFO - __main__ -   Epoch: 2, Batch: 123， Loss:  0.000779256260357215
+11/23/2021 21:23:40 - INFO - __main__ -   tb_data {'lr': 9.595837784579355e-06, 'loss': 0.0007782719926035498}
+11/23/2021 21:23:40 - INFO - __main__ -   Epoch: 2, Batch: 523， Loss:  0.0007782719926035498
+11/23/2021 21:33:06 - INFO - __main__ -   tb_data {'lr': 9.59365312395546e-06, 'loss': 0.0007748014169919771}
+11/23/2021 21:33:06 - INFO - __main__ -   Epoch: 2, Batch: 923， Loss:  0.0007748014169919771
+11/23/2021 21:39:21 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 21:39:21 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 21:41:35 - INFO - __main__ -   F1 Score = [0.518, 0.3455, 0.2623333333333347, 0.214, 0.17899999999999933]
+11/23/2021 21:41:35 - INFO - __main__ -   Recall Score  = [0.518, 0.37, 0.32899999999999974, 0.3276666666666665, 0.3344999999999995]
+11/23/2021 21:41:35 - INFO - __main__ -   Precision Score  = [0.518, 0.35366666666666696, 0.2838000000000009, 0.24810952380952417, 0.22281349206349274]
+11/23/2021 21:41:35 - INFO - __main__ -   Count  = 1000
+11/23/2021 21:41:35 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 21:41:35 - INFO - __main__ -   Training finished
+11/23/2021 21:41:35 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-20
+11/23/2021 21:42:09 - INFO - __main__ -   ############# FILE 21: Training Start   #############
+11/23/2021 21:42:09 - INFO - __main__ -   ***** Running training *****
+11/23/2021 21:42:09 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 21:42:09 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 21:42:09 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 21:42:09 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 21:42:09 - INFO - __main__ -   Start a new training
+11/23/2021 21:42:09 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+11/23/2021 21:45:20 - INFO - __main__ -   tb_data {'lr': 9.591468463331564e-06, 'loss': 0.00026359048701124266}
+11/23/2021 21:45:20 - INFO - __main__ -   Epoch: 0, Batch: 135， Loss:  0.00026359048701124266
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 21:54:46 - INFO - __main__ -   tb_data {'lr': 9.589283802707669e-06, 'loss': 0.0007725962839322165}
+11/23/2021 21:54:46 - INFO - __main__ -   Epoch: 0, Batch: 535， Loss:  0.0007725962839322165
+11/23/2021 22:04:08 - INFO - __main__ -   tb_data {'lr': 9.587099142083774e-06, 'loss': 0.0007682117924559861}
+11/23/2021 22:04:08 - INFO - __main__ -   Epoch: 0, Batch: 935， Loss:  0.0007682117924559861
+11/23/2021 22:10:06 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 22:10:06 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 22:12:21 - INFO - __main__ -   F1 Score = [0.503, 0.3305, 0.2546666666666682, 0.20975, 0.17839999999999948]
+11/23/2021 22:12:21 - INFO - __main__ -   Recall Score  = [0.503, 0.347, 0.31083333333333335, 0.31141666666666656, 0.3226833333333327]
+11/23/2021 22:12:21 - INFO - __main__ -   Precision Score  = [0.503, 0.33600000000000013, 0.27303333333333407, 0.2412309523809529, 0.2202626984126988]
+11/23/2021 22:12:21 - INFO - __main__ -   Count  = 1000
+11/23/2021 22:12:21 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 22:12:21 - INFO - __main__ -   Training finished
+11/23/2021 22:12:21 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 22:15:52 - INFO - __main__ -   tb_data {'lr': 9.584914481459879e-06, 'loss': 0.0007671630215190816}
+11/23/2021 22:15:52 - INFO - __main__ -   Epoch: 1, Batch: 147， Loss:  0.0007671630215190816
+11/23/2021 22:25:17 - INFO - __main__ -   tb_data {'lr': 9.582729820835983e-06, 'loss': 0.0007518086711934302}
+11/23/2021 22:25:17 - INFO - __main__ -   Epoch: 1, Batch: 547， Loss:  0.0007518086711934302
+11/23/2021 22:34:43 - INFO - __main__ -   tb_data {'lr': 9.580545160212088e-06, 'loss': 0.0007533380676613887}
+11/23/2021 22:34:43 - INFO - __main__ -   Epoch: 1, Batch: 947， Loss:  0.0007533380676613887
+11/23/2021 22:40:25 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/23/2021 22:40:25 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/23/2021 22:42:40 - INFO - __main__ -   F1 Score = [0.529, 0.346, 0.26766666666666783, 0.218, 0.18459999999999963]
+11/23/2021 22:42:40 - INFO - __main__ -   Recall Score  = [0.529, 0.3645, 0.3276666666666667, 0.3237499999999999, 0.335466666666666]
+11/23/2021 22:42:40 - INFO - __main__ -   Precision Score  = [0.529, 0.3521666666666667, 0.2872666666666674, 0.2507452380952385, 0.22802222222222288]
+11/23/2021 22:42:40 - INFO - __main__ -   Count  = 1000
+11/23/2021 22:42:40 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/23/2021 22:42:40 - INFO - __main__ -   Training finished
+11/23/2021 22:42:40 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/23/2021 22:46:28 - INFO - __main__ -   tb_data {'lr': 9.578360499588191e-06, 'loss': 0.0007523967974702827}
+11/23/2021 22:46:28 - INFO - __main__ -   Epoch: 2, Batch: 159， Loss:  0.0007523967974702827
+11/23/2021 22:55:55 - INFO - __main__ -   tb_data {'lr': 9.576175838964296e-06, 'loss': 0.0007388660514698131}
+11/23/2021 22:55:55 - INFO - __main__ -   Epoch: 2, Batch: 559， Loss:  0.0007388660514698131
+11/23/2021 23:05:23 - INFO - __main__ -   tb_data {'lr': 9.573991178340402e-06, 'loss': 0.0007387498430034611}
+11/23/2021 23:05:23 - INFO - __main__ -   Epoch: 2, Batch: 959， Loss:  0.0007387498430034611
+11/23/2021 23:10:45 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/23/2021 23:10:45 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/23/2021 23:13:00 - INFO - __main__ -   F1 Score = [0.534, 0.3595, 0.27400000000000097, 0.22175, 0.19019999999999948]
+11/23/2021 23:13:00 - INFO - __main__ -   Recall Score  = [0.534, 0.3795, 0.3356666666666662, 0.3313333333333331, 0.34588333333333254]
+11/23/2021 23:13:00 - INFO - __main__ -   Precision Score  = [0.534, 0.3661666666666666, 0.2940666666666671, 0.25552857142857166, 0.23501825396825463]
+11/23/2021 23:13:00 - INFO - __main__ -   Count  = 1000
+11/23/2021 23:13:00 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/23/2021 23:13:00 - INFO - __main__ -   Training finished
+11/23/2021 23:13:00 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-21
+11/23/2021 23:13:35 - INFO - __main__ -   ############# FILE 22: Training Start   #############
+11/23/2021 23:13:35 - INFO - __main__ -   ***** Running training *****
+11/23/2021 23:13:35 - INFO - __main__ -     Num Epochs = 3
+11/23/2021 23:13:35 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/23/2021 23:13:35 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/23/2021 23:13:35 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/23/2021 23:13:35 - INFO - __main__ -   Start a new training
+11/23/2021 23:13:35 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/23/2021 23:17:41 - INFO - __main__ -   tb_data {'lr': 9.571806517716507e-06, 'loss': 0.00032271593721816316}
+11/23/2021 23:17:41 - INFO - __main__ -   Epoch: 0, Batch: 171， Loss:  0.00032271593721816316
+11/23/2021 23:27:15 - INFO - __main__ -   tb_data {'lr': 9.56962185709261e-06, 'loss': 0.000754294162907172}
+11/23/2021 23:27:15 - INFO - __main__ -   Epoch: 0, Batch: 571， Loss:  0.000754294162907172
+11/23/2021 23:36:43 - INFO - __main__ -   tb_data {'lr': 9.567437196468715e-06, 'loss': 0.0007451507153746206}
+11/23/2021 23:36:43 - INFO - __main__ -   Epoch: 0, Batch: 971， Loss:  0.0007451507153746206
+11/23/2021 23:41:48 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/23/2021 23:41:48 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/23/2021 23:44:03 - INFO - __main__ -   F1 Score = [0.52, 0.368, 0.27900000000000075, 0.22375, 0.18879999999999947]
+11/23/2021 23:44:03 - INFO - __main__ -   Recall Score  = [0.52, 0.399, 0.35666666666666613, 0.3496666666666666, 0.35794999999999944]
+11/23/2021 23:44:03 - INFO - __main__ -   Precision Score  = [0.52, 0.37833333333333347, 0.3034666666666668, 0.261033333333334, 0.23561269841269916]
+11/23/2021 23:44:03 - INFO - __main__ -   Count  = 1000
+11/23/2021 23:44:03 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/23/2021 23:44:03 - INFO - __main__ -   Training finished
+11/23/2021 23:44:03 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/23/2021 23:48:23 - INFO - __main__ -   tb_data {'lr': 9.56525253584482e-06, 'loss': 0.0007405399852723349}
+11/23/2021 23:48:23 - INFO - __main__ -   Epoch: 1, Batch: 183， Loss:  0.0007405399852723349
+11/23/2021 23:57:55 - INFO - __main__ -   tb_data {'lr': 9.563067875220924e-06, 'loss': 0.0007303621469327481}
+11/23/2021 23:57:55 - INFO - __main__ -   Epoch: 1, Batch: 583， Loss:  0.0007303621469327481
+11/24/2021 00:07:25 - INFO - __main__ -   tb_data {'lr': 9.56088321459703e-06, 'loss': 0.0007287647490738891}
+11/24/2021 00:07:25 - INFO - __main__ -   Epoch: 1, Batch: 983， Loss:  0.0007287647490738891
+11/24/2021 00:12:18 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/24/2021 00:12:18 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/24/2021 00:14:34 - INFO - __main__ -   F1 Score = [0.522, 0.376, 0.28533333333333377, 0.2305, 0.19619999999999915]
+11/24/2021 00:14:34 - INFO - __main__ -   Recall Score  = [0.522, 0.4075, 0.36333333333333245, 0.35874999999999957, 0.3708833333333325]
+11/24/2021 00:14:34 - INFO - __main__ -   Precision Score  = [0.522, 0.38650000000000045, 0.30993333333333317, 0.2685166666666672, 0.24472857142857204]
+11/24/2021 00:14:34 - INFO - __main__ -   Count  = 1000
+11/24/2021 00:14:34 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/24/2021 00:14:34 - INFO - __main__ -   Training finished
+11/24/2021 00:14:34 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/24/2021 00:19:12 - INFO - __main__ -   tb_data {'lr': 9.558698553973134e-06, 'loss': 0.0007210493893944659}
+11/24/2021 00:19:12 - INFO - __main__ -   Epoch: 2, Batch: 195， Loss:  0.0007210493893944659
+11/24/2021 00:28:44 - INFO - __main__ -   tb_data {'lr': 9.556513893349239e-06, 'loss': 0.0007235932600451634}
+11/24/2021 00:28:44 - INFO - __main__ -   Epoch: 2, Batch: 595， Loss:  0.0007235932600451634
+11/24/2021 00:38:10 - INFO - __main__ -   tb_data {'lr': 9.554329232725343e-06, 'loss': 0.0007145451202814002}
+11/24/2021 00:38:10 - INFO - __main__ -   Epoch: 2, Batch: 995， Loss:  0.0007145451202814002
+11/24/2021 00:42:45 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/24/2021 00:42:45 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/24/2021 00:45:00 - INFO - __main__ -   F1 Score = [0.52, 0.3785, 0.2860000000000007, 0.2335, 0.2001999999999992]
+11/24/2021 00:45:00 - INFO - __main__ -   Recall Score  = [0.52, 0.4105, 0.36333333333333295, 0.3628333333333331, 0.3766666666666659]
+11/24/2021 00:45:00 - INFO - __main__ -   Precision Score  = [0.52, 0.3891666666666669, 0.31033333333333357, 0.27180952380952433, 0.24938095238095306]
+11/24/2021 00:45:00 - INFO - __main__ -   Count  = 1000
+11/24/2021 00:45:00 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/24/2021 00:45:00 - INFO - __main__ -   Training finished
+11/24/2021 00:45:00 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-22
+11/24/2021 00:45:31 - INFO - __main__ -   ############# FILE 23: Training Start   #############
+11/24/2021 00:45:31 - INFO - __main__ -   ***** Running training *****
+11/24/2021 00:45:31 - INFO - __main__ -     Num Epochs = 3
+11/24/2021 00:45:31 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/24/2021 00:45:31 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/24/2021 00:45:31 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/24/2021 00:45:31 - INFO - __main__ -   Start a new training
+11/24/2021 00:45:31 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/24/2021 00:50:28 - INFO - __main__ -   tb_data {'lr': 9.552144572101446e-06, 'loss': 0.00037744201108580455}
+11/24/2021 00:50:28 - INFO - __main__ -   Epoch: 0, Batch: 207， Loss:  0.00037744201108580455
+11/24/2021 00:59:54 - INFO - __main__ -   tb_data {'lr': 9.549959911477551e-06, 'loss': 0.0007287403343070765}
+11/24/2021 00:59:54 - INFO - __main__ -   Epoch: 0, Batch: 607， Loss:  0.0007287403343070765
+11/24/2021 01:09:21 - INFO - __main__ -   tb_data {'lr': 9.547775250853658e-06, 'loss': 0.0007223679190065013}
+11/24/2021 01:09:21 - INFO - __main__ -   Epoch: 0, Batch: 1007， Loss:  0.0007223679190065013
+11/24/2021 01:13:36 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/24/2021 01:13:36 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/24/2021 01:15:50 - INFO - __main__ -   F1 Score = [0.582, 0.418, 0.3153333333333329, 0.257, 0.21739999999999896]
+11/24/2021 01:15:50 - INFO - __main__ -   Recall Score  = [0.582, 0.444, 0.38633333333333264, 0.3816666666666661, 0.38981666666666565]
+11/24/2021 01:15:50 - INFO - __main__ -   Precision Score  = [0.582, 0.42666666666666697, 0.3381333333333326, 0.29492380952380914, 0.2671420634920639]
+11/24/2021 01:15:50 - INFO - __main__ -   Count  = 1000
+11/24/2021 01:15:50 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/24/2021 01:15:50 - INFO - __main__ -   Training finished
+11/24/2021 01:15:50 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/24/2021 01:21:01 - INFO - __main__ -   tb_data {'lr': 9.545590590229762e-06, 'loss': 0.000705062255874509}
+11/24/2021 01:21:01 - INFO - __main__ -   Epoch: 1, Batch: 219， Loss:  0.000705062255874509
+11/24/2021 01:30:26 - INFO - __main__ -   tb_data {'lr': 9.543405929605866e-06, 'loss': 0.0007110006681614323}
+11/24/2021 01:30:26 - INFO - __main__ -   Epoch: 1, Batch: 619， Loss:  0.0007110006681614323
+11/24/2021 01:39:45 - INFO - __main__ -   tb_data {'lr': 9.54122126898197e-06, 'loss': 0.0007066677965485723}
+11/24/2021 01:39:45 - INFO - __main__ -   Epoch: 1, Batch: 1019， Loss:  0.0007066677965485723
+11/24/2021 01:43:41 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/24/2021 01:43:41 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/24/2021 01:45:55 - INFO - __main__ -   F1 Score = [0.591, 0.4185, 0.3216666666666664, 0.2625, 0.22099999999999878]
+11/24/2021 01:45:55 - INFO - __main__ -   Recall Score  = [0.591, 0.4445, 0.39366666666666567, 0.38833333333333275, 0.39599999999999896]
+11/24/2021 01:45:55 - INFO - __main__ -   Precision Score  = [0.591, 0.4271666666666669, 0.34476666666666594, 0.30087619047619, 0.271567460317461]
+11/24/2021 01:45:55 - INFO - __main__ -   Count  = 1000
+11/24/2021 01:45:55 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/24/2021 01:45:55 - INFO - __main__ -   Training finished
+11/24/2021 01:45:55 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/24/2021 01:51:25 - INFO - __main__ -   tb_data {'lr': 9.539036608358075e-06, 'loss': 0.0006931502952647862}
+11/24/2021 01:51:25 - INFO - __main__ -   Epoch: 2, Batch: 231， Loss:  0.0006931502952647862
+11/24/2021 02:00:52 - INFO - __main__ -   tb_data {'lr': 9.53685194773418e-06, 'loss': 0.0006930392932554242}
+11/24/2021 02:00:52 - INFO - __main__ -   Epoch: 2, Batch: 631， Loss:  0.0006930392932554242
+11/24/2021 02:10:21 - INFO - __main__ -   tb_data {'lr': 9.534667287110285e-06, 'loss': 0.0006984163673041621}
+11/24/2021 02:10:21 - INFO - __main__ -   Epoch: 2, Batch: 1031， Loss:  0.0006984163673041621
+11/24/2021 02:14:02 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/24/2021 02:14:02 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/24/2021 02:16:15 - INFO - __main__ -   F1 Score = [0.608, 0.4285, 0.3256666666666658, 0.269, 0.22559999999999894]
+11/24/2021 02:16:15 - INFO - __main__ -   Recall Score  = [0.608, 0.4565, 0.3993333333333329, 0.3989166666666664, 0.4061999999999992]
+11/24/2021 02:16:15 - INFO - __main__ -   Precision Score  = [0.608, 0.43783333333333363, 0.3493333333333325, 0.30851666666666616, 0.2775412698412703]
+11/24/2021 02:16:15 - INFO - __main__ -   Count  = 1000
+11/24/2021 02:16:15 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/24/2021 02:16:15 - INFO - __main__ -   Training finished
+11/24/2021 02:16:15 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-23
+11/24/2021 02:16:48 - INFO - __main__ -   ############# FILE 24: Training Start   #############
+11/24/2021 02:16:48 - INFO - __main__ -   ***** Running training *****
+11/24/2021 02:16:48 - INFO - __main__ -     Num Epochs = 3
+11/24/2021 02:16:48 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/24/2021 02:16:48 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/24/2021 02:16:48 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/24/2021 02:16:48 - INFO - __main__ -   Start a new training
+11/24/2021 02:16:48 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/24/2021 02:22:34 - INFO - __main__ -   tb_data {'lr': 9.53248262648639e-06, 'loss': 0.0004355571639462141}
+11/24/2021 02:22:34 - INFO - __main__ -   Epoch: 0, Batch: 243， Loss:  0.0004355571639462141
+11/24/2021 02:31:59 - INFO - __main__ -   tb_data {'lr': 9.530297965862494e-06, 'loss': 0.0007083190271805506}
+11/24/2021 02:31:59 - INFO - __main__ -   Epoch: 0, Batch: 643， Loss:  0.0007083190271805506
+11/24/2021 02:41:19 - INFO - __main__ -   tb_data {'lr': 9.528113305238599e-06, 'loss': 0.0006955354673846159}
+11/24/2021 02:41:19 - INFO - __main__ -   Epoch: 0, Batch: 1043， Loss:  0.0006955354673846159
+11/24/2021 02:44:28 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/24/2021 02:44:28 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/24/2021 02:46:38 - INFO - __main__ -   F1 Score = [0.588, 0.432, 0.33266666666666667, 0.27125, 0.23439999999999875]
+11/24/2021 02:46:38 - INFO - __main__ -   Recall Score  = [0.588, 0.458, 0.4101666666666658, 0.4076666666666664, 0.4260833333333325]
+11/24/2021 02:46:38 - INFO - __main__ -   Precision Score  = [0.588, 0.4406666666666669, 0.3580666666666662, 0.3136523809523806, 0.28992857142857154]
+11/24/2021 02:46:38 - INFO - __main__ -   Count  = 1000
+11/24/2021 02:46:38 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/24/2021 02:46:38 - INFO - __main__ -   Training finished
+11/24/2021 02:46:38 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/24/2021 02:52:39 - INFO - __main__ -   tb_data {'lr': 9.525928644614702e-06, 'loss': 0.000697554525177111}
+11/24/2021 02:52:39 - INFO - __main__ -   Epoch: 1, Batch: 255， Loss:  0.000697554525177111
+11/24/2021 03:01:36 - INFO - __main__ -   tb_data {'lr': 9.523743983990808e-06, 'loss': 0.0006909023738262476}
+11/24/2021 03:01:36 - INFO - __main__ -   Epoch: 1, Batch: 655， Loss:  0.0006909023738262476
+11/24/2021 03:10:07 - INFO - __main__ -   tb_data {'lr': 9.521559323366913e-06, 'loss': 0.0006802385716582649}
+11/24/2021 03:10:07 - INFO - __main__ -   Epoch: 1, Batch: 1055， Loss:  0.0006802385716582649
+11/24/2021 03:12:51 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/24/2021 03:12:51 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/24/2021 03:14:57 - INFO - __main__ -   F1 Score = [0.579, 0.427, 0.3369999999999994, 0.2805, 0.2379999999999989]
+11/24/2021 03:14:57 - INFO - __main__ -   Recall Score  = [0.579, 0.4535, 0.4159999999999991, 0.4227499999999993, 0.43418333333333226]
+11/24/2021 03:14:57 - INFO - __main__ -   Precision Score  = [0.579, 0.4358333333333336, 0.362799999999999, 0.32452619047618964, 0.29468333333333385]
+11/24/2021 03:14:57 - INFO - __main__ -   Count  = 1000
+11/24/2021 03:14:57 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/24/2021 03:14:57 - INFO - __main__ -   Training finished
+11/24/2021 03:14:57 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/24/2021 03:21:18 - INFO - __main__ -   tb_data {'lr': 9.519374662743018e-06, 'loss': 0.0006741347858769586}
+11/24/2021 03:21:18 - INFO - __main__ -   Epoch: 2, Batch: 267， Loss:  0.0006741347858769586
+11/24/2021 03:30:36 - INFO - __main__ -   tb_data {'lr': 9.517190002119121e-06, 'loss': 0.0006791113955114269}
+11/24/2021 03:30:36 - INFO - __main__ -   Epoch: 2, Batch: 667， Loss:  0.0006791113955114269
+11/24/2021 03:39:58 - INFO - __main__ -   tb_data {'lr': 9.515005341495226e-06, 'loss': 0.0006753054578439333}
+11/24/2021 03:39:58 - INFO - __main__ -   Epoch: 2, Batch: 1067， Loss:  0.0006753054578439333
+11/24/2021 03:42:41 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/24/2021 03:42:41 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/24/2021 03:44:55 - INFO - __main__ -   F1 Score = [0.601, 0.4395, 0.34633333333333205, 0.28175, 0.23999999999999883]
+11/24/2021 03:44:55 - INFO - __main__ -   Recall Score  = [0.601, 0.467, 0.42766666666666603, 0.4239999999999997, 0.4389166666666658]
+11/24/2021 03:44:55 - INFO - __main__ -   Precision Score  = [0.601, 0.4486666666666671, 0.3728666666666657, 0.32592380952380906, 0.29730158730158746]
+11/24/2021 03:44:55 - INFO - __main__ -   Count  = 1000
+11/24/2021 03:44:55 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/24/2021 03:44:55 - INFO - __main__ -   Training finished
+11/24/2021 03:44:55 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-24
+11/24/2021 03:45:14 - INFO - __main__ -   ############# FILE 25: Training Start   #############
+11/24/2021 03:45:14 - INFO - __main__ -   ***** Running training *****
+11/24/2021 03:45:14 - INFO - __main__ -     Num Epochs = 3
+11/24/2021 03:45:14 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/24/2021 03:45:14 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/24/2021 03:45:14 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/24/2021 03:45:14 - INFO - __main__ -   Start a new training
+11/24/2021 03:45:14 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/24/2021 03:51:43 - INFO - __main__ -   tb_data {'lr': 9.51282068087133e-06, 'loss': 0.0004767599530168809}
+11/24/2021 03:51:43 - INFO - __main__ -   Epoch: 0, Batch: 279， Loss:  0.0004767599530168809
+11/24/2021 04:01:06 - INFO - __main__ -   tb_data {'lr': 9.510636020247435e-06, 'loss': 0.0006838379100372549}
+11/24/2021 04:01:06 - INFO - __main__ -   Epoch: 0, Batch: 679， Loss:  0.0006838379100372549
+11/24/2021 04:10:28 - INFO - __main__ -   tb_data {'lr': 9.50845135962354e-06, 'loss': 0.0006890797468076926}
+11/24/2021 04:10:28 - INFO - __main__ -   Epoch: 0, Batch: 1079， Loss:  0.0006890797468076926
+11/24/2021 04:13:00 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/24/2021 04:13:00 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/24/2021 04:15:13 - INFO - __main__ -   F1 Score = [0.63, 0.456, 0.3519999999999994, 0.28775, 0.242599999999999]
+11/24/2021 04:15:13 - INFO - __main__ -   Recall Score  = [0.63, 0.4815, 0.4254999999999995, 0.4185833333333331, 0.4285499999999991]
+11/24/2021 04:15:13 - INFO - __main__ -   Precision Score  = [0.63, 0.4645000000000005, 0.37589999999999973, 0.32830714285714174, 0.29719285714285776]
+11/24/2021 04:15:13 - INFO - __main__ -   Count  = 1000
+11/24/2021 04:15:13 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/24/2021 04:15:13 - INFO - __main__ -   Training finished
+11/24/2021 04:15:13 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/24/2021 04:22:07 - INFO - __main__ -   tb_data {'lr': 9.506266698999645e-06, 'loss': 0.0006753815336560365}
+11/24/2021 04:22:07 - INFO - __main__ -   Epoch: 1, Batch: 291， Loss:  0.0006753815336560365
+11/24/2021 04:31:34 - INFO - __main__ -   tb_data {'lr': 9.50408203837575e-06, 'loss': 0.0006703893471421907}
+11/24/2021 04:31:34 - INFO - __main__ -   Epoch: 1, Batch: 691， Loss:  0.0006703893471421907
+11/24/2021 04:41:00 - INFO - __main__ -   tb_data {'lr': 9.501897377751854e-06, 'loss': 0.0006698292501096148}
+11/24/2021 04:41:00 - INFO - __main__ -   Epoch: 1, Batch: 1091， Loss:  0.0006698292501096148
+11/24/2021 04:43:16 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/24/2021 04:43:16 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/24/2021 04:45:30 - INFO - __main__ -   F1 Score = [0.637, 0.4675, 0.35866666666666636, 0.29, 0.24619999999999906]
+11/24/2021 04:45:30 - INFO - __main__ -   Recall Score  = [0.637, 0.4935, 0.43483333333333263, 0.42341666666666644, 0.43543333333333284]
+11/24/2021 04:45:30 - INFO - __main__ -   Precision Score  = [0.637, 0.476166666666667, 0.3833333333333328, 0.33130238095237996, 0.30168730158730245]
+11/24/2021 04:45:30 - INFO - __main__ -   Count  = 1000
+11/24/2021 04:45:30 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/24/2021 04:45:30 - INFO - __main__ -   Training finished
+11/24/2021 04:45:30 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/24/2021 04:52:39 - INFO - __main__ -   tb_data {'lr': 9.499712717127959e-06, 'loss': 0.0006581463535985676}
+11/24/2021 04:52:39 - INFO - __main__ -   Epoch: 2, Batch: 303， Loss:  0.0006581463535985676
+11/24/2021 05:02:04 - INFO - __main__ -   tb_data {'lr': 9.497528056504064e-06, 'loss': 0.0006605965326161822}
+11/24/2021 05:02:04 - INFO - __main__ -   Epoch: 2, Batch: 703， Loss:  0.0006605965326161822
+11/24/2021 05:11:29 - INFO - __main__ -   tb_data {'lr': 9.495343395880168e-06, 'loss': 0.0006605817642412148}
+11/24/2021 05:11:29 - INFO - __main__ -   Epoch: 2, Batch: 1103， Loss:  0.0006605817642412148
+11/24/2021 05:13:27 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/24/2021 05:13:27 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/24/2021 05:15:40 - INFO - __main__ -   F1 Score = [0.639, 0.4685, 0.3586666666666656, 0.29125, 0.2501999999999989]
+11/24/2021 05:15:40 - INFO - __main__ -   Recall Score  = [0.639, 0.495, 0.43349999999999905, 0.42549999999999955, 0.44336666666666597]
+11/24/2021 05:15:40 - INFO - __main__ -   Precision Score  = [0.639, 0.47733333333333355, 0.3829999999999989, 0.33273809523809433, 0.30663650793650854]
+11/24/2021 05:15:40 - INFO - __main__ -   Count  = 1000
+11/24/2021 05:15:40 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/24/2021 05:15:40 - INFO - __main__ -   Training finished
+11/24/2021 05:15:40 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-25
+11/24/2021 05:16:12 - INFO - __main__ -   ############# FILE 26: Training Start   #############
+11/24/2021 05:16:12 - INFO - __main__ -   ***** Running training *****
+11/24/2021 05:16:12 - INFO - __main__ -     Num Epochs = 3
+11/24/2021 05:16:12 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/24/2021 05:16:12 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/24/2021 05:16:12 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/24/2021 05:16:12 - INFO - __main__ -   Start a new training
+11/24/2021 05:16:12 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/24/2021 05:23:43 - INFO - __main__ -   tb_data {'lr': 9.493158735256273e-06, 'loss': 0.0005302870099694701}
+11/24/2021 05:23:43 - INFO - __main__ -   Epoch: 0, Batch: 315， Loss:  0.0005302870099694701
+11/24/2021 05:33:09 - INFO - __main__ -   tb_data {'lr': 9.490974074632378e-06, 'loss': 0.0006759499308827798}
+11/24/2021 05:33:09 - INFO - __main__ -   Epoch: 0, Batch: 715， Loss:  0.0006759499308827798
+11/24/2021 05:42:32 - INFO - __main__ -   tb_data {'lr': 9.488789414008481e-06, 'loss': 0.000668804224624182}
+11/24/2021 05:42:32 - INFO - __main__ -   Epoch: 0, Batch: 1115， Loss:  0.000668804224624182
+11/24/2021 05:44:14 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/24/2021 05:44:14 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/24/2021 05:46:29 - INFO - __main__ -   F1 Score = [0.637, 0.4595, 0.349666666666666, 0.285, 0.24179999999999893]
+11/24/2021 05:46:29 - INFO - __main__ -   Recall Score  = [0.637, 0.4815, 0.42316666666666564, 0.4169166666666661, 0.42984999999999884]
+11/24/2021 05:46:29 - INFO - __main__ -   Precision Score  = [0.637, 0.46683333333333366, 0.3743666666666656, 0.3267071428571423, 0.29737380952380976]
+11/24/2021 05:46:29 - INFO - __main__ -   Count  = 1000
+11/24/2021 05:46:29 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/24/2021 05:46:29 - INFO - __main__ -   Training finished
+11/24/2021 05:46:29 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/24/2021 05:54:13 - INFO - __main__ -   tb_data {'lr': 9.486604753384586e-06, 'loss': 0.0006597473170404555}
+11/24/2021 05:54:13 - INFO - __main__ -   Epoch: 1, Batch: 327， Loss:  0.0006597473170404555
+11/24/2021 06:03:35 - INFO - __main__ -   tb_data {'lr': 9.48442009276069e-06, 'loss': 0.000655756845153519}
+11/24/2021 06:03:35 - INFO - __main__ -   Epoch: 1, Batch: 727， Loss:  0.000655756845153519
+11/24/2021 06:13:03 - INFO - __main__ -   tb_data {'lr': 9.482235432136795e-06, 'loss': 0.0006589529391203542}
+11/24/2021 06:13:03 - INFO - __main__ -   Epoch: 1, Batch: 1127， Loss:  0.0006589529391203542
+11/24/2021 06:14:27 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/24/2021 06:14:27 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/24/2021 06:16:43 - INFO - __main__ -   F1 Score = [0.646, 0.461, 0.35733333333333256, 0.288, 0.24679999999999871]
+11/24/2021 06:16:43 - INFO - __main__ -   Recall Score  = [0.646, 0.483, 0.4324999999999992, 0.4192499999999992, 0.437883333333332]
+11/24/2021 06:16:43 - INFO - __main__ -   Precision Score  = [0.646, 0.46833333333333355, 0.3825999999999988, 0.3296404761904754, 0.3033238095238096]
+11/24/2021 06:16:43 - INFO - __main__ -   Count  = 1000
+11/24/2021 06:16:43 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/24/2021 06:16:43 - INFO - __main__ -   Training finished
+11/24/2021 06:16:43 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/24/2021 06:24:46 - INFO - __main__ -   tb_data {'lr': 9.4800507715129e-06, 'loss': 0.000652874964507646}
+11/24/2021 06:24:46 - INFO - __main__ -   Epoch: 2, Batch: 339， Loss:  0.000652874964507646
+11/24/2021 06:34:10 - INFO - __main__ -   tb_data {'lr': 9.477866110889005e-06, 'loss': 0.0006459669100877363}
+11/24/2021 06:34:10 - INFO - __main__ -   Epoch: 2, Batch: 739， Loss:  0.0006459669100877363
+11/24/2021 06:43:29 - INFO - __main__ -   tb_data {'lr': 9.47568145026511e-06, 'loss': 0.0006453111190057825}
+11/24/2021 06:43:29 - INFO - __main__ -   Epoch: 2, Batch: 1139， Loss:  0.0006453111190057825
+11/24/2021 06:44:30 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/24/2021 06:44:30 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/24/2021 06:46:44 - INFO - __main__ -   F1 Score = [0.641, 0.4635, 0.3596666666666668, 0.28925, 0.2489999999999989]
+11/24/2021 06:46:44 - INFO - __main__ -   Recall Score  = [0.641, 0.4855, 0.43683333333333296, 0.4229999999999995, 0.44094999999999906]
+11/24/2021 06:46:44 - INFO - __main__ -   Precision Score  = [0.641, 0.47083333333333355, 0.3854333333333332, 0.3314476190476184, 0.30586269841269853]
+11/24/2021 06:46:44 - INFO - __main__ -   Count  = 1000
+11/24/2021 06:46:44 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/24/2021 06:46:44 - INFO - __main__ -   Training finished
+11/24/2021 06:46:44 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-26
+11/24/2021 06:47:18 - INFO - __main__ -   ############# FILE 27: Training Start   #############
+11/24/2021 06:47:18 - INFO - __main__ -   ***** Running training *****
+11/24/2021 06:47:18 - INFO - __main__ -     Num Epochs = 3
+11/24/2021 06:47:18 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/24/2021 06:47:18 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/24/2021 06:47:18 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/24/2021 06:47:18 - INFO - __main__ -   Start a new training
+11/24/2021 06:47:18 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/24/2021 06:55:38 - INFO - __main__ -   tb_data {'lr': 9.473496789641214e-06, 'loss': 0.0005765483848517761}
+11/24/2021 06:55:38 - INFO - __main__ -   Epoch: 0, Batch: 351， Loss:  0.0005765483848517761
+11/24/2021 07:05:04 - INFO - __main__ -   tb_data {'lr': 9.471312129017319e-06, 'loss': 0.0006686433540016878}
+11/24/2021 07:05:04 - INFO - __main__ -   Epoch: 0, Batch: 751， Loss:  0.0006686433540016878
+11/24/2021 07:14:34 - INFO - __main__ -   tb_data {'lr': 9.469127468393424e-06, 'loss': 0.0006561125943699153}
+11/24/2021 07:14:34 - INFO - __main__ -   Epoch: 0, Batch: 1151， Loss:  0.0006561125943699153
+11/24/2021 07:15:24 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/24/2021 07:15:24 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/24/2021 07:17:38 - INFO - __main__ -   F1 Score = [0.642, 0.4655, 0.3599999999999999, 0.29175, 0.24759999999999854]
+11/24/2021 07:17:38 - INFO - __main__ -   Recall Score  = [0.642, 0.4965, 0.4483333333333327, 0.44033333333333285, 0.45234999999999903]
+11/24/2021 07:17:38 - INFO - __main__ -   Precision Score  = [0.642, 0.4758333333333337, 0.38873333333333293, 0.33715238095238026, 0.30599682539682554]
+11/24/2021 07:17:38 - INFO - __main__ -   Count  = 1000
+11/24/2021 07:17:38 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/24/2021 07:17:38 - INFO - __main__ -   Training finished
+11/24/2021 07:17:38 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/24/2021 07:26:12 - INFO - __main__ -   tb_data {'lr': 9.466942807769528e-06, 'loss': 0.0006474345227616141}
+11/24/2021 07:26:12 - INFO - __main__ -   Epoch: 1, Batch: 363， Loss:  0.0006474345227616141
+11/24/2021 07:35:40 - INFO - __main__ -   tb_data {'lr': 9.464758147145633e-06, 'loss': 0.0006485649228125112}
+11/24/2021 07:35:40 - INFO - __main__ -   Epoch: 1, Batch: 763， Loss:  0.0006485649228125112
+11/24/2021 07:45:05 - INFO - __main__ -   tb_data {'lr': 9.462573486521736e-06, 'loss': 0.0006395742296444951}
+11/24/2021 07:45:05 - INFO - __main__ -   Epoch: 1, Batch: 1163， Loss:  0.0006395742296444951
+11/24/2021 07:45:39 - INFO - __main__ -   ############# Epoch 1: Training End     #############
+11/24/2021 07:45:39 - INFO - __main__ -   ############# Epoch 1: Validation Start   #############
+11/24/2021 07:47:52 - INFO - __main__ -   F1 Score = [0.644, 0.47, 0.36233333333333245, 0.29325, 0.24859999999999846]
+11/24/2021 07:47:52 - INFO - __main__ -   Recall Score  = [0.644, 0.501, 0.4504999999999989, 0.44199999999999945, 0.4532499999999992]
+11/24/2021 07:47:52 - INFO - __main__ -   Precision Score  = [0.644, 0.4803333333333339, 0.39099999999999874, 0.3386761904761895, 0.30700000000000005]
+11/24/2021 07:47:52 - INFO - __main__ -   Count  = 1000
+11/24/2021 07:47:52 - INFO - __main__ -   ############# Epoch 1: Validation End     #############
+11/24/2021 07:47:52 - INFO - __main__ -   Training finished
+11/24/2021 07:47:52 - INFO - __main__ -   ############# Epoch 2: Training Start   #############
+11/24/2021 07:56:43 - INFO - __main__ -   tb_data {'lr': 9.460388825897841e-06, 'loss': 0.0006380732559773606}
+11/24/2021 07:56:43 - INFO - __main__ -   Epoch: 2, Batch: 375， Loss:  0.0006380732559773606
+11/24/2021 08:06:10 - INFO - __main__ -   tb_data {'lr': 9.458204165273946e-06, 'loss': 0.000637796029477613}
+11/24/2021 08:06:10 - INFO - __main__ -   Epoch: 2, Batch: 775， Loss:  0.000637796029477613
+11/24/2021 08:15:41 - INFO - __main__ -   tb_data {'lr': 9.45601950465005e-06, 'loss': 0.0006310090560873505}
+11/24/2021 08:15:41 - INFO - __main__ -   Epoch: 2, Batch: 1175， Loss:  0.0006310090560873505
+11/24/2021 08:15:58 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/24/2021 08:15:58 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/24/2021 08:18:11 - INFO - __main__ -   F1 Score = [0.65, 0.47, 0.36399999999999866, 0.2955, 0.2525999999999986]
+11/24/2021 08:18:11 - INFO - __main__ -   Recall Score  = [0.65, 0.5005, 0.4533333333333322, 0.44624999999999915, 0.46153333333333213]
+11/24/2021 08:18:11 - INFO - __main__ -   Precision Score  = [0.65, 0.4801666666666671, 0.39303333333333224, 0.3414404761904753, 0.3120769841269842]
+11/24/2021 08:18:11 - INFO - __main__ -   Count  = 1000
+11/24/2021 08:18:11 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/24/2021 08:18:11 - INFO - __main__ -   Training finished
+11/24/2021 08:18:11 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-27
+11/24/2021 08:18:43 - INFO - __main__ -   ############# FILE 28: Training Start   #############
+11/24/2021 08:18:43 - INFO - __main__ -   ***** Running training *****
+11/24/2021 08:18:43 - INFO - __main__ -     Num Epochs = 3
+11/24/2021 08:18:43 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/24/2021 08:18:43 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/24/2021 08:18:43 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/24/2021 08:18:43 - INFO - __main__ -   Start a new training
+11/24/2021 08:18:43 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/24/2021 08:27:52 - INFO - __main__ -   tb_data {'lr': 9.453834844026155e-06, 'loss': 0.0006375188103993424}
+11/24/2021 08:27:52 - INFO - __main__ -   Epoch: 0, Batch: 387， Loss:  0.0006375188103993424
+11/24/2021 08:37:19 - INFO - __main__ -   tb_data {'lr': 9.45165018340226e-06, 'loss': 0.0006432364052307094}
+11/24/2021 08:37:19 - INFO - __main__ -   Epoch: 0, Batch: 787， Loss:  0.0006432364052307094
+11/24/2021 08:46:47 - INFO - __main__ -   tb_data {'lr': 9.449465522778365e-06, 'loss': 0.0006459650947363115}
+11/24/2021 08:46:47 - INFO - __main__ -   Epoch: 0, Batch: 1187， Loss:  0.0006459650947363115
+11/24/2021 08:46:47 - INFO - __main__ -   ############# Epoch 0: Training End     #############
+11/24/2021 08:46:47 - INFO - __main__ -   ############# Epoch 0: Validation Start   #############
+11/24/2021 08:49:01 - INFO - __main__ -   F1 Score = [0.678, 0.5, 0.3826666666666652, 0.31175, 0.2601999999999984]
+11/24/2021 08:49:01 - INFO - __main__ -   Recall Score  = [0.678, 0.5305, 0.4698333333333322, 0.4619166666666659, 0.46759999999999846]
+11/24/2021 08:49:01 - INFO - __main__ -   Precision Score  = [0.678, 0.5101666666666671, 0.41103333333333214, 0.35814999999999886, 0.3201634920634923]
+11/24/2021 08:49:01 - INFO - __main__ -   Count  = 1000
+11/24/2021 08:49:01 - INFO - __main__ -   ############# Epoch 0: Validation End     #############
+11/24/2021 08:49:01 - INFO - __main__ -   Training finished
+11/24/2021 08:49:01 - INFO - __main__ -   ############# Epoch 1: Training Start   #############
+11/24/2021 08:58:25 - INFO - __main__ -   tb_data {'lr': 9.44728086215447e-06, 'loss': 0.0006324509122350719}
+11/24/2021 08:58:25 - INFO - __main__ -   Epoch: 1, Batch: 399， Loss:  0.0006324509122350719
