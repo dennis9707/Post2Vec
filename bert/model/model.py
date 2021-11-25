@@ -33,13 +33,15 @@ class ClassifyHeader(nn.Module):
     def __init__(self, config, num_class):
         super().__init__()
         self.hidden_size = config.hidden_size
-        self.title_pooler = AvgPooler(config)
-        self.text_pooler = AvgPooler(config)
-        self.code_pooler = AvgPooler(config)
+        self.title_pooler = MaxPooler(config)
+        self.text_pooler = MaxPooler(config)
+        self.code_pooler = MaxPooler(config)
 
-        self.dense = nn.Linear(config.hidden_size * 5, config.hidden_size)
+        # self.dense = nn.Linear(config.hidden_size * 5, config.hidden_size)
+        self.dense = nn.Linear(config.hidden_size * 5, config.hidden_size * 3)
+
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        self.output_layer = nn.Linear(config.hidden_size, num_class)
+        self.output_layer = nn.Linear(config.hidden_size * 3, num_class)
 
     def forward(self, title_hidden, text_hidden, code_hidden):
         pool_title_hidden = self.title_pooler(title_hidden)
@@ -56,6 +58,7 @@ class ClassifyHeader(nn.Module):
         x = self.dropout(concated_hidden)
         x = self.dense(x)
         x = torch.tanh(x)
+        x = self.dropout(x)
         x = self.output_layer(x)
         return x
 
@@ -90,4 +93,4 @@ class TBertT(PreTrainedModel):
 
         logits = self.cls(title_hidden=t_hidden,
                           text_hidden=n_hidden, code_hidden=c_hidden)
-        return logits 
+        return logits

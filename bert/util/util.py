@@ -18,6 +18,7 @@ OPTIMIZER_FNAME = "optimizer.pt"
 SCHED_FNAME = "scheduler.pt"
 ARG_FNAME = "training_args.bin"
 
+
 def write_tensor_board(tb_writer, data, step):
     for att_name in data.keys():
         att_value = data[att_name]
@@ -29,7 +30,9 @@ def get_files_paths_from_directory(input_dir):
     for root, dirs, files in os.walk(input_dir):
         for file_name in files:
             file_paths.append(os.path.join(root, file_name))
+    file_paths.sort()
     return file_paths
+
 
 def seed_everything(seed=42):
     random.seed(seed)
