@@ -128,7 +128,8 @@ if __name__ == "__main__":
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
         model.load_state_dict(torch.load(model_path),strict=False)
-    # model = torch.nn.DataParallel(model)
+    model = torch.nn.DataParallel(model)
+    model.to(device)
     print("model loaded")
     
     fin_pre = []
