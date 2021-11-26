@@ -3289,3 +3289,11 @@
 11/26/2021 09:04:20 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
 11/26/2021 09:04:20 - INFO - __main__ -   Training finished
 11/26/2021 09:04:20 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-59
+11/26/2021 09:05:05 - INFO - __main__ -   ############# FILE 60: Training Start   #############
+11/26/2021 09:05:05 - INFO - __main__ -   ***** Running training *****
+11/26/2021 09:05:05 - INFO - __main__ -     Num Epochs = 3
+11/26/2021 09:05:05 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/26/2021 09:05:05 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/26/2021 09:05:05 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/26/2021 09:05:05 - INFO - __main__ -   Start a new training
+11/26/2021 09:05:05 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
