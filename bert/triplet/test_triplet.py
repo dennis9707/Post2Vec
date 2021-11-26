@@ -110,11 +110,11 @@ def test(args, model, test_set):
 
 
 if __name__ == "__main__":
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
+    # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
 
     args = get_eval_args()
 
-    device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     args.device = device
 
     if not os.path.isdir(args.output_dir):
@@ -127,15 +127,15 @@ if __name__ == "__main__":
     model = TBertT(BertConfig(), args.code_bert, num_class)
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
-        model.load_state_dict(torch.load(model_path))
-    model = torch.nn.DataParallel(model)
+        model.load_state_dict(torch.load(model_path),strict=False)
+    # model = torch.nn.DataParallel(model)
     print("model loaded")
     
     fin_pre = []
     fin_rc = []
     fin_f1 = []
     fin_cnt = 0
-    files = get_files_paths_from_directory(args.data_folder)
+    files = get_files_paths_from_directory(args.data_dir)
 
     start_time = time.time()
     
