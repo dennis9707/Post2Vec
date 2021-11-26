@@ -4,3 +4,4 @@ data/
 results/
 bert/runs/
 bert/trinity/apex/
+__pycache__/

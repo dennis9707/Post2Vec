@@ -1,11 +1,14 @@
-# Post2Vec
+# Post2Vec Extension
 
+## Original Post2Vec Code
+
+`post2vec`
 Replication Package for the paper "Post2Vec: Learning Distributed Representations of Stack Overflow Posts".
 
 ## How to train/test Post2Vec Model?
 
-- Train File: ./src/tasks/tag\_rec/approaches/post2vec/separate/cnn/cnn\_separate\_train.py
-- Test File: ./src/tasks/tag\_rec/approaches/post2vec/separate/post2vec\_separate_test.py
+- Train File: ./src/tasks/tag_rec/approaches/post2vec/separate/cnn/cnn_separate_train.py
+- Test File: ./src/tasks/tag_rec/approaches/post2vec/separate/post2vec_separate_test.py
 
 ## Data
 
