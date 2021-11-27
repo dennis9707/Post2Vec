@@ -88,7 +88,3 @@ class QuestionDataset(Dataset):
             "input_ids": feature["input_ids"].flatten(),
             "attention_mask": feature["attention_mask"].flatten()}
         return res
-
-    def add_question(self, question):
-        self.length += 1
-        self.questions.append(question)

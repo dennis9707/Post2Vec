@@ -6,7 +6,7 @@ from torch.optim import AdamW
 from transformers import BertConfig, get_linear_schedule_with_warmup, AutoTokenizer
 from torch.utils.tensorboard import SummaryWriter
 import gc
-from sklearn import metrics, preprocessing
+from sklearn import preprocessing
 from datetime import datetime
 import pandas as pd
 from apex.parallel import convert_syncbn_model, DistributedDataParallel as DDP
@@ -25,8 +25,75 @@ import argparse
 from data_structure.question import Question, QuestionDataset
 import pandas as pd
 from util.util import write_tensor_board
+from util.data_util import get_tag_encoder
 
 logger = logging.getLogger(__name__)
+
+def get_exe_name(args):
+    exe_name = "{}_{}_{}"
+    time = datetime.now().strftime("%m-%d %H-%M-%S")
+
+    base_model = ""
+    return exe_name.format(args.tbert_type, time, base_model)
+
+def get_optimizer_scheduler(args, model, train_steps):
+    no_decay = ["bias", "LayerNorm.weight"]
+    optimizer_grouped_parameters = [
+        {
+            "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
+            "weight_decay": args.weight_decay,
+        },
+        {"params": [p for n, p in model.named_parameters() if any(
+            nd in n for nd in no_decay)], "weight_decay": 0.0},
+    ]
+    optimizer = AdamW(optimizer_grouped_parameters,
+                      lr=args.learning_rate, eps=args.adam_epsilon)
+    # optimizer = optim.SGD(model.parameters(), lr=args.learning_rate)
+    scheduler = get_linear_schedule_with_warmup(
+        optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=train_steps
+    )
+    return optimizer, scheduler
+
+def init_train_env(args, tbert_type):
+    # Setup CUDA, GPU
+    device = torch.device(
+        "cuda" if torch.cuda.is_available() else "cpu")
+    args.n_gpu = torch.cuda.device_count()
+
+    args.device = device
+
+    # Setup logging
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
+        datefmt="%m/%d/%Y %H:%M:%S",
+        level=logging.INFO,
+    )
+    logger.warning(
+        "device: %s, n_gpu: %s",
+        device,
+        args.n_gpu,
+    )
+    
+    # Set seed
+    seed_everything(args.seed)
+    
+    # get the encoder for tags
+    mlb, num_class = get_tag_encoder(args.vocab_file)
+    args.mlb = mlb
+    args.num_class = num_class
+    
+    # get the model
+    if tbert_type == 'trinity':
+        model = TBertT(BertConfig(), args.code_bert, args.num_class)
+    else:
+        raise Exception("TBERT type not found")
+    
+    args.tbert_type = tbert_type
+    model.to(args.device)
+    logger.info("Training/evaluation parameters %s", args)
+    args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
+    return model
+
 
 def get_train_args():
     parser = argparse.ArgumentParser()
@@ -74,78 +141,3 @@ def get_train_args():
                                  'codistai/codeBERT-small-v2'])
     args = parser.parse_args()
     return args
-
-
-def init_train_env(args, tbert_type):
-    # Setup CUDA, GPU
-    device = torch.device(
-        "cuda" if torch.cuda.is_available() else "cpu")
-    args.n_gpu = torch.cuda.device_count()
-
-    args.device = device
-
-    # Setup logging
-    logging.basicConfig(
-        format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
-        datefmt="%m/%d/%Y %H:%M:%S",
-        level=logging.INFO,
-    )
-    logger.warning(
-        "device: %s, n_gpu: %s",
-        device,
-        args.n_gpu,
-    )
-    
-    # Set seed
-    seed_everything(args.seed)
-    
-    # get the encoder for tags
-    mlb, num_class = get_tag_encoder(args.vocab_file)
-    args.mlb = mlb
-    args.num_class = num_class
-    
-    # get the model
-    if tbert_type == 'trinity':
-        model = TBertT(BertConfig(), args.code_bert, args.num_class)
-    else:
-        raise Exception("TBERT type not found")
-    
-    args.tbert_type = tbert_type
-    model.to(args.device)
-    logger.info("Training/evaluation parameters %s", args)
-    args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
-    return model
-
-
-def get_optimizer_scheduler(args, model, train_steps):
-    no_decay = ["bias", "LayerNorm.weight"]
-    optimizer_grouped_parameters = [
-        {
-            "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-            "weight_decay": args.weight_decay,
-        },
-        {"params": [p for n, p in model.named_parameters() if any(
-            nd in n for nd in no_decay)], "weight_decay": 0.0},
-    ]
-    optimizer = AdamW(optimizer_grouped_parameters,
-                      lr=args.learning_rate, eps=args.adam_epsilon)
-    # optimizer = optim.SGD(model.parameters(), lr=args.learning_rate)
-    scheduler = get_linear_schedule_with_warmup(
-        optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=train_steps
-    )
-    return optimizer, scheduler
-
-def get_exe_name(args):
-    exe_name = "{}_{}_{}"
-    time = datetime.now().strftime("%m-%d %H-%M-%S")
-
-    base_model = ""
-    return exe_name.format(args.tbert_type, time, base_model)
-
-def get_tag_encoder(vocab_file):
-    tab_vocab_path = vocab_file
-    tag_vocab = pd.read_csv(tab_vocab_path)
-    tag_list = tag_vocab["tag"].astype(str).tolist()
-    mlb = preprocessing.MultiLabelBinarizer()
-    mlb.fit([tag_list])
-    return mlb, len(mlb.classes_)
