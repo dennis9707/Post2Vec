@@ -138,7 +138,6 @@ def main():
 
         logger.info("Start a new training")
         # in case we resume training
-
         tr_loss = 0
         for epoch in range(args.num_train_epochs):
             logger.info(

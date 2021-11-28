@@ -65,13 +65,13 @@ class NewQuestion:
     def get_creation_date(self):
         return self.creation_date
 
-    def get_title_id(self):
+    def get_title(self):
         return self.title
 
-    def get_text_id(self):
+    def get_text(self):
         return self.text
 
-    def get_code_id(self):
+    def get_code(self):
         return self.code
 
     def get_tag(self):

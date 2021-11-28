@@ -79,7 +79,6 @@ def init_train_env(args, tbert_type):
         device,
         args.n_gpu,
         bool(args.local_rank != -1),
-        args.fp16,
     )
     
     # Set seed
