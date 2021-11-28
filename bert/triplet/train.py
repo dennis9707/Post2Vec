@@ -55,10 +55,15 @@ def get_optimizer_scheduler(args, model, train_steps):
     return optimizer, scheduler
 
 def init_train_env(args, tbert_type):
-    # Setup CUDA, GPU
-    device = torch.device(
-        "cuda" if torch.cuda.is_available() else "cpu")
-    args.n_gpu = torch.cuda.device_count()
+    # Setup CUDA, GPU & distributed training
+    if args.local_rank == -1:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        args.n_gpu = torch.cuda.device_count()
+    else:  # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
+        torch.cuda.set_device(args.local_rank)
+        device = torch.device("cuda", args.local_rank)
+        torch.distributed.init_process_group(backend="nccl")
+        args.n_gpu = 1
 
     args.device = device
 
@@ -66,12 +71,15 @@ def init_train_env(args, tbert_type):
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
-        level=logging.INFO,
+        level=logging.INFO if args.local_rank in [-1, 0] else logging.WARN,
     )
     logger.warning(
         "device: %s, n_gpu: %s",
+        args.local_rank,
         device,
         args.n_gpu,
+        bool(args.local_rank != -1),
+        args.fp16,
     )
     
     # Set seed
@@ -82,13 +90,25 @@ def init_train_env(args, tbert_type):
     args.mlb = mlb
     args.num_class = num_class
     
-    # get the model
+    # Load pretrained model and tokenizer
+    if args.local_rank not in [-1, 0]:
+        # Make sure only the first process in distributed training will download model & vocab
+        torch.distributed.barrier()
     if tbert_type == 'trinity':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
+    # elif tbert_type == 'siamese' or tbert_type == "I":
+    #     model = TBertI(BertConfig(), args.code_bert)
+    # elif tbert_type == 'siamese2' or tbert_type == "I2":
+    #     model = TBertI2(BertConfig(), args.code_bert)
+    # elif tbert_type == 'single' or tbert_type == "S":
+    #     model = TBertS(BertConfig(), args.code_bert)
     else:
         raise Exception("TBERT type not found")
-    
     args.tbert_type = tbert_type
+    if args.local_rank == 0:
+        # Make sure only the first process in distributed training will download model & vocab
+        torch.distributed.barrier()
+        
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
     args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)

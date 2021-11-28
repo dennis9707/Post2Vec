@@ -5201,3 +5201,18 @@
 11/28/2021 14:20:20 - INFO - __main__ -   Epoch: 2, Batch: 1187， Loss:  0.0003892476922192145
 11/28/2021 14:20:20 - INFO - __main__ -   ############# Epoch 2: Training End     #############
 11/28/2021 14:20:20 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/28/2021 14:22:32 - INFO - __main__ -   F1 Score = [0.82, 0.647, 0.5280000000000004, 0.43825, 0.3717999999999978]
+11/28/2021 14:22:32 - INFO - __main__ -   Recall Score  = [0.82, 0.6915, 0.6446666666666666, 0.6468333333333336, 0.6654500000000002]
+11/28/2021 14:22:32 - INFO - __main__ -   Precision Score  = [0.82, 0.6618333333333327, 0.5653666666666666, 0.502876190476188, 0.4572158730158727]
+11/28/2021 14:22:32 - INFO - __main__ -   Count  = 1000
+11/28/2021 14:22:32 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/28/2021 14:22:32 - INFO - __main__ -   Training finished
+11/28/2021 14:22:32 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-94
+11/28/2021 14:22:50 - INFO - __main__ -   ############# FILE 95: Training Start   #############
+11/28/2021 14:22:50 - INFO - __main__ -   ***** Running training *****
+11/28/2021 14:22:50 - INFO - __main__ -     Num Epochs = 3
+11/28/2021 14:22:50 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/28/2021 14:22:50 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/28/2021 14:22:50 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/28/2021 14:22:50 - INFO - __main__ -   Start a new training
+11/28/2021 14:22:50 - INFO - __main__ -   ############# Epoch 0: Training Start   #############

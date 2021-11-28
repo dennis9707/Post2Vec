@@ -69,6 +69,16 @@ def get_dataloader(dataset, batch_size):
     return data_loader
 
 
+def get_distribued_dataloader(dataset, batch_size):
+    # sampler = DistributedSampler(dataset)
+
+    data_loader = DataLoader(dataset,
+                             batch_size=batch_size,
+                             shuffle=True,
+                             )
+    return data_loader
+
+
 def main():
     os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
 
