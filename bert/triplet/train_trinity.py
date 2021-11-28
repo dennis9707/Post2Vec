@@ -79,7 +79,6 @@ def get_distribued_dataloader(dataset, batch_size):
                              )
     return data_loader
 
-
 def main():
     os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
 
@@ -188,49 +187,7 @@ def main():
                         tr_loss = 0.0
             logger.info(
                 '############# Epoch {}: Training End     #############'.format(epoch))
-            logger.info(
-                '############# Epoch {}: Validation Start   #############'.format(epoch))
-            model.eval()
-            fin_targets = []
-            fin_outputs = []
-            with torch.no_grad():
-                for batch_idx, data in enumerate(valid_data_loader, 0):
-                    title_ids = data['titile_ids'].to(
-                        args.device, dtype=torch.long)
-                    title_mask = data['title_mask'].to(
-                        args.device, dtype=torch.long)
-                    text_ids = data['text_ids'].to(
-                        args.device, dtype=torch.long)
-                    text_mask = data['text_mask'].to(
-                        args.device, dtype=torch.long)
-                    code_ids = data['code_ids'].to(
-                        args.device, dtype=torch.long)
-                    code_mask = data['code_mask'].to(
-                        args.device, dtype=torch.long)
-                    targets = data['labels'].to(
-                        args.device, dtype=torch.float)
-
-                    outputs = model(title_ids=title_ids,
-                                    title_attention_mask=title_mask,
-                                    text_ids=text_ids,
-                                    text_attention_mask=text_mask,
-                                    code_ids=code_ids,
-                                    code_attention_mask=code_mask)
-
-                    fin_targets.extend(targets.cpu().detach().numpy().tolist())
-                    fin_outputs.extend(torch.sigmoid(
-                        outputs).cpu().detach().numpy().tolist())
-            [pre, rc, f1, cnt] = evaluate_batch(
-                fin_outputs, fin_targets, [1, 2, 3, 4, 5])
-            logger.info("F1 Score = {}".format(pre))
-            logger.info("Recall Score  = {}".format(rc))
-            logger.info("Precision Score  = {}".format(f1))
-            logger.info("Count  = {}".format(cnt))
-            logger.info(
-                '############# Epoch {}: Validation End     #############'.format(epoch))
-
-            logger.info("Training finished")
-            # Save model checkpoint
+        # Save model checkpoint
         model_output = os.path.join(
             args.output_dir, "final_model-{}".format(file_cnt))
         save_check_point(model, model_output, args,
