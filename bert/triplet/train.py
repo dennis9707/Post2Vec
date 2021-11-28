@@ -96,12 +96,6 @@ def init_train_env(args, tbert_type):
         torch.distributed.barrier()
     if tbert_type == 'trinity':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
-    # elif tbert_type == 'siamese' or tbert_type == "I":
-    #     model = TBertI(BertConfig(), args.code_bert)
-    # elif tbert_type == 'siamese2' or tbert_type == "I2":
-    #     model = TBertI2(BertConfig(), args.code_bert)
-    # elif tbert_type == 'single' or tbert_type == "S":
-    #     model = TBertS(BertConfig(), args.code_bert)
     else:
         raise Exception("TBERT type not found")
     args.tbert_type = tbert_type

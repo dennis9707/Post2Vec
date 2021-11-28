@@ -1,3 +1,6 @@
+import sys
+sys.path.append("../")
+sys.path.append("/usr/src/bert")
 from util.util import write_tensor_board
 import numpy as np
 from model.loss import loss_fn
@@ -19,9 +22,8 @@ from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data import DataLoader
 from train import get_optimizer_scheduler
 from util.util import save_check_point
-import sys
-sys.path.append("../")
-sys.path.append("/usr/src/bert")
+from torch.utils.data.distributed import DistributedSampler
+
 
 
 logger = logging.getLogger(__name__)
@@ -70,11 +72,10 @@ def get_dataloader(dataset, batch_size):
 
 
 def get_distribued_dataloader(dataset, batch_size):
-    # sampler = DistributedSampler(dataset)
-
+    sampler = DistributedSampler(dataset)
     data_loader = DataLoader(dataset,
                              batch_size=batch_size,
-                             shuffle=True,
+                             sampler=sampler,
                              )
     return data_loader
 
@@ -119,10 +120,17 @@ def main():
         valid_size = len(training_set) - train_size
         train_dataset, valid_dataset = torch.utils.data.random_split(
             training_set, [train_size, valid_size])
-        train_data_loader = get_dataloader(
-            train_dataset, args.train_batch_size)
-        valid_data_loader = get_dataloader(
-            valid_dataset, args.train_batch_size)
+        
+        if args.local_rank == -1:
+            train_data_loader = get_dataloader(
+                train_dataset, args.train_batch_size)
+            valid_data_loader = get_dataloader(
+                valid_dataset, args.train_batch_size)
+        else: 
+            train_data_loader = get_distribued_dataloader(
+                train_dataset, args.train_batch_size)
+            valid_data_loader = get_distribued_dataloader(
+                valid_dataset, args.train_batch_size)
 
         logger.info(
             '############# FILE {}: Training Start   #############'.format(file_cnt))

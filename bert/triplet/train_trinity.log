@@ -5216,3 +5216,7 @@
 11/28/2021 14:22:50 - INFO - __main__ -     Gradient Accumulation steps = 4
 11/28/2021 14:22:50 - INFO - __main__ -   Start a new training
 11/28/2021 14:22:50 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/28/2021 14:32:19 - INFO - __main__ -   tb_data {'lr': 8.149592451560614e-06, 'loss': 0.00042262439357728}
+11/28/2021 14:32:19 - INFO - __main__ -   Epoch: 0, Batch: 399， Loss:  0.00042262439357728
