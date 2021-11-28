@@ -1,27 +1,27 @@
+from util.util import write_tensor_board
+import numpy as np
+from model.loss import loss_fn
+from util.eval_util import evaluate_batch
+from apex.parallel import convert_syncbn_model, DistributedDataParallel as DDP
+from datetime import datetime
+import gc
+from torch.utils.tensorboard import SummaryWriter
+from train import get_train_args, init_train_env
+import logging
+import os
+from transformers import AutoTokenizer
+from sklearn import preprocessing
+import pandas as pd
+import torch
+from data_structure.question import Question, QuestionDataset
+from util.util import get_files_paths_from_directory
+from torch.utils.data.distributed import DistributedSampler
+from torch.utils.data import DataLoader
+from train import get_optimizer_scheduler
+from util.util import save_check_point
 import sys
 sys.path.append("../")
 sys.path.append("/usr/src/bert")
-from util.util import save_check_point
-from train import get_optimizer_scheduler
-from torch.utils.data import DataLoader
-from torch.utils.data.distributed import DistributedSampler
-from util.util import get_files_paths_from_directory
-from data_structure.question import Question, QuestionDataset
-import torch
-import pandas as pd
-from sklearn import preprocessing
-from transformers import AutoTokenizer
-import os
-import logging
-from train import get_train_args, init_train_env
-from torch.utils.tensorboard import SummaryWriter
-import gc
-from datetime import datetime
-from apex.parallel import convert_syncbn_model, DistributedDataParallel as DDP
-from util.eval_util import evaluate_batch
-from model.loss import loss_fn
-import numpy as np
-from util.util import write_tensor_board
 
 
 logger = logging.getLogger(__name__)
@@ -77,7 +77,7 @@ def main():
 
     # multiple train file
     files = get_files_paths_from_directory(args.data_folder)
-    
+
     # total training examples 10279014
     train_numbers = 9765063
     epoch_batch_num = train_numbers / args.train_batch_size
@@ -91,10 +91,16 @@ def main():
     args.output_dir = os.path.join(args.output_dir, exp_name)
     if not os.path.isdir(args.output_dir):
         os.makedirs(args.output_dir)
-    
+
     logger.info("n_gpu: {}".format(args.n_gpu))
     if args.n_gpu > 1:
         model = torch.nn.DataParallel(model)
+
+    # Distributed training (should be after apex fp16 initialization)
+    if args.local_rank != -1:
+        model = torch.nn.parallel.DistributedDataParallel(
+            model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
+
     args.global_step = 0
     for file_cnt in range(len(files)):
         # Load dataset and dataloader
@@ -107,8 +113,9 @@ def main():
             train_dataset, args.train_batch_size)
         valid_data_loader = get_dataloader(
             valid_dataset, args.train_batch_size)
-        
-        logger.info('############# FILE {}: Training Start   #############'.format(file_cnt))
+
+        logger.info(
+            '############# FILE {}: Training Start   #############'.format(file_cnt))
         # Train!
         log_train_info(args)
 
@@ -117,7 +124,8 @@ def main():
 
         tr_loss = 0
         for epoch in range(args.num_train_epochs):
-            logger.info('############# Epoch {}: Training Start   #############'.format(epoch))
+            logger.info(
+                '############# Epoch {}: Training Start   #############'.format(epoch))
             model.train()
             model.zero_grad()
             for step, data in enumerate(train_data_loader):
@@ -151,7 +159,6 @@ def main():
                     model.zero_grad()
                     args.global_step += 1
 
-
                     if args.logging_steps > 0 and args.global_step % args.logging_steps == 0:
                         tb_data = {
                             'lr': scheduler.get_last_lr()[0],
@@ -161,8 +168,10 @@ def main():
                         logger.info(
                             'Epoch: {}, Batch: {}， Loss:  {}'.format(epoch, step, tr_loss / args.logging_steps))
                         tr_loss = 0.0
-            logger.info('############# Epoch {}: Training End     #############'.format(epoch))
-            logger.info('############# Epoch {}: Validation Start   #############'.format(epoch))
+            logger.info(
+                '############# Epoch {}: Training End     #############'.format(epoch))
+            logger.info(
+                '############# Epoch {}: Validation Start   #############'.format(epoch))
             model.eval()
             fin_targets = []
             fin_outputs = []
@@ -199,14 +208,15 @@ def main():
             logger.info("Recall Score  = {}".format(rc))
             logger.info("Precision Score  = {}".format(f1))
             logger.info("Count  = {}".format(cnt))
-            logger.info('############# Epoch {}: Validation End     #############'.format(epoch))
+            logger.info(
+                '############# Epoch {}: Validation End     #############'.format(epoch))
 
             logger.info("Training finished")
             # Save model checkpoint
         model_output = os.path.join(
             args.output_dir, "final_model-{}".format(file_cnt))
         save_check_point(model, model_output, args,
-                            optimizer, scheduler)
+                         optimizer, scheduler)
 
 
 if __name__ == "__main__":
