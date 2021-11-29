@@ -5745,3 +5745,26 @@
 11/29/2021 05:13:32 - INFO - __main__ -   Epoch: 2, Batch: 347， Loss:  0.0003858884658257011
 11/29/2021 05:23:04 - INFO - __main__ -   tb_data {'lr': 7.959526977281715e-06, 'loss': 0.00038494721022289016}
 11/29/2021 05:23:04 - INFO - __main__ -   Epoch: 2, Batch: 747， Loss:  0.00038494721022289016
+11/29/2021 05:32:35 - INFO - __main__ -   tb_data {'lr': 7.957342316657818e-06, 'loss': 0.00038401257173973133}
+11/29/2021 05:32:35 - INFO - __main__ -   Epoch: 2, Batch: 1147， Loss:  0.00038401257173973133
+11/29/2021 05:33:32 - INFO - __main__ -   ############# Epoch 2: Training End     #############
+11/29/2021 05:33:32 - INFO - __main__ -   ############# Epoch 2: Validation Start   #############
+11/29/2021 05:35:45 - INFO - __main__ -   F1 Score = [0.809, 0.6485, 0.5280000000000005, 0.4355, 0.36859999999999776]
+11/29/2021 05:35:45 - INFO - __main__ -   Recall Score  = [0.809, 0.695, 0.6471666666666669, 0.6425833333333331, 0.6590333333333329]
+11/29/2021 05:35:45 - INFO - __main__ -   Precision Score  = [0.809, 0.6639999999999997, 0.5657666666666664, 0.4989880952380928, 0.4526722222222222]
+11/29/2021 05:35:45 - INFO - __main__ -   Count  = 1000
+11/29/2021 05:35:45 - INFO - __main__ -   ############# Epoch 2: Validation End     #############
+11/29/2021 05:35:45 - INFO - __main__ -   Training finished
+11/29/2021 05:35:45 - INFO - util.util -   Saving checkpoint to ../../data/results/trinity_11-22 14-23-51_/final_model-104
+11/29/2021 05:36:02 - INFO - __main__ -   ############# FILE 105: Training Start   #############
+11/29/2021 05:36:02 - INFO - __main__ -   ***** Running training *****
+11/29/2021 05:36:02 - INFO - __main__ -     Num Epochs = 3
+11/29/2021 05:36:02 - INFO - __main__ -     Instantaneous batch size per GPU = 2
+11/29/2021 05:36:02 - INFO - __main__ -     Total train batch size (w. parallel, distributed & accumulation) = 64
+11/29/2021 05:36:02 - INFO - __main__ -     Gradient Accumulation steps = 4
+11/29/2021 05:36:02 - INFO - __main__ -   Start a new training
+11/29/2021 05:36:02 - INFO - __main__ -   ############# Epoch 0: Training Start   #############
+/opt/conda/lib/python3.6/site-packages/sklearn/preprocessing/_label.py:987: UserWarning: unknown class(es) ['null'] will be ignored
+  .format(sorted(unknown, key=str)))
+11/29/2021 05:44:38 - INFO - __main__ -   tb_data {'lr': 7.955157656033923e-06, 'loss': 0.00036446267025894483}
+11/29/2021 05:44:38 - INFO - __main__ -   Epoch: 0, Batch: 359， Loss:  0.00036446267025894483
