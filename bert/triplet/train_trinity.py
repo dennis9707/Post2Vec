@@ -17,7 +17,7 @@ from sklearn import preprocessing
 import pandas as pd
 import torch
 from data_structure.question import Question, QuestionDataset
-from util.util import get_files_paths_from_directory
+from util.util import get_files_paths_from_directory, avg
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data import DataLoader
 from train import get_optimizer_scheduler
@@ -80,8 +80,51 @@ def get_distribued_dataloader(dataset, batch_size):
     return data_loader
 
 
-def validate(model, args):
-    
+
+
+def validate(model, args, valid_data_loader):
+    fin_outputs = []
+    fin_targets = []
+    valid_loss = 0
+    with torch.no_grad():
+        model.eval()
+        for batch_idx, data in enumerate(valid_data_loader, 0):
+            title_ids = data['titile_ids'].to(
+                args.device, dtype=torch.long)
+            title_mask = data['title_mask'].to(
+                args.device, dtype=torch.long)
+            text_ids = data['text_ids'].to(
+                args.device, dtype=torch.long)
+            text_mask = data['text_mask'].to(
+                args.device, dtype=torch.long)
+            code_ids = data['code_ids'].to(
+                args.device, dtype=torch.long)
+            code_mask = data['code_mask'].to(
+                args.device, dtype=torch.long)
+            targets = data['labels'].to(
+                args.device, dtype=torch.float)
+
+            outputs = model(title_ids=title_ids,
+                            title_attention_mask=title_mask,
+                            text_ids=text_ids,
+                            text_attention_mask=text_mask,
+                            code_ids=code_ids,
+                            code_attention_mask=code_mask)
+            loss = loss_fn(outputs, targets)
+            valid_loss += loss.item()
+            fin_targets.extend(targets.cpu().detach().numpy().tolist())
+            fin_outputs.extend(torch.sigmoid(
+                outputs).cpu().detach().numpy().tolist())
+            
+    [pre, rc, f1, cnt] = evaluate_batch(
+                fin_outputs, fin_targets, [1, 2, 3, 4, 5])
+    valid_loss = valid_loss / len(valid_data_loader)
+    logger.info("Final F1 Score = {}".format(pre))
+    logger.info("Final Recall Score  = {}".format(rc))
+    logger.info("Final Precision Score  = {}".format(f1))
+    logger.info("Final Count  = {}".format(cnt))
+    logger.info("Valid Loss  = {}".format(valid_loss))
+    return valid_loss
 
 def main():
     os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
@@ -115,37 +158,42 @@ def main():
         model = torch.nn.parallel.DistributedDataParallel(
             model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
 
-    args.global_step = 0
-    for file_cnt in range(len(files)):
-        # Load dataset and dataloader
-        training_set = load_data_to_dataset(args.mlb, files[file_cnt])
-        train_size = int(0.95 * len(training_set))
-        valid_size = len(training_set) - train_size
-        train_dataset, valid_dataset = torch.utils.data.random_split(
-            training_set, [train_size, valid_size])
-        
-        if args.local_rank == -1:
-            train_data_loader = get_dataloader(
-                train_dataset, args.train_batch_size)
-            valid_data_loader = get_dataloader(
-                valid_dataset, args.train_batch_size)
-        else: 
-            train_data_loader = get_distribued_dataloader(
-                train_dataset, args.train_batch_size)
-            valid_data_loader = get_distribued_dataloader(
-                valid_dataset, args.train_batch_size)
-
-        logger.info(
-            '############# FILE {}: Training Start   #############'.format(file_cnt))
-        # Train!
-        log_train_info(args)
-
-        logger.info("Start a new training")
-        # in case we resume training
-        tr_loss = 0
-        for epoch in range(args.num_train_epochs):
-            logger.info(
+    log_train_info(args)
+    logger.info(
                 '############# Epoch {}: Training Start   #############'.format(epoch))
+
+    args.global_step = 0
+    valid_loss_min = 0
+    for epoch in range(args.num_train_epochs):    
+        for file_cnt in range(len(files)):
+            # Load dataset and dataloader
+            training_set = load_data_to_dataset(args.mlb, files[file_cnt])
+            if (file_cnt + 1) % 5 == 0:
+                train_size = int(0.90 * len(training_set))
+                valid_size = len(training_set) - train_size
+                train_dataset, valid_dataset = torch.utils.data.random_split(
+                    training_set, [train_size, valid_size])
+            else:
+                train_dataset = training_set
+            
+            if args.local_rank == -1:
+                train_data_loader = get_dataloader(
+                    train_dataset, args.train_batch_size)
+                if (file_cnt + 1) % 5 == 0:
+                    valid_data_loader = get_dataloader(
+                    valid_dataset, args.train_batch_size)
+            else: 
+                train_data_loader = get_distribued_dataloader(
+                    train_dataset, args.train_batch_size)
+                if (file_cnt + 1) % 5 == 0:
+                    valid_data_loader = get_distribued_dataloader(
+                    valid_dataset, args.train_batch_size)
+
+            logger.info(
+                '############# FILE {}: Training Start   #############'.format(file_cnt))
+            
+            tr_loss = 0
+            valid_loss_min = np.Inf
             model.train()
             model.zero_grad()
             for step, data in enumerate(train_data_loader):
@@ -189,7 +237,17 @@ def main():
                             'Epoch: {}, Batch: {}， Loss:  {}'.format(epoch, step, tr_loss / args.logging_steps))
                         tr_loss = 0.0
             logger.info(
-                '############# Epoch {}: Training End     #############'.format(epoch))
+                '############# FILE {}: Training End     #############'.format(file_cnt))
+            
+            # validation
+            if (file_cnt + 1) % 5 == 0:
+                logger.info(
+                '############# FILE {}: Validation Start    #############'.format(file_cnt))
+                valid_loss = validate(model, args, valid_data_loader)
+                logger.info(
+                '############# FILE {}: Validation End    #############'.format(file_cnt))
+            
+
         # Save model checkpoint
         model_output = os.path.join(
             args.output_dir, "final_model-{}".format(file_cnt))

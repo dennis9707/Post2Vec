@@ -18,6 +18,13 @@ OPTIMIZER_FNAME = "optimizer.pt"
 SCHED_FNAME = "scheduler.pt"
 ARG_FNAME = "training_args.bin"
 
+def avg(data):
+    import numpy as np
+    a = np.array(data)
+    res = np.average(a, axis=0)
+    return res
+
+
 
 def write_tensor_board(tb_writer, data, step):
     for att_name in data.keys():
