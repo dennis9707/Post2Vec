@@ -246,13 +246,19 @@ def main():
                 valid_loss = validate(model, args, valid_data_loader)
                 logger.info(
                 '############# FILE {}: Validation End    #############'.format(file_cnt))
-            
-
-        # Save model checkpoint
-        model_output = os.path.join(
-            args.output_dir, "final_model-{}".format(file_cnt))
-        save_check_point(model, model_output, args,
-                         optimizer, scheduler)
+                if valid_loss < valid_loss_min:
+                    valid_loss_min = valid_loss
+                
+                best_model_output = os.path.join(
+                    args.output_dir, "best_model")
+                save_check_point(model, model_output, args,
+                                optimizer, scheduler)
+                
+                # Save model checkpoint Regularly
+                model_output = os.path.join(
+                    args.output_dir, "final_model-{}".format(file_cnt))
+                save_check_point(model, model_output, args,
+                                optimizer, scheduler)
 
 
 if __name__ == "__main__":
