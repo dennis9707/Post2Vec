@@ -125,11 +125,11 @@ if __name__ == "__main__":
     args.num_class = num_class
     
     model = TBertT(BertConfig(), args.code_bert, num_class)
+    model = torch.nn.DataParallel(model)
+    model.to(device)
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
         model.load_state_dict(torch.load(model_path),strict=False)
-    model = torch.nn.DataParallel(model)
-    model.to(device)
     print("model loaded")
     
     fin_pre = []

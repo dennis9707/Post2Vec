@@ -45,6 +45,104 @@ class Question:
             return self.combine
 
 
+class NewQuestion:
+    # use __slots to decrease the memory usage
+    __slots__ = ['qid', 'title', 'text',
+                 'code', 'creation_date', 'tags', ]
+
+    def __init__(self, qid=None, title=None, text=None,
+                 code=None, creation_date=None, tags=None):
+        self.qid = qid
+        self.title = title
+        self.text = text
+        self.code = code
+        self.creation_date = creation_date
+        self.tags = tags
+
+    def get_qid(self):
+        return self.qid
+
+    def get_creation_date(self):
+        return self.creation_date
+
+    def get_title(self):
+        return self.title
+
+    def get_text(self):
+        return self.text
+
+    def get_code(self):
+        return self.code
+
+    def get_tag(self):
+        return self.tags
+
+    def get_comp_by_name(self, comp_name):
+        if comp_name == "qid":
+            return self.qid
+        if comp_name == "creation_date":
+            return self.creation_date
+
+
+class AmbitiousQuestion:
+    # use __slots to decrease the memory usage
+    __slots__ = ['qid', 'title_id', 'title_mask', 'text_id', 'text_mask',
+                 'code_id', 'code_mask', 'creation_date', 'tags', ]
+
+    def __init__(self, qid=None, title_id=None, title_mask=None, text_id=None, text_mask=None,
+                 code_id=None, code_mask=None, creation_date=None, tags=None):
+        self.qid = qid
+        self.title_id = title_id
+        self.title_mask = title_mask
+        self.text_id = text_id
+        self.text_mask = text_mask
+        self.code_id = code_id
+        self.code_mask = code_mask
+        self.creation_date = creation_date
+        self.tags = tags
+
+    def get_title_id(self):
+        return self.title_id
+
+    def get_title_mask(self):
+        return self.title_mask
+
+    def get_text_id(self):
+        return self.text_id
+
+    def get_text_mask(self):
+        return self.text_mask
+
+    def get_code_id(self):
+        return self.code_id
+
+    def get_code_mask(self):
+        return self.code_mask
+
+    def get_tag(self):
+        return self.tags
+
+    def get_comp_by_name(self, comp_name):
+        if comp_name == "qid":
+            return self.qid
+        if comp_name == "title_id":
+            return self.title_id
+        if comp_name == "title_mask":
+            return self.title_mask
+        if comp_name == "text_id":
+            return self.text_id
+        if comp_name == "text_mask":
+            return self.text_mask
+        if comp_name == "code_id":
+            return self.code_id
+        if comp_name == "code_mask":
+            return self.code_mask
+        if comp_name == "creation_date":
+            return self.creation_date
+        if comp_name == "tags":
+            return self.tags
+
+
 class QuestionDataset(Dataset):
 
     def __init__(self, questions, mlb, tokenizer):
@@ -79,7 +177,7 @@ class QuestionDataset(Dataset):
         }
 
     def _gen_feature(self, tokens):
-    
+
         feature = self.tokenizer(tokens, max_length=512,
                                  padding='max_length', return_attention_mask=True,
                                  return_token_type_ids=False, truncation=True,
@@ -88,7 +186,3 @@ class QuestionDataset(Dataset):
             "input_ids": feature["input_ids"].flatten(),
             "attention_mask": feature["attention_mask"].flatten()}
         return res
-
-    def add_question(self, question):
-        self.length += 1
-        self.questions.append(question)
