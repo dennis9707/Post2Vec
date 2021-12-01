@@ -1,34 +1,23 @@
 import sys
 sys.path.append("../")
 sys.path.append("/usr/src/bert")
-from util.util import write_tensor_board
 import numpy as np
-from model.loss import loss_fn
-from util.eval_util import evaluate_batch
-from apex.parallel import convert_syncbn_model, DistributedDataParallel as DDP
 from datetime import datetime
 import gc
-from torch.utils.tensorboard import SummaryWriter
-from train import get_train_args, init_train_env
 import logging
 import os
-from transformers import AutoTokenizer
-from sklearn import preprocessing
 import pandas as pd
 import torch
 from data_structure.question import Question, QuestionDataset
-from util.util import get_files_paths_from_directory, avg
-from torch.utils.data.distributed import DistributedSampler
-from torch.utils.data import DataLoader
-from train import get_optimizer_scheduler
-from util.util import save_check_point
-from torch.utils.data.distributed import DistributedSampler
+from util.util import get_files_paths_from_directory, save_check_point
+from util.eval_util import evaluate_batch
+from util.data_util import load_data_to_dataset, get_dataloader, get_distribued_dataloader
+from model.loss import loss_fn
+from train import get_optimizer_scheduler,get_train_args, init_train_env
 
 
 
 logger = logging.getLogger(__name__)
-
-
 def get_exe_name(args):
     exe_name = "{}_{}_{}"
     time = datetime.now().strftime("%m-%d %H-%M-%S")
@@ -37,7 +26,6 @@ def get_exe_name(args):
     if args.model_path:
         base_model = os.path.basename(args.model_path)
     return exe_name.format(args.tbert_type, time, base_model)
-
 
 def log_train_info(args):
     logger.info("***** Running training *****")
@@ -51,36 +39,6 @@ def log_train_info(args):
     )
     logger.info("  Gradient Accumulation steps = %d",
                 args.gradient_accumulation_steps)
-
-
-def load_data_to_dataset(mlb, file):
-    tokenizer = AutoTokenizer.from_pretrained(
-        "microsoft/codebert-base", local_files_only=True)
-    train = pd.read_pickle(file)
-    training_set = QuestionDataset(train, mlb, tokenizer)
-    return training_set
-
-
-def get_dataloader(dataset, batch_size):
-    # sampler = DistributedSampler(dataset)
-
-    data_loader = DataLoader(dataset,
-                             batch_size=batch_size,
-                             shuffle=True,
-                             )
-    return data_loader
-
-
-def get_distribued_dataloader(dataset, batch_size):
-    sampler = DistributedSampler(dataset)
-    data_loader = DataLoader(dataset,
-                             batch_size=batch_size,
-                             sampler=sampler,
-                             )
-    return data_loader
-
-
-
 
 def validate(model, args, valid_data_loader):
     fin_outputs = []
@@ -248,11 +206,10 @@ def main():
                 '############# FILE {}: Validation End    #############'.format(file_cnt))
                 if valid_loss < valid_loss_min:
                     valid_loss_min = valid_loss
-                
-                best_model_output = os.path.join(
-                    args.output_dir, "best_model")
-                save_check_point(model, model_output, args,
-                                optimizer, scheduler)
+                    best_model_output = os.path.join(
+                        args.output_dir, "best_model")
+                    save_check_point(model, best_model_output, args,
+                                    optimizer, scheduler)
                 
                 # Save model checkpoint Regularly
                 model_output = os.path.join(
