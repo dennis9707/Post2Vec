@@ -55,18 +55,14 @@ def get_eval_args():
     return args
 
 def test(args, model, test_set):
-    batch_size = 2
+    batch_size = 250
     test_data_loader = get_dataloader(
             test_set, batch_size)
-    fin_pre = []
-    fin_rc = []
-    fin_f1 = []
-    fin_cnt = 0
     with torch.no_grad():
         model.eval()
+        fin_outputs = []
+        fin_targets = []
         for batch_idx, data in enumerate(test_data_loader, 0):
-            fin_outputs = []
-            fin_targets = []
             title_ids = data['titile_ids'].to(
                 args.device, dtype=torch.long)
             title_mask = data['title_mask'].to(
@@ -92,28 +88,27 @@ def test(args, model, test_set):
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(
                 outputs).cpu().detach().numpy().tolist())
-            [pre, rc, f1, cnt] = evaluate_batch(
-                fin_outputs, fin_targets, [1, 2, 3, 4, 5])
-            fin_pre.append(pre)
-            fin_rc.append(rc)
-            fin_f1.append(f1)
-            fin_cnt += cnt  
-    
-    avg_pre = avg(fin_pre)
-    avg_rc = avg(fin_rc)
-    avg_f1 = avg(fin_f1)
-    print("Final F1 Score = {}".format(avg_pre))
-    print("Final Recall Score  = {}".format(avg_rc))
-    print("Final Precision Score  = {}".format(avg_f1))
-    print("Final Count  = {}".format(fin_cnt))
-    return [avg_pre, avg_rc, avg_f1, cnt]
+            logger.info(len(fin_outputs))
+    [pre, rc, f1, cnt] = evaluate_batch(
+        fin_outputs, fin_targets, [1, 2, 3, 4, 5]) 
+    logger.info("F1 Score = {}".format(pre))
+    logger.info("Recall Score  = {}".format(rc))
+    logger.info("Precision Score  = {}".format(f1))
+    logger.info("Count  = {}".format(cnt))
+    return [pre, rc, f1, cnt]
 
 
 if __name__ == "__main__":
     # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
 
     args = get_eval_args()
-
+    logger = logging.getLogger(__name__)
+    # Setup logging
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
+        datefmt="%m/%d/%Y %H:%M:%S",
+        level=logging.INFO,
+    )
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     args.device = device
 
@@ -130,7 +125,7 @@ if __name__ == "__main__":
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
         model.load_state_dict(torch.load(model_path),strict=False)
-    print("model loaded")
+    logger.info("model loaded")
     
     fin_pre = []
     fin_rc = []
@@ -152,8 +147,8 @@ if __name__ == "__main__":
     avg_pre = avg(fin_pre)
     avg_rc = avg(fin_rc)
     avg_f1 = avg(fin_f1)
-    print("Final F1 Score = {}".format(avg_pre))
-    print("Final Recall Score  = {}".format(avg_rc))
-    print("Final Precision Score  = {}".format(avg_f1))
-    print("Final Count  = {}".format(fin_cnt))
-    print("Test finished")
+    logger.info("Final F1 Score = {}".format(avg_pre))
+    logger.info("Final Recall Score  = {}".format(avg_rc))
+    logger.info("Final Precision Score  = {}".format(avg_f1))
+    logger.info("Final Count  = {}".format(fin_cnt))
+    logger.info("Test finished")

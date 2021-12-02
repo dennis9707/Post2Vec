@@ -17,6 +17,8 @@ def evaluate_ori(pred, label, topk):
     if num_of_true_in_all > topk:
         rec_k = num_of_true_in_topk / float(topk)
     else:
+        if num_of_true_in_all == 0:
+            return -1,-1,-1
         rec_k = num_of_true_in_topk / float(num_of_true_in_all)
     # f1@k = 2 * precision@k * recall@k / (precision@k + recall@k)
     if pre_k == 0 and rec_k == 0:
@@ -32,13 +34,20 @@ def evaluate_batch(pred, label, topk_list=[1, 2, 3, 4, 5]):
     rc = [0.0] * len(topk_list)
     f1 = [0.0] * len(topk_list)
     cnt = 0
+    flag = 0
     for i in range(0, len(pred)):
         for idx, topk in enumerate(topk_list):
             pre_val, rc_val, f1_val = evaluate_ori(
                 pred=pred[i], label=label[i], topk=topk)
+            if pre_val == -1:
+                flag = 1
+                break;
             pre[idx] += pre_val
             rc[idx] += rc_val
             f1[idx] += f1_val
+        if flag == 1:
+            flag = 0
+            continue
         cnt += 1
     pre[:] = [x / cnt for x in pre]
     rc[:] = [x / cnt for x in rc]

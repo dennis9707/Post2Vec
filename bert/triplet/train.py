@@ -9,7 +9,6 @@ import gc
 from sklearn import preprocessing
 from datetime import datetime
 import pandas as pd
-from apex.parallel import convert_syncbn_model, DistributedDataParallel as DDP
 from util.eval_util import evaluate_batch
 from util.util import seed_everything, save_check_point
 from torch.utils.data.distributed import DistributedSampler
