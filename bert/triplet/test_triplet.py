@@ -15,19 +15,23 @@ from data_structure.question import Question, QuestionDataset
 from transformers import AutoTokenizer
 
 from torch.utils.data import DataLoader
+from util.util import get_files_paths_from_directory
 
 sys.path.append("..")
 sys.path.append("../..")
 
-from tqdm import tqdm
-from code_search.twin.twin_train import load_examples
-from common.metrices import metrics
-
 import torch
 from transformers import BertConfig
 from model.model import TBertT
-from util.util import MODEL_FNAME, results_to_df
+from train import get_tag_encoder
+from train_trinity import load_data_to_dataset, get_dataloader
+from util.eval_util import evaluate_batch
 
+def avg(data):
+    import numpy as np
+    a = np.array(data)
+    res = np.average(a, axis=0)
+    return res
 
 def load_data(args):
     tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base")
@@ -39,78 +43,117 @@ def load_data(args):
 def get_eval_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--data_dir", default="../data/code_search_net/python", type=str,
-        help="The input data dir. Should contain the .json files for the task.")
-    parser.add_argument("--model_path", default=None, help="The model to evaluate")
+        "--data_dir", default="../../data/test", type=str,
+        help="The input test data dir.")
+    parser.add_argument("--model_path", default="../../data/results/trinity_11-22 14-23-51_/final_model-46/t_bert.pt", help="The model to evaluate")
     parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
-    parser.add_argument("--test_num", type=int,
-                        help="The number of true links used for evaluation. The retrival task is build around the true links")
-    parser.add_argument("--per_gpu_eval_batch_size", default=8, type=int, help="Batch size per GPU/CPU for evaluation.")
-    parser.add_argument("--output_dir", default="../results/evaluation/test", help="directory to store the results")
+    parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
+                        help="The tag vocab data file.")
+    parser.add_argument("--output_dir", default="./results/evaluate/", help="directory to store the results")
     parser.add_argument("--code_bert", default="microsoft/codebert-base", help="the base bert")
-    parser.add_argument("--exp_name", default="exp",help="id for this run of experiment")
-    parser.add_argument("--chunk_query_num", default=-1, type=int,
-                        help="The number of queries in each chunk of retrivial task")
     args = parser.parse_args()
-    args.output_dir = os.path.join(args.output_dir, args.exp_name)
     return args
 
-def test(args, model, eval_examples, cache_file, batch_size=1000):
-    if not os.path.isdir(args.output_dir):
-        os.makedirs(args.output_dir)
-    retr_res_path = os.path.join(args.output_dir, "raw_result.csv")
+def test(args, model, test_set):
+    batch_size = 2
+    test_data_loader = get_dataloader(
+            test_set, batch_size)
+    fin_pre = []
+    fin_rc = []
+    fin_f1 = []
+    fin_cnt = 0
+    with torch.no_grad():
+        model.eval()
+        for batch_idx, data in enumerate(test_data_loader, 0):
+            fin_outputs = []
+            fin_targets = []
+            title_ids = data['titile_ids'].to(
+                args.device, dtype=torch.long)
+            title_mask = data['title_mask'].to(
+                args.device, dtype=torch.long)
+            text_ids = data['text_ids'].to(
+                args.device, dtype=torch.long)
+            text_mask = data['text_mask'].to(
+                args.device, dtype=torch.long)
+            code_ids = data['code_ids'].to(
+                args.device, dtype=torch.long)
+            code_mask = data['code_mask'].to(
+                args.device, dtype=torch.long)
+            targets = data['labels'].to(
+                args.device, dtype=torch.float)
 
-    if args.overwrite or not os.path.isfile(cache_file):
-        chunked_retrivial_examples = eval_examples.get_chunked_retrivial_task_examples(
-            chunk_query_num=args.chunk_query_num,
-            chunk_size=batch_size)
-        torch.save(chunked_retrivial_examples, cache_file)
-    else:
-        chunked_retrivial_examples = torch.load(cache_file)
-    retrival_dataloader = DataLoader(chunked_retrivial_examples, batch_size=args.per_gpu_eval_batch_size)
-    res = []
-    for batch in tqdm(retrival_dataloader, desc="retrival evaluation"):
-        nl_ids = batch[0]
-        pl_ids = batch[1]
-        labels = batch[2]
-        nl_embd, pl_embd = eval_examples.id_pair_to_embd_pair(nl_ids, pl_ids)
+            outputs = model(title_ids=title_ids,
+                            title_attention_mask=title_mask,
+                            text_ids=text_ids,
+                            text_attention_mask=text_mask,
+                            code_ids=code_ids,
+                            code_attention_mask=code_mask)
 
-        with torch.no_grad():
-            model.eval()
-            nl_embd = nl_embd.to(model.device)
-            pl_embd = pl_embd.to(model.device)
-            sim_score = model.get_sim_score(text_hidden=nl_embd, code_hidden=pl_embd)
-            for n, p, prd, lb in zip(nl_ids.tolist(), pl_ids.tolist(), sim_score, labels.tolist()):
-                res.append((n, p, prd, lb))
-
-    df = results_to_df(res)
-    df.to_csv(retr_res_path)
-    m = metrics(df, output_dir=args.output_dir)
-    return m
+            fin_targets.extend(targets.cpu().detach().numpy().tolist())
+            fin_outputs.extend(torch.sigmoid(
+                outputs).cpu().detach().numpy().tolist())
+            [pre, rc, f1, cnt] = evaluate_batch(
+                fin_outputs, fin_targets, [1, 2, 3, 4, 5])
+            fin_pre.append(pre)
+            fin_rc.append(rc)
+            fin_f1.append(f1)
+            fin_cnt += cnt  
+    
+    avg_pre = avg(fin_pre)
+    avg_rc = avg(fin_rc)
+    avg_f1 = avg(fin_f1)
+    print("Final F1 Score = {}".format(avg_pre))
+    print("Final Recall Score  = {}".format(avg_rc))
+    print("Final Precision Score  = {}".format(avg_f1))
+    print("Final Count  = {}".format(fin_cnt))
+    return [avg_pre, avg_rc, avg_f1, cnt]
 
 
 if __name__ == "__main__":
+    # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
+
     args = get_eval_args()
 
-    device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
-
-    logging.basicConfig(level='INFO')
-    logger = logging.getLogger(__name__)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    args.device = device
 
     if not os.path.isdir(args.output_dir):
         os.makedirs(args.output_dir)
-
-    model = TBertT(BertConfig(), args.code_bert)
+     # get the encoder for tags
+    mlb, num_class = get_tag_encoder(args.vocab_file)
+    args.mlb = mlb
+    args.num_class = num_class
+    
+    model = TBertT(BertConfig(), args.code_bert, num_class)
+    model = torch.nn.DataParallel(model)
+    model.to(device)
     if args.model_path and os.path.exists(args.model_path):
-        model_path = os.path.join(args.model_path, MODEL_FNAME)
-        model.load_state_dict(torch.load(model_path))
+        model_path = os.path.join(args.model_path, )
+        model.load_state_dict(torch.load(model_path),strict=False)
+    print("model loaded")
+    
+    fin_pre = []
+    fin_rc = []
+    fin_f1 = []
+    fin_cnt = 0
+    files = get_files_paths_from_directory(args.data_dir)
 
-    logger.info("model loaded")
     start_time = time.time()
-    test_examples = load_examples(args.data_dir, data_type="test", model=model, overwrite=args.overwrite,
-                                  num_limit=args.test_num)
-    test_examples.update_embd(model)
-    m = test(args, model, test_examples, "cached_twin_test")
-    exe_time = time.time() - start_time
-    m.write_summary(exe_time)
-    logger.info("finished test")
+    
+    for file_cnt in range(len(files)):
+        # Load dataset and dataloader
+        test_set = load_data_to_dataset(args.mlb, files[file_cnt])
+        [pre, rc, f1, cnt] = test(args, model, test_set)
+        fin_pre.append(pre)
+        fin_rc.append(rc)
+        fin_f1.append(f1)
+        fin_cnt += cnt 
+    
+    avg_pre = avg(fin_pre)
+    avg_rc = avg(fin_rc)
+    avg_f1 = avg(fin_f1)
+    print("Final F1 Score = {}".format(avg_pre))
+    print("Final Recall Score  = {}".format(avg_rc))
+    print("Final Precision Score  = {}".format(avg_f1))
+    print("Final Count  = {}".format(fin_cnt))
+    print("Test finished")
