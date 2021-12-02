@@ -4,3 +4,6 @@ data/
 results/
 bert/runs/
 bert/trinity/apex/
+*.log
+*.pt
+*.pyc
