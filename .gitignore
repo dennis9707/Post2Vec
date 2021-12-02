@@ -8,3 +8,4 @@ bert/trinity/apex/
 *.pt
 *.pyc
 __pycache__/
+apex/
