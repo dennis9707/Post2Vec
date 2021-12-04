@@ -9,7 +9,7 @@ import os
 import pandas as pd
 import torch
 from data_structure.question import Question, QuestionDataset
-from util.util import get_files_paths_from_directory, save_check_point
+from util.util import get_files_paths_from_directory, save_check_point, load_check_point
 from util.eval_util import evaluate_batch
 from util.data_util import load_data_to_dataset, get_dataloader, get_distribued_dataloader
 from model.loss import loss_fn
@@ -85,23 +85,20 @@ def validate(model, args, valid_data_loader):
     return valid_loss
 
 def main():
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
+    # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
 
     args = get_train_args()
     model = init_train_env(args, tbert_type='trinity')
-
-    # multiple train file
     files = get_files_paths_from_directory(args.data_folder)
 
     # total training examples 10279014
-    train_numbers = 9765063
+    train_numbers = 7159014
     epoch_batch_num = train_numbers / args.train_batch_size
     t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
 
     optimizer, scheduler = get_optimizer_scheduler(args, model, t_total)
     # get the name of the execution
     exp_name = get_exe_name(args)
-
     # make output directory
     args.output_dir = os.path.join(args.output_dir, exp_name)
     if not os.path.isdir(args.output_dir):
@@ -116,14 +113,20 @@ def main():
         model = torch.nn.parallel.DistributedDataParallel(
             model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
 
+    if args.model_path and os.path.exists(args.model_path):
+        model.load_state_dict(torch.load(args.model_path))
+        logger.info("model loaded")
     log_train_info(args)
-    logger.info(
-                '############# Epoch {}: Training Start   #############'.format(epoch))
-
     args.global_step = 0
     valid_loss_min = 0
-    for epoch in range(args.num_train_epochs):    
-        for file_cnt in range(len(files)):
+    
+    torch.cuda.empty_cache()
+    import gc
+    gc.collect()
+    for epoch in range(args.num_train_epochs):
+        logger.info(
+                '############# Epoch {}: Training Start   #############'.format(epoch)) 
+        for file_cnt in range(157, len(files)):
             # Load dataset and dataloader
             training_set = load_data_to_dataset(args.mlb, files[file_cnt])
             if (file_cnt + 1) % 5 == 0:
@@ -137,15 +140,15 @@ def main():
             if args.local_rank == -1:
                 train_data_loader = get_dataloader(
                     train_dataset, args.train_batch_size)
-                if (file_cnt + 1) % 5 == 0:
-                    valid_data_loader = get_dataloader(
-                    valid_dataset, args.train_batch_size)
+                # if (file_cnt + 1) % 5 == 0:
+                #     valid_data_loader = get_dataloader(
+                #     valid_dataset, args.train_batch_size)
             else: 
                 train_data_loader = get_distribued_dataloader(
                     train_dataset, args.train_batch_size)
-                if (file_cnt + 1) % 5 == 0:
-                    valid_data_loader = get_distribued_dataloader(
-                    valid_dataset, args.train_batch_size)
+                # if (file_cnt + 1) % 5 == 0:
+                #     valid_data_loader = get_distribued_dataloader(
+                #     valid_dataset, args.train_batch_size)
 
             logger.info(
                 '############# FILE {}: Training Start   #############'.format(file_cnt))
@@ -199,17 +202,17 @@ def main():
             
             # validation
             if (file_cnt + 1) % 5 == 0:
-                logger.info(
-                '############# FILE {}: Validation Start    #############'.format(file_cnt))
-                valid_loss = validate(model, args, valid_data_loader)
-                logger.info(
-                '############# FILE {}: Validation End    #############'.format(file_cnt))
-                if valid_loss < valid_loss_min:
-                    valid_loss_min = valid_loss
-                    best_model_output = os.path.join(
-                        args.output_dir, "best_model")
-                    save_check_point(model, best_model_output, args,
-                                    optimizer, scheduler)
+            #     logger.info(
+            #     '############# FILE {}: Validation Start    #############'.format(file_cnt))
+            #     valid_loss = validate(model, args, valid_data_loader)
+            #     logger.info(
+            #     '############# FILE {}: Validation End    #############'.format(file_cnt))
+            #     if valid_loss < valid_loss_min:
+            #         valid_loss_min = valid_loss
+            #         best_model_output = os.path.join(
+            #             args.output_dir, "best_model")
+            #         save_check_point(model, best_model_output, args,
+            #                         optimizer, scheduler)
                 
                 # Save model checkpoint Regularly
                 model_output = os.path.join(

@@ -45,7 +45,7 @@ def get_eval_args():
     parser.add_argument(
         "--data_dir", default="../../data/test", type=str,
         help="The input test data dir.")
-    parser.add_argument("--model_path", default="../../data/results/trinity_11-22 14-23-51_/final_model-46/t_bert.pt", help="The model to evaluate")
+    parser.add_argument("--model_path", default="../../data/results/trinity_12-02 15-31-04_t_bert.pt/final_model-259/t_bert.pt", help="The model to evaluate")
     parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
@@ -88,6 +88,7 @@ def test(args, model, test_set):
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(
                 outputs).cpu().detach().numpy().tolist())
+<<<<<<< HEAD
             logger.info(len(fin_outputs))
     [pre, rc, f1, cnt] = evaluate_batch(
         fin_outputs, fin_targets, [1, 2, 3, 4, 5]) 
@@ -96,10 +97,31 @@ def test(args, model, test_set):
     logger.info("Precision Score  = {}".format(f1))
     logger.info("Count  = {}".format(cnt))
     return [pre, rc, f1, cnt]
+=======
+            [pre, rc, f1, cnt] = evaluate_batch(
+                fin_outputs, fin_targets, [1, 2, 3, 4, 5])
+            fin_pre.append(pre)
+            fin_rc.append(rc)
+            fin_f1.append(f1)
+            fin_cnt += cnt
+            print("Final F1 Score = {}".format(pre))
+            print("Final Recall Score  = {}".format(rc))
+            print("Final Precision Score  = {}".format(f1))
+            print("Final Count  = {}".format(fin_cnt))
+    
+    avg_pre = avg(fin_pre)
+    avg_rc = avg(fin_rc)
+    avg_f1 = avg(fin_f1)
+    print("Final File F1 Score = {}".format(avg_pre))
+    print("Final File Recall Score  = {}".format(avg_rc))
+    print("Final File Precision Score  = {}".format(avg_f1))
+    print("Final File Count  = {}".format(fin_cnt))
+    return [avg_pre, avg_rc, avg_f1, cnt]
+>>>>>>> origin/development
 
 
 if __name__ == "__main__":
-    # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
 
     args = get_eval_args()
     logger = logging.getLogger(__name__)
@@ -124,8 +146,13 @@ if __name__ == "__main__":
     model.to(device)
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
+<<<<<<< HEAD
         model.load_state_dict(torch.load(model_path),strict=False)
     logger.info("model loaded")
+=======
+        model.load_state_dict(torch.load(model_path))
+    print("model loaded")
+>>>>>>> origin/development
     
     fin_pre = []
     fin_rc = []

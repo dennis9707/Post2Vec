@@ -73,15 +73,11 @@ def init_train_env(args, tbert_type):
         level=logging.INFO if args.local_rank in [-1, 0] else logging.WARN,
     )
     logger.warning(
-        "device: %s, n_gpu: %s",
+        "local rank %s, device: %s, n_gpu: %s",
         args.local_rank,
         device,
         args.n_gpu,
-        bool(args.local_rank != -1),
     )
-    
-    # Set seed
-    seed_everything(args.seed)
     
     # get the encoder for tags
     mlb, num_class = get_tag_encoder(args.vocab_file)
@@ -103,7 +99,7 @@ def init_train_env(args, tbert_type):
         
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
-    args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
+    args.train_batch_size = 12
     return model
 
 
@@ -118,7 +114,7 @@ def get_train_args():
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
     parser.add_argument(
-        "--model_path", default=None, type=str,
+        "--model_path", default="../../data/results/trinity_11-22 14-23-51_/final_model-156/t_bert.pt", type=str,
         help="path of checkpoint and trained model, if none will do training from scratch")
     parser.add_argument("--logging_steps", type=int,
                         default=500, help="Log every X updates steps.")
@@ -126,6 +122,7 @@ def get_train_args():
                         type=int, help="Batch size per GPU/CPU for training.")
     parser.add_argument("--seed", type=int, default=42,
                         help="random seed for initialization")
+    parser.add_argument("--local_rank", type=int, default=-1, help="local_rank for distributed training on gpus")
 
     parser.add_argument(
         "--gradient_accumulation_steps", type=int, default=4,
