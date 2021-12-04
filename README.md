@@ -4,6 +4,30 @@
 
 https://zenodo.org/record/5604548#.YXoG7NZBw1I
 
+## Download Data
+
+### Train
+
+```shell
+    wget https://zenodo.org/record/5604548/files/train.tar.gz
+```
+
+### Test
+
+```shell
+    wget https://zenodo.org/record/5604548/files/test.tar.gz
+```
+### Tag
+
+```shell
+    wget https://zenodo.org/record/5604548/files/_1_commonTags.csv
+```
+
+### Unzip
+```
+   tar -xvf file.tar.gz 
+```
+
 ## Post2Vec Extension
 
 - Train File: ./bert/triplet/train_trinity.bash
