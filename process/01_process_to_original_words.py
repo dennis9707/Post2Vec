@@ -37,8 +37,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_dir", "-i", default="../data/train")
     parser.add_argument("--out_dir", "-o", default="../data/processed_train")
-
     args = parser.parse_args()
+
+    # If folder doesn't exist, then create it.
+    if not args.out_dir:
+        os.makedirs(args.out_dir)
+        print("created folder : ", args.out_dir)
+
+    else:
+        print(args.out_dir, "folder already exists.")
     files = get_files_paths_from_directory(args.input_dir)
     logging.getLogger().setLevel(logging.INFO)
     logging.info("Start to process files...")
@@ -49,7 +56,6 @@ def main():
     pool = mp.Pool(mp.cpu_count())
     for file in files:
         pool.apply_async(process_file, args=(file, ), callback=update)
-        # result.get()
     pool.close()
     pool.join()
 

@@ -66,14 +66,9 @@ class ClassifyHeader(nn.Module):
 class TBertT(PreTrainedModel):
     def __init__(self, config, code_bert, num_class):
         super().__init__(config)
-        # nbert_model = "huggingface/CodeBERTa-small-v1"
-        tbert_model = code_bert
-        cbert_model = code_bert
-        nbert_model = code_bert
-
-        self.tbert = AutoModel.from_pretrained(tbert_model)
-        self.nbert = AutoModel.from_pretrained(nbert_model)
-        self.cbert = AutoModel.from_pretrained(cbert_model)
+        self.tbert = AutoModel.from_pretrained(code_bert)
+        self.nbert = AutoModel.from_pretrained(code_bert)
+        self.cbert = AutoModel.from_pretrained(code_bert)
 
         self.cls = ClassifyHeader(config, num_class=num_class)
 
@@ -94,3 +89,14 @@ class TBertT(PreTrainedModel):
         logits = self.cls(title_hidden=t_hidden,
                           text_hidden=n_hidden, code_hidden=c_hidden)
         return logits
+
+
+
+class TBertI2(TBertT):
+    def __init__(self, config, code_bert,num_class):
+        super().__init__(config, code_bert)
+
+        self.tbert = AutoModel.from_pretrained(code_bert)
+        self.nbert = self.tbert
+        self.cbert = self.tbert
+        self.cls = RelationClassifyHeader(config, num_class=num_class)
