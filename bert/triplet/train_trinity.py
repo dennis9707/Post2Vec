@@ -8,10 +8,10 @@ import logging
 import os
 import pandas as pd
 import torch
-from data_structure.question import Question, QuestionDataset
+from data_structure.question import Question, QuestionDataset,TensorQuestionDataset
 from util.util import get_files_paths_from_directory, save_check_point, load_check_point
 from util.eval_util import evaluate_batch
-from util.data_util import load_data_to_dataset, get_dataloader, get_distribued_dataloader
+from util.data_util import load_data_to_dataset, get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset
 from model.loss import loss_fn
 from train import get_optimizer_scheduler,get_train_args, init_train_env
 
@@ -124,16 +124,10 @@ def main():
     for epoch in range(args.num_train_epochs):
         logger.info(
                 '############# Epoch {}: Training Start   #############'.format(epoch)) 
-        for file_cnt in range(157, len(files)):
+        for file_cnt in range(len(files)):
             # Load dataset and dataloader
-            training_set = load_data_to_dataset(args.mlb, files[file_cnt])
-            if (file_cnt + 1) % 5 == 0:
-                train_size = int(0.90 * len(training_set))
-                valid_size = len(training_set) - train_size
-                train_dataset, valid_dataset = torch.utils.data.random_split(
-                    training_set, [train_size, valid_size])
-            else:
-                train_dataset = training_set
+            training_set = load_tenor_data_to_dataset(args.mlb, files[file_cnt])
+            train_dataset = training_set
             
             if args.local_rank == -1:
                 train_data_loader = get_dataloader(

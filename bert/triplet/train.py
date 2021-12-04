@@ -85,17 +85,17 @@ def init_train_env(args, tbert_type):
     args.num_class = num_class
     
     # Load pretrained model and tokenizer
-    if args.local_rank not in [-1, 0]:
-        # Make sure only the first process in distributed training will download model & vocab
-        torch.distributed.barrier()
+    # if args.local_rank not in [-1, 0]:
+    #     # Make sure only the first process in distributed training will download model & vocab
+    #     torch.distributed.barrier()
     if tbert_type == 'trinity':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
     else:
         raise Exception("TBERT type not found")
     args.tbert_type = tbert_type
-    if args.local_rank == 0:
-        # Make sure only the first process in distributed training will download model & vocab
-        torch.distributed.barrier()
+    # if args.local_rank == 0:
+    #     # Make sure only the first process in distributed training will download model & vocab
+    #     torch.distributed.barrier()
         
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
@@ -105,7 +105,7 @@ def init_train_env(args, tbert_type):
 def get_train_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--data_folder", default="../../data/train", type=str,
+    parser.add_argument("--data_folder", default="../../data/tensor_data", type=str,
                         help="The direcoty of the input training data files.")
 
     parser.add_argument("--data_file", default="../../data/train/train-0-20000.pkl", type=str,
