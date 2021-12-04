@@ -89,7 +89,7 @@ class TBertT(PreTrainedModel):
 
 
 
-class TBertI2(TBertT):
+class TBertI(TBertT):
     def __init__(self, config, code_bert,num_class):
         super().__init__(config, code_bert)
 
@@ -97,3 +97,24 @@ class TBertI2(TBertT):
         self.nbert = self.tbert
         self.cbert = self.tbert
         self.cls = RelationClassifyHeader(config, num_class=num_class)
+
+
+
+class TBertS(PreTrainedModel):
+    def __init__(self, config, code_bert,num_class):
+        super().__init__(config)
+        self.bert = AutoModel.from_pretrained(code_bert)
+
+    def forward(self, input_ids, attention_mask, token_type_ids, relation_label=None):
+        outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask, token_type_ids=token_type_ids,
+                            labels=relation_label)
+        res = dict()
+        if relation_label is not None:
+            loss = outputs[0]
+            res['loss'] = loss
+            logits = outputs[1]
+            res['logits'] = logits
+        else:
+            logits = outputs[0]
+            res['logits'] = logits
+        return res

@@ -86,7 +86,7 @@ def main():
     # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
 
     args = get_train_args()
-    model = init_train_env(args, tbert_type='trinity')
+    model = init_train_env(args, tbert_type='siamese')
     files = get_files_paths_from_directory(args.data_folder)
 
     # total training examples 10279014
@@ -124,16 +124,10 @@ def main():
     for epoch in range(args.num_train_epochs):
         logger.info(
                 '############# Epoch {}: Training Start   #############'.format(epoch)) 
-        for file_cnt in range(157, len(files)):
+        for file_cnt in range(len(files)):
             # Load dataset and dataloader
             training_set = load_data_to_dataset(args.mlb, files[file_cnt])
-            if (file_cnt + 1) % 5 == 0:
-                train_size = int(0.90 * len(training_set))
-                valid_size = len(training_set) - train_size
-                train_dataset, valid_dataset = torch.utils.data.random_split(
-                    training_set, [train_size, valid_size])
-            else:
-                train_dataset = training_set
+            train_dataset = training_set
             
             if args.local_rank == -1:
                 train_data_loader = get_dataloader(

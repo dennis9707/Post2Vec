@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=3,4 python -m torch.distributed.launch \
+CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch \
     --nproc_per_node=2 \
     train_trinity.py \
     --data_folder ../../data/tensor_data \

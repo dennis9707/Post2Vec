@@ -14,7 +14,7 @@ from util.util import seed_everything, save_check_point
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data import DataLoader
 from model.loss import loss_fn
-from model.model import TBertT
+from model.model import TBertT, TBertI
 import numpy as np
 import logging
 
@@ -90,6 +90,10 @@ def init_train_env(args, tbert_type):
         torch.distributed.barrier()
     if tbert_type == 'trinity':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
+    elif tbert_type == 'siamese':
+        model = TBertI(BertConfig(), args.code_bert,args.num_class)
+    elif tbert_type == 'single':
+        model = TBertS(BertConfig(), args.code_bert,args.num_class)
     else:
         raise Exception("TBERT type not found")
     args.tbert_type = tbert_type
