@@ -33,28 +33,25 @@ class ClassifyHeader(nn.Module):
     def __init__(self, config, num_class):
         super().__init__()
         self.hidden_size = config.hidden_size
-        self.title_pooler = MaxPooler(config)
-        self.text_pooler = MaxPooler(config)
-        self.code_pooler = MaxPooler(config)
+        self.title_pooler = AvgPooler(config)
+        self.text_pooler = AvgPooler(config)
+        self.code_pooler = AvgPooler(config)
 
         # self.dense = nn.Linear(config.hidden_size * 5, config.hidden_size)
-        self.dense = nn.Linear(config.hidden_size * 5, config.hidden_size * 3)
+        self.dense = nn.Linear(config.hidden_size * 3, config.hidden_size)
 
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        self.output_layer = nn.Linear(config.hidden_size * 3, num_class)
+        self.output_layer = nn.Linear(config.hidden_size, num_class)
 
     def forward(self, title_hidden, text_hidden, code_hidden):
         pool_title_hidden = self.title_pooler(title_hidden)
         pool_text_hidden = self.text_pooler(text_hidden)
         pool_code_hidden = self.code_pooler(code_hidden)
-        diff_hidden1 = torch.abs(pool_text_hidden - pool_title_hidden)
-        diff_hidden2 = torch.abs(pool_code_hidden - pool_text_hidden)
 
         # concatenates the given sequence of tensors in the given dimension
         concated_hidden = torch.cat((pool_title_hidden, pool_text_hidden), 1)
         concated_hidden = torch.cat((concated_hidden, pool_code_hidden), 1)
-        concated_diff_hidden = torch.cat((diff_hidden1, diff_hidden2), 1)
-        concated_hidden = torch.cat((concated_hidden, concated_diff_hidden), 1)
+
         x = self.dropout(concated_hidden)
         x = self.dense(x)
         x = torch.tanh(x)
