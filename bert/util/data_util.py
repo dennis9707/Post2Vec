@@ -1,16 +1,17 @@
 import sys
 sys.path.append("../")
 sys.path.append("/usr/src/bert")
-import pandas as pd
-from sklearn import preprocessing
-from data_structure.question import Question, QuestionDataset
-from torch.utils.data import DataLoader
-from torch.utils.data.distributed import DistributedSampler
 from transformers import AutoTokenizer
+from torch.utils.data.distributed import DistributedSampler
+from torch.utils.data import DataLoader
+from data_structure.question import Question, QuestionDataset
+from sklearn import preprocessing
+import pandas as pd
+
 
 def get_tag_encoder(vocab_file):
     tab_vocab_path = vocab_file
-    tag_vocab = pd.read_csv(tab_vocab_path)
+    tag_vocab = pd.read_csv(tab_vocab_path,keep_default_na=False)
     tag_list = tag_vocab["tag"].astype(str).tolist()
     mlb = preprocessing.MultiLabelBinarizer()
     mlb.fit([tag_list])
