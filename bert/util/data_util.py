@@ -16,6 +16,11 @@ def get_tag_encoder(vocab_file):
     mlb.fit([tag_list])
     return mlb, len(mlb.classes_)
 
+def load_tenor_data_to_dataset(mlb, file):
+    train = pd.read_pickle(file)
+    training_set = TensorQuestionDataset(train, mlb)
+    return training_set
+
 
 def load_data_to_dataset(mlb, file):
     tokenizer = AutoTokenizer.from_pretrained(

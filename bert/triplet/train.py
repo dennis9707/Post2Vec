@@ -99,7 +99,6 @@ def init_train_env(args, tbert_type):
         
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
-    args.train_batch_size = 12
     return model
 
 
@@ -111,7 +110,7 @@ def get_train_args():
 
     parser.add_argument("--data_file", default="../../data/train/train-0-20000.pkl", type=str,
                         help="The input training data file.")
-    parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
+    parser.add_argument("--vocab_file", default="../../data/tags/commonTags.csv", type=str,
                         help="The tag vocab data file.")
     parser.add_argument(
         "--model_path", default="../../data/results/trinity_11-22 14-23-51_/final_model-156/t_bert.pt", type=str,
@@ -119,6 +118,8 @@ def get_train_args():
     parser.add_argument("--logging_steps", type=int,
                         default=500, help="Log every X updates steps.")
     parser.add_argument("--per_gpu_train_batch_size", default=8,
+                        type=int, help="Batch size per GPU/CPU for training.")
+    parser.add_argument("--train_batch_size", default=32,
                         type=int, help="Batch size per GPU/CPU for training.")
     parser.add_argument("--seed", type=int, default=42,
                         help="random seed for initialization")

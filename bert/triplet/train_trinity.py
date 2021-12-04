@@ -15,8 +15,6 @@ from util.data_util import load_data_to_dataset, get_dataloader, get_distribued_
 from model.loss import loss_fn
 from train import get_optimizer_scheduler,get_train_args, init_train_env
 
-
-
 logger = logging.getLogger(__name__)
 def get_exe_name(args):
     exe_name = "{}_{}_{}"
@@ -92,7 +90,7 @@ def main():
     files = get_files_paths_from_directory(args.data_folder)
 
     # total training examples 10279014
-    train_numbers = 7159014
+    train_numbers = 10279014
     epoch_batch_num = train_numbers / args.train_batch_size
     t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
 
@@ -140,15 +138,9 @@ def main():
             if args.local_rank == -1:
                 train_data_loader = get_dataloader(
                     train_dataset, args.train_batch_size)
-                # if (file_cnt + 1) % 5 == 0:
-                #     valid_data_loader = get_dataloader(
-                #     valid_dataset, args.train_batch_size)
             else: 
                 train_data_loader = get_distribued_dataloader(
                     train_dataset, args.train_batch_size)
-                # if (file_cnt + 1) % 5 == 0:
-                #     valid_data_loader = get_distribued_dataloader(
-                #     valid_dataset, args.train_batch_size)
 
             logger.info(
                 '############# FILE {}: Training Start   #############'.format(file_cnt))
@@ -200,21 +192,7 @@ def main():
             logger.info(
                 '############# FILE {}: Training End     #############'.format(file_cnt))
             
-            # validation
             if (file_cnt + 1) % 5 == 0:
-            #     logger.info(
-            #     '############# FILE {}: Validation Start    #############'.format(file_cnt))
-            #     valid_loss = validate(model, args, valid_data_loader)
-            #     logger.info(
-            #     '############# FILE {}: Validation End    #############'.format(file_cnt))
-            #     if valid_loss < valid_loss_min:
-            #         valid_loss_min = valid_loss
-            #         best_model_output = os.path.join(
-            #             args.output_dir, "best_model")
-            #         save_check_point(model, best_model_output, args,
-            #                         optimizer, scheduler)
-                
-                # Save model checkpoint Regularly
                 model_output = os.path.join(
                     args.output_dir, "final_model-{}".format(file_cnt))
                 save_check_point(model, model_output, args,
