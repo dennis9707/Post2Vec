@@ -88,7 +88,6 @@ def test(args, model, test_set):
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(
                 outputs).cpu().detach().numpy().tolist())
-<<<<<<< HEAD
             logger.info(len(fin_outputs))
     [pre, rc, f1, cnt] = evaluate_batch(
         fin_outputs, fin_targets, [1, 2, 3, 4, 5]) 
@@ -97,27 +96,6 @@ def test(args, model, test_set):
     logger.info("Precision Score  = {}".format(f1))
     logger.info("Count  = {}".format(cnt))
     return [pre, rc, f1, cnt]
-=======
-            [pre, rc, f1, cnt] = evaluate_batch(
-                fin_outputs, fin_targets, [1, 2, 3, 4, 5])
-            fin_pre.append(pre)
-            fin_rc.append(rc)
-            fin_f1.append(f1)
-            fin_cnt += cnt
-            print("Final F1 Score = {}".format(pre))
-            print("Final Recall Score  = {}".format(rc))
-            print("Final Precision Score  = {}".format(f1))
-            print("Final Count  = {}".format(fin_cnt))
-    
-    avg_pre = avg(fin_pre)
-    avg_rc = avg(fin_rc)
-    avg_f1 = avg(fin_f1)
-    print("Final File F1 Score = {}".format(avg_pre))
-    print("Final File Recall Score  = {}".format(avg_rc))
-    print("Final File Precision Score  = {}".format(avg_f1))
-    print("Final File Count  = {}".format(fin_cnt))
-    return [avg_pre, avg_rc, avg_f1, cnt]
->>>>>>> origin/development
 
 
 if __name__ == "__main__":
