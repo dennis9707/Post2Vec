@@ -1,0 +1,1 @@
+python -u test_triplet.py  2>&1| tee ./logs/test_trinity.log
