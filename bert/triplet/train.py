@@ -86,26 +86,16 @@ def init_train_env(args, tbert_type):
     
     # Load pretrained model and tokenizer
     # if args.local_rank not in [-1, 0]:
-<<<<<<< HEAD
         # Make sure only the first process in distributed training will download model & vocab
         # torch.distributed.barrier()
-=======
-    #     # Make sure only the first process in distributed training will download model & vocab
-    #     torch.distributed.barrier()
->>>>>>> origin/no-fusion-development
     if tbert_type == 'trinity':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
     else:
         raise Exception("TBERT type not found")
     args.tbert_type = tbert_type
     # if args.local_rank == 0:
-<<<<<<< HEAD
         # Make sure only the first process in distributed training will download model & vocab
         # torch.distributed.barrier()
-=======
-    #     # Make sure only the first process in distributed training will download model & vocab
-    #     torch.distributed.barrier()
->>>>>>> origin/no-fusion-development
         
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)

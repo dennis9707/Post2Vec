@@ -155,14 +155,3 @@ class TensorQuestionDataset(Dataset):
             'code_mask': code_feat['attention_mask'],
             'labels': torch.from_numpy(ret[0]).type(torch.FloatTensor)
         }
-
-    def _gen_feature(self, tokens):
-
-        feature = self.tokenizer(tokens, max_length=512,
-                                 padding='max_length', return_attention_mask=True,
-                                 return_token_type_ids=False, truncation=True,
-                                 return_tensors='pt')
-        res = {
-            "input_ids": feature["input_ids"].flatten(),
-            "attention_mask": feature["attention_mask"].flatten()}
-        return res
