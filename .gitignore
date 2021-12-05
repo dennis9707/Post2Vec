@@ -4,5 +4,8 @@ data/
 results/
 bert/runs/
 bert/trinity/apex/
-__pycache__/
+*.log
+*.pt
 *.pyc
+__pycache__/
+apex/

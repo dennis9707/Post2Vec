@@ -1,12 +1,13 @@
 import sys
 sys.path.append("../")
 sys.path.append("/usr/src/bert")
-from transformers import AutoTokenizer
-from torch.utils.data.distributed import DistributedSampler
-from torch.utils.data import DataLoader
-from data_structure.question import Question, QuestionDataset
-from sklearn import preprocessing
 import pandas as pd
+from sklearn import preprocessing
+from data_structure.question import Question, QuestionDataset,TensorQuestionDataset
+from torch.utils.data import DataLoader
+from torch.utils.data.distributed import DistributedSampler
+from transformers import AutoTokenizer
+
 
 
 def get_tag_encoder(vocab_file):
@@ -17,6 +18,11 @@ def get_tag_encoder(vocab_file):
     mlb = preprocessing.MultiLabelBinarizer()
     mlb.fit([tag_list])
     return mlb, len(mlb.classes_)
+
+def load_tenor_data_to_dataset(mlb, file):
+    train = pd.read_pickle(file)
+    training_set = TensorQuestionDataset(train, mlb)
+    return training_set
 
 
 def load_data_to_dataset(mlb, file):

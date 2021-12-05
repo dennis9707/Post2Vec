@@ -9,7 +9,6 @@ import gc
 from sklearn import preprocessing
 from datetime import datetime
 import pandas as pd
-from apex.parallel import convert_syncbn_model, DistributedDataParallel as DDP
 from util.eval_util import evaluate_batch
 from util.util import seed_everything, save_check_point
 from torch.utils.data.distributed import DistributedSampler
@@ -87,32 +86,41 @@ def init_train_env(args, tbert_type):
     
     # Load pretrained model and tokenizer
     # if args.local_rank not in [-1, 0]:
+<<<<<<< HEAD
         # Make sure only the first process in distributed training will download model & vocab
         # torch.distributed.barrier()
+=======
+    #     # Make sure only the first process in distributed training will download model & vocab
+    #     torch.distributed.barrier()
+>>>>>>> origin/no-fusion-development
     if tbert_type == 'trinity':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
     else:
         raise Exception("TBERT type not found")
     args.tbert_type = tbert_type
     # if args.local_rank == 0:
+<<<<<<< HEAD
         # Make sure only the first process in distributed training will download model & vocab
         # torch.distributed.barrier()
+=======
+    #     # Make sure only the first process in distributed training will download model & vocab
+    #     torch.distributed.barrier()
+>>>>>>> origin/no-fusion-development
         
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
-    args.train_batch_size = 12
     return model
 
 
 def get_train_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--data_folder", default="../../data/train", type=str,
+    parser.add_argument("--data_folder", default="../../data/tensor_data", type=str,
                         help="The direcoty of the input training data files.")
 
     parser.add_argument("--data_file", default="../../data/train/train-0-20000.pkl", type=str,
                         help="The input training data file.")
-    parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
+    parser.add_argument("--vocab_file", default="../../data/tags/commonTags.csv", type=str,
                         help="The tag vocab data file.")
     parser.add_argument(
         "--model_path", default="../../data/results/trinity_11-22 14-23-51_/final_model-156/t_bert.pt", type=str,
@@ -120,6 +128,8 @@ def get_train_args():
     parser.add_argument("--logging_steps", type=int,
                         default=500, help="Log every X updates steps.")
     parser.add_argument("--per_gpu_train_batch_size", default=8,
+                        type=int, help="Batch size per GPU/CPU for training.")
+    parser.add_argument("--train_batch_size", default=32,
                         type=int, help="Batch size per GPU/CPU for training.")
     parser.add_argument("--seed", type=int, default=42,
                         help="random seed for initialization")

@@ -1,18 +1,32 @@
 # Post2Vec Extension
 
-## Original Post2Vec Code
-
-`post2vec`
-Replication Package for the paper "Post2Vec: Learning Distributed Representations of Stack Overflow Posts".
-
-## How to train/test Post2Vec Model?
-
-- Train File: ./post2vec/tasks/tag_rec/approaches/post2vec/separate/cnn/cnn_separate_train.py
-- Test File: ./post2vec/tasks/tag_rec/approaches/post2vec/separate/post2vec_separate_test.py
-
 ## Data
 
 https://zenodo.org/record/5604548#.YXoG7NZBw1I
+
+## Download Data
+
+### Train
+
+```shell
+    wget https://zenodo.org/record/5604548/files/train.tar.gz
+```
+
+### Test
+
+```shell
+    wget https://zenodo.org/record/5604548/files/test.tar.gz
+```
+### Tag
+
+```shell
+    wget https://zenodo.org/record/5604548/files/_1_commonTags.csv
+```
+
+### Unzip
+```
+   tar -xvf file.tar.gz 
+```
 
 ## Post2Vec Extension
 

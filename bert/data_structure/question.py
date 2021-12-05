@@ -126,3 +126,43 @@ class QuestionDataset(Dataset):
             "input_ids": feature["input_ids"].flatten(),
             "attention_mask": feature["attention_mask"].flatten()}
         return res
+
+
+
+class TensorQuestionDataset(Dataset):
+
+    def __init__(self, questions, mlb):
+        self.questions = questions
+        self.mlb = mlb
+
+    def __len__(self):
+        return len(self.questions)
+
+    def __getitem__(self, index):
+        question = self.questions[index]
+        title_feat = question.get_title()
+        text_feat = question.get_text()
+        code_feat = question.get_code()
+        labels = set(question.get_tag())
+        ret = self.mlb.transform([labels])
+
+        return {
+            'titile_ids': title_feat['input_ids'],
+            'title_mask': title_feat['attention_mask'],
+            'text_ids': text_feat['input_ids'],
+            'text_mask': text_feat['attention_mask'],
+            'code_ids': code_feat['input_ids'],
+            'code_mask': code_feat['attention_mask'],
+            'labels': torch.from_numpy(ret[0]).type(torch.FloatTensor)
+        }
+
+    def _gen_feature(self, tokens):
+
+        feature = self.tokenizer(tokens, max_length=512,
+                                 padding='max_length', return_attention_mask=True,
+                                 return_token_type_ids=False, truncation=True,
+                                 return_tensors='pt')
+        res = {
+            "input_ids": feature["input_ids"].flatten(),
+            "attention_mask": feature["attention_mask"].flatten()}
+        return res
