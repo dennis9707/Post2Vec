@@ -11,7 +11,8 @@ import pandas as pd
 
 def get_tag_encoder(vocab_file):
     tab_vocab_path = vocab_file
-    tag_vocab = pd.read_csv(tab_vocab_path,keep_default_na=False)
+    # tag_vocab = pd.read_csv(tab_vocab_path,keep_default_na=False)
+    tag_vocab = pd.read_csv(tab_vocab_path)
     tag_list = tag_vocab["tag"].astype(str).tolist()
     mlb = preprocessing.MultiLabelBinarizer()
     mlb.fit([tag_list])
