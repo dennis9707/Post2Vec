@@ -60,6 +60,7 @@ def test(args, model, test_set):
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(
                 outputs).cpu().detach().numpy().tolist())
+    logger.info("Test Data Loaded")
     [pre, rc, f1, cnt] = evaluate_batch(
         fin_outputs, fin_targets, [1, 2, 3, 4, 5])
     logger.info("Final F1 Score = {}".format(pre))
