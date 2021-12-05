@@ -146,14 +146,9 @@ if __name__ == "__main__":
     model.to(device)
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
-<<<<<<< HEAD
         model.load_state_dict(torch.load(model_path),strict=False)
     logger.info("model loaded")
-=======
-        model.load_state_dict(torch.load(model_path))
-    print("model loaded")
->>>>>>> origin/development
-    
+        # model.load_state_dict(torch.load(model_path))    
     fin_pre = []
     fin_rc = []
     fin_f1 = []

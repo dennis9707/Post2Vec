@@ -89,11 +89,11 @@ class TBertT(PreTrainedModel):
 
 
 
-class TBertI2(TBertT):
+class TBertSI(TBertT):
     def __init__(self, config, code_bert,num_class):
         super().__init__(config, code_bert)
 
         self.tbert = AutoModel.from_pretrained(code_bert)
         self.nbert = self.tbert
         self.cbert = self.tbert
-        self.cls = RelationClassifyHeader(config, num_class=num_class)
+        self.cls = ClassifyHeader(config, num_class=num_class)
