@@ -153,10 +153,28 @@ class TBertTLarge(PreTrainedModel):
         return logits
 
 
-class TBertSI(TBertT):
-    def __init__(self, config, code_bert,num_class):
-        super().__init__(config, code_bert,num_class)
+class TBertSI(PreTrainedModel):
+    def __init__(self,config, code_bert, num_class):
+        super().__init__(config)
         self.tbert = AutoModel.from_pretrained(code_bert)
         self.nbert = self.tbert
         self.cbert = self.tbert
         self.cls = ClassifyHeader(config, num_class=num_class)
+    
+    def forward(
+            self,
+            title_ids=None,
+            title_attention_mask=None,
+            text_ids=None,
+            text_attention_mask=None,
+            code_ids=None,
+            code_attention_mask=None,
+    ):
+        t_hidden = self.tbert(
+            title_ids, attention_mask=title_attention_mask)[0]
+        n_hidden = self.tbert(text_ids, attention_mask=text_attention_mask)[0]
+        c_hidden = self.tbert(code_ids, attention_mask=code_attention_mask)[0]
+
+        logits = self.cls(title_hidden=t_hidden,
+                          text_hidden=n_hidden, code_hidden=c_hidden)
+        return logits

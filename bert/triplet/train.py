@@ -74,7 +74,7 @@ def init_train_env(args, tbert_type):
     if args.local_rank not in [-1, 0]:
         # Make sure only the first process in distributed training will download model & vocab
         torch.distributed.barrier()
-    if tbert_type == 'trinity':
+    if tbert_type == 'triplet':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
     elif tbert_type == 'siamese':
         model = TBertSI(BertConfig(), args.code_bert, args.num_class)
@@ -88,13 +88,12 @@ def init_train_env(args, tbert_type):
         
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
-    # Before we do anything with models, we want to ensure that we get fp16 execution of torch.einsum if args.fp16 is set.
-    # Otherwise it'll default to "promote" mode, and we'll get fp32 operations. Note that running `--fp16_opt_level="O2"` will
-    # remove the need for this code, but it is still valid.
     if args.fp16:
         try:
             import apex
-            apex.amp.register_half_function(torch, "einsum")
+            # apex.amp.register_half_function(torch, "einsum")
+            apex.amp.register_float_function(torch, 'sigmoid')
+            apex.amp.register_float_function(torch, 'tanh')
         except ImportError:
             raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
     return model
@@ -151,7 +150,7 @@ def get_train_args():
     parser.add_argument(
         "--fp16_opt_level",
         type=str,
-        default="O1",
+        default="O2",
         help="For fp16: Apex AMP optimization level selected in ['O0', 'O1', 'O2', and 'O3']."
              "See details at https://nvidia.github.io/apex/amp.html",
     )

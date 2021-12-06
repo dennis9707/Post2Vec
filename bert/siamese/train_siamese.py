@@ -13,11 +13,13 @@ import torch
 from data_structure.question import Question, QuestionDataset,TensorQuestionDataset
 from util.util import get_files_paths_from_directory, save_check_point, load_check_point,seed_everything
 from util.eval_util import evaluate_batch
-from util.data_util import get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset
+from util.data_util import get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset,load_data_to_dataset
 from model.loss import loss_fn
 from triplet.train import get_optimizer_scheduler,get_train_args, init_train_env
 from triplet.train_trinity import get_exe_name
-
+from apex.parallel import DistributedDataParallel as DDP
+from torch.optim import AdamW
+from transformers import BertConfig, get_linear_schedule_with_warmup
 logger = logging.getLogger(__name__)
 
 def log_train_info(args):
@@ -35,9 +37,12 @@ def log_train_info(args):
 
 def main():
     # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
+    logger.info("start getting args")
     args = get_train_args()
+    logger.info("make seed")
     seed_everything(args.seed)
-    model = init_train_env(args, tbert_type='siamese')
+    logger.info("init environment")
+    model = init_train_env(args, tbert_type='triplet')
     files = get_files_paths_from_directory(args.data_folder)
 
     # total training examples 10279014
@@ -45,7 +50,18 @@ def main():
     epoch_batch_num = train_numbers / args.train_batch_size
     t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
 
-    optimizer, scheduler = get_optimizer_scheduler(args, model, t_total)
+    # optimizer, scheduler = get_optimizer_scheduler(args, model, t_total)
+    no_decay = ["bias", "LayerNorm.weight"]
+    optimizer_grouped_parameters = [
+        {
+            "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
+            "weight_decay": args.weight_decay,
+        },
+        {"params": [p for n, p in model.named_parameters() if any(
+            nd in n for nd in no_decay)], "weight_decay": 0.0},
+    ]
+    optimizer = AdamW(optimizer_grouped_parameters,
+                      lr=args.learning_rate, eps=args.adam_epsilon)
     # get the name of the execution
     exp_name = get_exe_name(args)
     # make output directory
@@ -58,15 +74,19 @@ def main():
         except ImportError:
             raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
         model, optimizer = amp.initialize(model, optimizer, opt_level=args.fp16_opt_level)
-
+    scheduler = get_linear_schedule_with_warmup(
+        optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=t_total
+    )
     logger.info("n_gpu: {}".format(args.n_gpu))
     if args.n_gpu > 1:
         model = torch.nn.DataParallel(model)
 
     # Distributed training (should be after apex fp16 initialization)
     if args.local_rank != -1:
-        model = torch.nn.parallel.DistributedDataParallel(
-            model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
+        # model = torch.nn.parallel.DistributedDataParallel(
+        #     model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
+        model = DDP(model, delay_allreduce=True)
+
 
     if args.model_path and os.path.exists(args.model_path):
         model.load_state_dict(torch.load(args.model_path))
