@@ -32,9 +32,13 @@ def test(args, model, test_set):
             test_set, batch_size)
     with torch.no_grad():
         model.eval()
-        fin_outputs = []
-        fin_targets = []
+        fin_pre = []
+        fin_rc = []
+        fin_f1 = []
+        fin_cnt = 0
         for batch_idx, data in enumerate(test_data_loader, 0):
+            fin_outputs = []
+            fin_targets = []
             title_ids = data['titile_ids'].to(
                 args.device, dtype=torch.long)
             title_mask = data['title_mask'].to(
@@ -60,13 +64,23 @@ def test(args, model, test_set):
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(
                 outputs).cpu().detach().numpy().tolist())
-    logger.info("Test Data Loaded")
-    [pre, rc, f1, cnt] = evaluate_batch(
-        fin_outputs, fin_targets, [1, 2, 3, 4, 5])
-    logger.info("Final F1 Score = {}".format(pre))
-    logger.info("Final Recall Score  = {}".format(rc))
-    logger.info("Final Precision Score  = {}".format(f1))
-    logger.info("Final Count  = {}".format(cnt))
+            [pre, rc, f1, cnt] = evaluate_batch(
+                fin_outputs, fin_targets, [1, 2, 3, 4, 5])
+            fin_pre.append(pre)
+            fin_rc.append(rc)
+            fin_f1.append(f1)
+            fin_cnt += cnt
+            logger.info("Final F1 Score = {}".format(pre))
+            logger.info("Final Recall Score  = {}".format(rc))
+            logger.info("Final Precision Score  = {}".format(f1))
+            logger.info("Final Count  = {}".format(cnt))
+        avg_pre = avg(fin_pre)
+        avg_rc = avg(fin_rc)
+        avg_f1 = avg(fin_f1)
+        logger.info("Final File F1 Score = {}".format(avg_pre))
+        logger.info("Final File Recall Score  = {}".format(avg_rc))
+        logger.info("Final File Precision Score  = {}".format(avg_f1))
+        logger.info("Final File Count  = {}".format(fin_cnt))
     return [pre, rc, f1, cnt]
 
 def get_eval_args():

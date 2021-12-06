@@ -3,28 +3,12 @@ sys.path.append("../")
 sys.path.append("/usr/src/bert")
 import torch
 from torch.optim import AdamW
-from transformers import BertConfig, get_linear_schedule_with_warmup, AutoTokenizer
-from torch.utils.tensorboard import SummaryWriter
-import gc
-from sklearn import preprocessing
+from transformers import BertConfig, get_linear_schedule_with_warmup
 from datetime import datetime
-import pandas as pd
-from util.eval_util import evaluate_batch
-from util.util import seed_everything, save_check_point
-from torch.utils.data.distributed import DistributedSampler
-from torch.utils.data import DataLoader
-from model.loss import loss_fn
-from model.model import TBertT
-import numpy as np
+from model.model import TBertT,TBertSI
 import logging
-
-import os
-import random
 import argparse
-from data_structure.question import Question, QuestionDataset
-import pandas as pd
-from util.util import write_tensor_board
-from util.data_util import get_tag_encoder
+from util.data_util import get_fixed_tag_encoder
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +64,7 @@ def init_train_env(args, tbert_type):
     )
     
     # get the encoder for tags
-    mlb, num_class = get_tag_encoder(args.vocab_file)
+    mlb, num_class = get_fixed_tag_encoder(args.vocab_file)
     args.mlb = mlb
     args.num_class = num_class
     
@@ -90,6 +74,8 @@ def init_train_env(args, tbert_type):
         # torch.distributed.barrier()
     if tbert_type == 'trinity':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
+    elif tbert_type == 'siamese':
+        model = TBertSI(BertConfig(), args.code_bert, args.num_class)
     else:
         raise Exception("TBERT type not found")
     args.tbert_type = tbert_type
