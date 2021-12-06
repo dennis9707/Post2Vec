@@ -1,4 +1,6 @@
 
+import logging
+logger = logging.getLogger(__name__)
 
 def evaluate_ori(pred, label, topk):
     """
