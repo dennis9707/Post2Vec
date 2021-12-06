@@ -1,6 +1,8 @@
 import sys
 sys.path.append("../")
+sys.path.append("../..")
 sys.path.append("/usr/src/bert")
+sys.path.append("/usr/src/bert/triplet")
 import numpy as np
 from datetime import datetime
 import gc
@@ -11,7 +13,7 @@ import torch
 from data_structure.question import Question, QuestionDataset,TensorQuestionDataset
 from util.util import get_files_paths_from_directory, save_check_point, load_check_point
 from util.eval_util import evaluate_batch
-from util.data_util import load_data_to_dataset, get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset
+from util.data_util import get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset
 from model.loss import loss_fn
 from triplet.train import get_optimizer_scheduler,get_train_args, init_train_env
 from triplet.train_trinity import get_exe_name
@@ -74,9 +76,7 @@ def main():
                 '############# Epoch {}: Training Start   #############'.format(epoch)) 
         for file_cnt in range(len(files)):
             # Load dataset and dataloader
-            training_set = load_tenor_data_to_dataset(args.mlb, files[file_cnt])
-            train_dataset = training_set
-            
+            train_dataset = load_tenor_data_to_dataset(args.mlb, files[file_cnt])            
             if args.local_rank == -1:
                 train_data_loader = get_dataloader(
                     train_dataset, args.train_batch_size)
@@ -88,7 +88,6 @@ def main():
                 '############# FILE {}: Training Start   #############'.format(file_cnt))
             
             tr_loss = 0
-            valid_loss_min = np.Inf
             model.train()
             model.zero_grad()
             for step, data in enumerate(train_data_loader):

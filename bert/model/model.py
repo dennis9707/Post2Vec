@@ -155,8 +155,7 @@ class TBertTLarge(PreTrainedModel):
 
 class TBertSI(TBertT):
     def __init__(self, config, code_bert,num_class):
-        super().__init__(config, code_bert)
-
+        super().__init__(config, code_bert,num_class)
         self.tbert = AutoModel.from_pretrained(code_bert)
         self.nbert = self.tbert
         self.cbert = self.tbert

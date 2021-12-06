@@ -69,19 +69,20 @@ def init_train_env(args, tbert_type):
     args.num_class = num_class
     
     # Load pretrained model and tokenizer
-    # if args.local_rank not in [-1, 0]:
+    if args.local_rank not in [-1, 0]:
         # Make sure only the first process in distributed training will download model & vocab
-        # torch.distributed.barrier()
+        torch.distributed.barrier()
     if tbert_type == 'trinity':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
     elif tbert_type == 'siamese':
         model = TBertSI(BertConfig(), args.code_bert, args.num_class)
     else:
         raise Exception("TBERT type not found")
+    
     args.tbert_type = tbert_type
-    # if args.local_rank == 0:
+    if args.local_rank == 0:
         # Make sure only the first process in distributed training will download model & vocab
-        # torch.distributed.barrier()
+        torch.distributed.barrier()
         
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
@@ -94,18 +95,16 @@ def get_train_args():
     parser.add_argument("--data_folder", default="../../data/tensor_data", type=str,
                         help="The direcoty of the input training data files.")
 
-    parser.add_argument("--data_file", default="../../data/train/train-0-20000.pkl", type=str,
-                        help="The input training data file.")
-    parser.add_argument("--vocab_file", default="../../data/tags/commonTags.csv", type=str,
+    parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
     parser.add_argument(
-        "--model_path", default="../../data/results/trinity_11-22 14-23-51_/final_model-156/t_bert.pt", type=str,
+        "--model_path", default="", type=str,
         help="path of checkpoint and trained model, if none will do training from scratch")
     parser.add_argument("--logging_steps", type=int,
                         default=500, help="Log every X updates steps.")
     parser.add_argument("--per_gpu_train_batch_size", default=8,
                         type=int, help="Batch size per GPU/CPU for training.")
-    parser.add_argument("--train_batch_size", default=32,
+    parser.add_argument("--train_batch_size", default=64,
                         type=int, help="Batch size per GPU/CPU for training.")
     parser.add_argument("--seed", type=int, default=42,
                         help="random seed for initialization")
