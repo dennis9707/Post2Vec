@@ -57,10 +57,12 @@ def init_train_env(args, tbert_type):
         level=logging.INFO if args.local_rank in [-1, 0] else logging.WARN,
     )
     logger.warning(
-        "local rank %s, device: %s, n_gpu: %s",
+        "Process rank: %s, device: %s, n_gpu: %s, distributed training: %s, 16-bits training: %s",
         args.local_rank,
         device,
         args.n_gpu,
+        bool(args.local_rank != -1),
+        args.fp16,
     )
     
     # get the encoder for tags
@@ -86,6 +88,15 @@ def init_train_env(args, tbert_type):
         
     model.to(args.device)
     logger.info("Training/evaluation parameters %s", args)
+    # Before we do anything with models, we want to ensure that we get fp16 execution of torch.einsum if args.fp16 is set.
+    # Otherwise it'll default to "promote" mode, and we'll get fp32 operations. Note that running `--fp16_opt_level="O2"` will
+    # remove the need for this code, but it is still valid.
+    if args.fp16:
+        try:
+            import apex
+            apex.amp.register_half_function(torch, "einsum")
+        except ImportError:
+            raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
     return model
 
 
@@ -134,5 +145,15 @@ def get_train_args():
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
                                  'codistai/codeBERT-small-v2'])
+    parser.add_argument(
+        "--fp16", action="store_true",
+        help="Whether to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit", )
+    parser.add_argument(
+        "--fp16_opt_level",
+        type=str,
+        default="O1",
+        help="For fp16: Apex AMP optimization level selected in ['O0', 'O1', 'O2', and 'O3']."
+             "See details at https://nvidia.github.io/apex/amp.html",
+    )
     args = parser.parse_args()
     return args

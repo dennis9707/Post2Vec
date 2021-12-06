@@ -11,7 +11,7 @@ import os
 import pandas as pd
 import torch
 from data_structure.question import Question, QuestionDataset,TensorQuestionDataset
-from util.util import get_files_paths_from_directory, save_check_point, load_check_point
+from util.util import get_files_paths_from_directory, save_check_point, load_check_point,seed_everything
 from util.eval_util import evaluate_batch
 from util.data_util import get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset
 from model.loss import loss_fn
@@ -35,8 +35,8 @@ def log_train_info(args):
 
 def main():
     # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
-
     args = get_train_args()
+    seed_everything(args.seed)
     model = init_train_env(args, tbert_type='siamese')
     files = get_files_paths_from_directory(args.data_folder)
 
@@ -52,6 +52,12 @@ def main():
     args.output_dir = os.path.join(args.output_dir, exp_name)
     if not os.path.isdir(args.output_dir):
         os.makedirs(args.output_dir)
+    if args.fp16:
+        try:
+            from apex import amp
+        except ImportError:
+            raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
+        model, optimizer = amp.initialize(model, optimizer, opt_level=args.fp16_opt_level)
 
     logger.info("n_gpu: {}".format(args.n_gpu))
     if args.n_gpu > 1:
@@ -110,12 +116,23 @@ def main():
                 loss = loss_fn(outputs, targets)
                 if args.gradient_accumulation_steps > 1:
                     loss = loss / args.gradient_accumulation_steps
-                loss.backward()
+                if args.fp16:
+                    try:
+                        from apex import amp
+                        with amp.scale_loss(loss, optimizer) as scaled_loss:
+                            scaled_loss.backward()
+                    except ImportError:
+                        raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
+                else:
+                    loss.backward()
                 tr_loss += loss.item()
 
                 if (step + 1) % args.gradient_accumulation_steps == 0:
-                    torch.nn.utils.clip_grad_norm_(
-                        model.parameters(), args.max_grad_norm)
+                    if args.fp16:
+                        torch.nn.utils.clip_grad_norm_(amp.master_params(optimizer), args.max_grad_norm)
+                    else:
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
+                        
                     optimizer.step()
                     scheduler.step()
                     model.zero_grad()
