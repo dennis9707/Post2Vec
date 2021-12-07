@@ -1,5 +1,6 @@
 import sys
 sys.path.append("../")
+sys.path.append("../..")
 sys.path.append("/usr/src/bert")
 import numpy as np
 from datetime import datetime
@@ -9,23 +10,16 @@ import os
 import pandas as pd
 import torch
 from data_structure.question import Question, QuestionDataset,TensorQuestionDataset
-from util.util import get_files_paths_from_directory, save_check_point, load_check_point
+from util.util import get_files_paths_from_directory, save_check_point, load_check_point,seed_everything
 from util.eval_util import evaluate_batch
-from util.data_util import load_data_to_dataset, get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset
+from util.data_util import get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset,load_data_to_dataset
 from model.loss import loss_fn
-from train import get_optimizer_scheduler,get_train_args, init_train_env
-
-
-
+from triplet.train import get_optimizer_scheduler,get_train_args, init_train_env
+from triplet.train_trinity import get_exe_name
+from apex.parallel import DistributedDataParallel as DDP
+from torch.optim import AdamW
+from transformers import BertConfig, get_linear_schedule_with_warmup
 logger = logging.getLogger(__name__)
-def get_exe_name(args):
-    exe_name = "{}_{}_{}"
-    time = datetime.now().strftime("%m-%d %H-%M-%S")
-
-    base_model = ""
-    if args.model_path:
-        base_model = os.path.basename(args.model_path)
-    return exe_name.format(args.tbert_type, time, base_model)
 
 def log_train_info(args):
     logger.info("***** Running training *****")
@@ -40,55 +34,14 @@ def log_train_info(args):
     logger.info("  Gradient Accumulation steps = %d",
                 args.gradient_accumulation_steps)
 
-def validate(model, args, valid_data_loader):
-    fin_outputs = []
-    fin_targets = []
-    valid_loss = 0
-    with torch.no_grad():
-        model.eval()
-        for batch_idx, data in enumerate(valid_data_loader, 0):
-            title_ids = data['titile_ids'].to(
-                args.device, dtype=torch.long)
-            title_mask = data['title_mask'].to(
-                args.device, dtype=torch.long)
-            text_ids = data['text_ids'].to(
-                args.device, dtype=torch.long)
-            text_mask = data['text_mask'].to(
-                args.device, dtype=torch.long)
-            code_ids = data['code_ids'].to(
-                args.device, dtype=torch.long)
-            code_mask = data['code_mask'].to(
-                args.device, dtype=torch.long)
-            targets = data['labels'].to(
-                args.device, dtype=torch.float)
-
-            outputs = model(title_ids=title_ids,
-                            title_attention_mask=title_mask,
-                            text_ids=text_ids,
-                            text_attention_mask=text_mask,
-                            code_ids=code_ids,
-                            code_attention_mask=code_mask)
-            loss = loss_fn(outputs, targets)
-            valid_loss += loss.item()
-            fin_targets.extend(targets.cpu().detach().numpy().tolist())
-            fin_outputs.extend(torch.sigmoid(
-                outputs).cpu().detach().numpy().tolist())
-            
-    [pre, rc, f1, cnt] = evaluate_batch(
-                fin_outputs, fin_targets, [1, 2, 3, 4, 5])
-    valid_loss = valid_loss / len(valid_data_loader)
-    logger.info("Final F1 Score = {}".format(pre))
-    logger.info("Final Recall Score  = {}".format(rc))
-    logger.info("Final Precision Score  = {}".format(f1))
-    logger.info("Final Count  = {}".format(cnt))
-    logger.info("Valid Loss  = {}".format(valid_loss))
-    return valid_loss
-
 def main():
     # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
-
+    logger.info("start getting args")
     args = get_train_args()
-    model = init_train_env(args, tbert_type='trinity')
+    logger.info("make seed")
+    seed_everything(args.seed)
+    logger.info("init environment")
+    model = init_train_env(args, tbert_type='triplet')
     files = get_files_paths_from_directory(args.data_folder)
 
     # total training examples 10279014
@@ -96,30 +49,50 @@ def main():
     epoch_batch_num = train_numbers / args.train_batch_size
     t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
 
-    optimizer, scheduler = get_optimizer_scheduler(args, model, t_total)
+    # optimizer, scheduler = get_optimizer_scheduler(args, model, t_total)
+    no_decay = ["bias", "LayerNorm.weight"]
+    optimizer_grouped_parameters = [
+        {
+            "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
+            "weight_decay": args.weight_decay,
+        },
+        {"params": [p for n, p in model.named_parameters() if any(
+            nd in n for nd in no_decay)], "weight_decay": 0.0},
+    ]
+    optimizer = AdamW(optimizer_grouped_parameters,
+                      lr=args.learning_rate, eps=args.adam_epsilon)
     # get the name of the execution
     exp_name = get_exe_name(args)
     # make output directory
     args.output_dir = os.path.join(args.output_dir, exp_name)
     if not os.path.isdir(args.output_dir):
         os.makedirs(args.output_dir)
-
+    if args.fp16:
+        try:
+            from apex import amp
+        except ImportError:
+            raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
+        model, optimizer = amp.initialize(model, optimizer, opt_level=args.fp16_opt_level)
+    scheduler = get_linear_schedule_with_warmup(
+        optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=t_total
+    )
     logger.info("n_gpu: {}".format(args.n_gpu))
     if args.n_gpu > 1:
         model = torch.nn.DataParallel(model)
 
     # Distributed training (should be after apex fp16 initialization)
     if args.local_rank != -1:
-        model = torch.nn.parallel.DistributedDataParallel(
-            model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
+        # model = torch.nn.parallel.DistributedDataParallel(
+        #     model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
+        model = DDP(model, delay_allreduce=True)
+
 
     if args.model_path and os.path.exists(args.model_path):
         model.load_state_dict(torch.load(args.model_path))
         logger.info("model loaded")
     log_train_info(args)
     args.global_step = 0
-    valid_loss_min = 0
-    
+        
     torch.cuda.empty_cache()
     import gc
     gc.collect()
@@ -128,9 +101,7 @@ def main():
                 '############# Epoch {}: Training Start   #############'.format(epoch)) 
         for file_cnt in range(len(files)):
             # Load dataset and dataloader
-            training_set = load_tenor_data_to_dataset(args.mlb, files[file_cnt])
-            train_dataset = training_set
-            
+            train_dataset = load_tenor_data_to_dataset(args.mlb, files[file_cnt])            
             if args.local_rank == -1:
                 train_data_loader = get_dataloader(
                     train_dataset, args.train_batch_size)
@@ -142,7 +113,6 @@ def main():
                 '############# FILE {}: Training Start   #############'.format(file_cnt))
             
             tr_loss = 0
-            valid_loss_min = np.Inf
             model.train()
             model.zero_grad()
             for step, data in enumerate(train_data_loader):
@@ -165,12 +135,23 @@ def main():
                 loss = loss_fn(outputs, targets)
                 if args.gradient_accumulation_steps > 1:
                     loss = loss / args.gradient_accumulation_steps
-                loss.backward()
+                if args.fp16:
+                    try:
+                        from apex import amp
+                        with amp.scale_loss(loss, optimizer) as scaled_loss:
+                            scaled_loss.backward()
+                    except ImportError:
+                        raise ImportError("Please install apex from https://www.github.com/nvidia/apex to use fp16 training.")
+                else:
+                    loss.backward()
                 tr_loss += loss.item()
 
                 if (step + 1) % args.gradient_accumulation_steps == 0:
-                    torch.nn.utils.clip_grad_norm_(
-                        model.parameters(), args.max_grad_norm)
+                    if args.fp16:
+                        torch.nn.utils.clip_grad_norm_(amp.master_params(optimizer), args.max_grad_norm)
+                    else:
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
+                        
                     optimizer.step()
                     scheduler.step()
                     model.zero_grad()
