@@ -79,7 +79,6 @@ def evaluate_batch(pred, label, topk_list=[1, 2, 3, 4, 5], mlb=None):
                 pred=pred[i], label=label[i], topk=topk,mlb=mlb)
             if pre_val == -1:
                 cnt -= 1
-                break
             pre[idx] += pre_val
             rc[idx] += rc_val
             f1[idx] += f1_val
