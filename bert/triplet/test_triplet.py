@@ -64,7 +64,7 @@ def evaluate_ori(pred, label, topk,mlb=None):
     new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
     new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
     to_csv.append(new_dict)
-    logger.info("Loging dict ---> {0}".format(new_dict))
+    logger.info("{}".format(new_dict))
     return pre_k, rec_k, f1_k
 
 
@@ -84,6 +84,10 @@ def evaluate_batch(pred, label, topk_list=[1, 2, 3, 4, 5], mlb=None):
             rc[idx] += rc_val
             f1[idx] += f1_val
         cnt += 1
+        logger.info("i {}".format(i))
+        logger.info("pre{}".format(pre))
+        logger.info("rc{}".format(rc))
+        logger.info("f1{}".format(f1))
     pre[:] = [x / cnt for x in pre]
     rc[:] = [x / cnt for x in rc]
     f1[:] = [x / cnt for x in f1]
@@ -96,7 +100,7 @@ def avg(data):
     res = np.average(a, axis=0)
     return res
 def test(args, model, test_set,mlb):
-    batch_size = 250
+    batch_size = 10
     test_data_loader = DataLoader(test_set,
                              batch_size=batch_size,
                              shuffle=False,
@@ -148,9 +152,9 @@ def test(args, model, test_set,mlb):
         avg_pre = avg(fin_pre)
         avg_rc = avg(fin_rc)
         avg_f1 = avg(fin_f1)
-        logger.info("Final File F1 Score = {}".format(avg_pre))
+        logger.info("Final File F1 Score = {}".format(avg_f1))
         logger.info("Final File Recall Score  = {}".format(avg_rc))
-        logger.info("Final File Precision Score  = {}".format(avg_f1))
+        logger.info("Final File Precision Score  = {}".format(avg_pre))
         logger.info("Final File Count  = {}".format(fin_cnt))
     return [pre, rc, f1, cnt]
 
