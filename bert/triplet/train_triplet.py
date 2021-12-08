@@ -14,7 +14,7 @@ from util.util import get_files_paths_from_directory, save_check_point, load_che
 from util.eval_util import evaluate_batch
 from util.data_util import get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset,load_data_to_dataset
 from model.loss import loss_fn
-from train import get_optimizer_scheduler,get_train_args, init_train_env, get_exe_name
+from train import get_optimizer, get_optimizer_scheduler,get_train_args, init_train_env, get_exe_name
 from apex.parallel import DistributedDataParallel as DDP
 from torch.optim import AdamW
 from transformers import BertConfig, get_linear_schedule_with_warmup
@@ -31,40 +31,26 @@ def log_train_info(args):
         "  Total train batch size (w. parallel, distributed & accumulation) = %d",
         args.train_batch_size
         * args.gradient_accumulation_steps
+        * (torch.distributed.get_world_size() if args.local_rank != -1 else 1),
     )
     logger.info("  Gradient Accumulation steps = %d",
                 args.gradient_accumulation_steps)
 
-def main():
-    # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
-    logger.info("start getting args")
-    args = get_train_args()
-    logger.info("make seed")
-    seed_everything(args.seed)
-    logger.info("init environment")
-    model = init_train_env(args, tbert_type='triplet')
+
+def train(args, model):
     files = get_files_paths_from_directory(args.data_folder)
+    
     if not args.exp_name:
         exp_name = get_exe_name(args)
     else:
         exp_name = args.exp_name
     # total training examples 10279014
+    args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
+    args.valid_batch_size = args.per_gpu_evalute_batch_size * max(1, args.n_gpu)
     train_numbers = 10279014
     epoch_batch_num = train_numbers / args.train_batch_size
     t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
-
-    # optimizer, scheduler = get_optimizer_scheduler(args, model, t_total)
-    no_decay = ["bias", "LayerNorm.weight"]
-    optimizer_grouped_parameters = [
-        {
-            "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-            "weight_decay": args.weight_decay,
-        },
-        {"params": [p for n, p in model.named_parameters() if any(
-            nd in n for nd in no_decay)], "weight_decay": 0.0},
-    ]
-    optimizer = AdamW(optimizer_grouped_parameters,
-                      lr=args.learning_rate, eps=args.adam_epsilon)
+    optimizer = get_optimizer(args,model)
     
     # make output directory
     args.output_dir = os.path.join(args.output_dir, exp_name)
@@ -185,6 +171,12 @@ def main():
     if args.local_rank in [-1, 0]:
         tb_writer.close()
 
+
+def main():
+    # os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3,4,5,6,7'
+    args = get_train_args()
+    model = init_train_env(args, tbert_type=args.bert_type)
+    train(args, model)
 
 if __name__ == "__main__":
     main()

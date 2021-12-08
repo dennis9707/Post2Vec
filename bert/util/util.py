@@ -25,7 +25,6 @@ def avg(data):
     return res
 
 
-
 def write_tensor_board(tb_writer, data, step):
     for att_name in data.keys():
         att_value = data[att_name]

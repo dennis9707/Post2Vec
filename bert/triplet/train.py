@@ -9,6 +9,7 @@ from model.model import TBertT,TBertSI
 import logging
 import argparse
 from util.data_util import get_fixed_tag_encoder
+from util.util import seed_everything
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +19,7 @@ def get_exe_name(args):
 
     base_model = ""
     return exe_name.format(args.tbert_type, time, base_model)
-
-def get_optimizer_scheduler(args, model, train_steps):
+def get_optimizer(args,model):
     no_decay = ["bias", "LayerNorm.weight"]
     optimizer_grouped_parameters = [
         {
@@ -31,6 +31,9 @@ def get_optimizer_scheduler(args, model, train_steps):
     ]
     optimizer = AdamW(optimizer_grouped_parameters,
                       lr=args.learning_rate, eps=args.adam_epsilon)
+    return optimizer
+def get_optimizer_scheduler(args, model, train_steps):
+    optimizer = get_optimizer(args, model)
     # optimizer = optim.SGD(model.parameters(), lr=args.learning_rate)
     scheduler = get_linear_schedule_with_warmup(
         optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=train_steps
@@ -39,9 +42,9 @@ def get_optimizer_scheduler(args, model, train_steps):
 
 def init_train_env(args, tbert_type):
     # Setup CUDA, GPU & distributed training
-    if args.local_rank == -1:
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        args.n_gpu = torch.cuda.device_count()
+    if args.local_rank == -1 or args.no_cuda:
+        device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
+        args.n_gpu = 0 if args.no_cuda else torch.cuda.device_count()
     else:  # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
         torch.cuda.set_device(args.local_rank)
         device = torch.device("cuda", args.local_rank)
@@ -49,7 +52,6 @@ def init_train_env(args, tbert_type):
         args.n_gpu = 1
 
     args.device = device
-    args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
     # Setup logging
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
@@ -64,6 +66,7 @@ def init_train_env(args, tbert_type):
         bool(args.local_rank != -1),
         args.fp16,
     )
+    seed_everything(args.seed)
     
     # get the encoder for tags
     mlb, num_class = get_fixed_tag_encoder(args.vocab_file)
@@ -77,6 +80,8 @@ def init_train_env(args, tbert_type):
     if tbert_type == 'triplet':
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
     elif tbert_type == 'siamese':
+        model = TBertSI(BertConfig(), args.code_bert, args.num_class)
+    elif tbert_type == 'single':
         model = TBertSI(BertConfig(), args.code_bert, args.num_class)
     else:
         raise Exception("TBERT type not found")
@@ -150,6 +155,8 @@ def get_train_args():
     )
     parser.add_argument("--warmup_steps", default=0, type=int,
                         help="Linear warmup over warmup_steps.")
+    parser.add_argument("--bert_type", default='triplet',
+                        choices=['triplet', 'siamese','single'])
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
                                  'codistai/codeBERT-small-v2'])
