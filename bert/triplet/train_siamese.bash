@@ -5,6 +5,7 @@ CUDA_VISIBLE_DEVICES=3,4 python -m torch.distributed.launch \
     --per_gpu_train_batch_size 8 \
     --logging_steps 100 \
     --gradient_accumulation_steps 4 \
+    --bert_type siamese \
     --num_train_epochs 3 \
     --fp16 \
     --fp16_opt_level O2 \
