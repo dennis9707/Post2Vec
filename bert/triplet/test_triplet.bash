@@ -1,1 +1,2 @@
-python -u test_triplet.py  2>&1| tee ./logs/test_trinity.log
+python -u test_triplet.py \
+    --test_batch_size 500 2>&1| tee ./logs/test_trinity.log

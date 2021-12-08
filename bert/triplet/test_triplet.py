@@ -64,7 +64,6 @@ def evaluate_ori(pred, label, topk,mlb=None):
     new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
     new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
     to_csv.append(new_dict)
-    logger.info("{}".format(new_dict))
     return pre_k, rec_k, f1_k
 
 
@@ -83,10 +82,6 @@ def evaluate_batch(pred, label, topk_list=[1, 2, 3, 4, 5], mlb=None):
             rc[idx] += rc_val
             f1[idx] += f1_val
         cnt += 1
-        logger.info("i {}".format(i))
-        logger.info("pre{}".format(pre))
-        logger.info("rc{}".format(rc))
-        logger.info("f1{}".format(f1))
     pre[:] = [x / cnt for x in pre]
     rc[:] = [x / cnt for x in rc]
     f1[:] = [x / cnt for x in f1]
@@ -99,9 +94,8 @@ def avg(data):
     res = np.average(a, axis=0)
     return res
 def test(args, model, test_set,mlb):
-    batch_size = 10
     test_data_loader = DataLoader(test_set,
-                             batch_size=batch_size,
+                             batch_size=args.test_batch_size,
                              shuffle=False,
                              )
     with torch.no_grad():
@@ -144,9 +138,9 @@ def test(args, model, test_set,mlb):
             fin_rc.append(rc)
             fin_f1.append(f1)
             fin_cnt += cnt
-            logger.info("Final F1 Score = {}".format(pre))
+            logger.info("Final F1 Score = {}".format(f1))
             logger.info("Final Recall Score  = {}".format(rc))
-            logger.info("Final Precision Score  = {}".format(f1))
+            logger.info("Final Precision Score  = {}".format(pre))
             logger.info("Final Count  = {}".format(cnt))
         avg_pre = avg(fin_pre)
         avg_rc = avg(fin_rc)
@@ -162,19 +156,19 @@ def get_eval_args():
     parser.add_argument(
         "--data_dir", default="../../data/test", type=str,
         help="The input test data dir.")
-    parser.add_argument("--model_path", default="../../data/results/trinity_12-02 15-31-04_t_bert.pt/final_model-429/t_bert.pt", help="The model to evaluate")
+    parser.add_argument("--model_path", default="../../data/results/trinity_12-02 15-31-04_t_bert.pt/final_model-504/t_bert.pt", help="The model to evaluate")
     parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
     parser.add_argument("--verbus", action="store_true", help="show more logs")
     parser.add_argument("--mlb_latest", action="store_true", help="use the latest mlb")
-    parser.add_argument("--test_batch_size", default=250, help="batch size used for testing")
+    parser.add_argument("--test_batch_size", default=500, help="batch size used for testing")
     parser.add_argument("--output_dir", default="./logs", help="directory to store the results")
     parser.add_argument("--code_bert", default="microsoft/codebert-base", help="the base bert")
     args = parser.parse_args()
     return args
 def main():
-    os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
@@ -226,9 +220,9 @@ def main():
     avg_pre = avg(fin_pre)
     avg_rc = avg(fin_rc)
     avg_f1 = avg(fin_f1)
-    logger.info("Final F1 Score = {}".format(avg_pre))
+    logger.info("Final F1 Score = {}".format(avg_f1))
     logger.info("Final Recall Score  = {}".format(avg_rc))
-    logger.info("Final Precision Score  = {}".format(avg_f1))
+    logger.info("Final Precision Score  = {}".format(avg_pre))
     logger.info("Final Count  = {}".format(fin_cnt))
     logger.info("Test finished")
     keys = to_csv[0].keys()
