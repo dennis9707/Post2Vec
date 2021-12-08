@@ -49,7 +49,7 @@ def init_train_env(args, tbert_type):
         args.n_gpu = 1
 
     args.device = device
-
+    args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
     # Setup logging
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
@@ -104,7 +104,8 @@ def get_train_args():
 
     parser.add_argument("--data_folder", default="../../data/tensor_data", type=str,
                         help="The direcoty of the input training data files.")
-
+    parser.add_argument("--test_data_folder", default="../../data/test", type=str,
+                        help="The direcoty of the input training data files.")
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
     parser.add_argument(
@@ -112,10 +113,15 @@ def get_train_args():
         help="path of checkpoint and trained model, if none will do training from scratch")
     parser.add_argument("--logging_steps", type=int,
                         default=500, help="Log every X updates steps.")
+    parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
+    parser.add_argument("--valid_num", type=int, default=200,
+                        help="number of instances used for evaluating the checkpoint performance")
+    parser.add_argument("--valid_step", type=int, default=500,
+                        help="obtain validation accuracy every given steps")
     parser.add_argument("--per_gpu_train_batch_size", default=8,
                         type=int, help="Batch size per GPU/CPU for training.")
-    parser.add_argument("--train_batch_size", default=64,
-                        type=int, help="Batch size per GPU/CPU for training.")
+    parser.add_argument("--per_gpu_evalute_batch_size", default=8,
+                        type=int, help="Batch size per GPU/CPU for evaluation.")
     parser.add_argument("--seed", type=int, default=42,
                         help="random seed for initialization")
     parser.add_argument("--local_rank", type=int, default=-1, help="local_rank for distributed training on gpus")
@@ -131,6 +137,9 @@ def get_train_args():
                         type=float, help="Max gradient norm.")
     parser.add_argument("--save_steps", type=int, default=500,
                         help="Save checkpoint every X updates steps.")
+    parser.add_argument(
+        "--exp_name", type=str, help="name of this execution"
+    )
     parser.add_argument(
         "--output_dir", default="../results", type=str,
         help="The output directory where the model checkpoints and predictions will be written.", )
@@ -150,7 +159,7 @@ def get_train_args():
     parser.add_argument(
         "--fp16_opt_level",
         type=str,
-        default="O2",
+        default="O1",
         help="For fp16: Apex AMP optimization level selected in ['O0', 'O1', 'O2', and 'O3']."
              "See details at https://nvidia.github.io/apex/amp.html",
     )

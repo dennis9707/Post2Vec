@@ -1,9 +1,10 @@
-CUDA_VISIBLE_DEVICES=3,4,5,6 python train_trinity.py \
+CUDA_VISIBLE_DEVICES=4,5 python -m torch.distributed.launch \
+    --nproc_per_node=2 train_triplet.py \
     --data_folder ../../data/tensor_data \
     --output_dir ../../data/results \
-    --per_gpu_train_batch_size 1 \
-    --train_batch_size 8 \
+    --per_gpu_train_batch_size 4 \
     --logging_steps 100 \
     --gradient_accumulation_steps 4 \
     --num_train_epochs 3 \
-    --learning_rate 7e-5  2>&1| tee train_trinity.log
+    --fp16 \
+    --learning_rate 7e-5  2>&1| tee train_triplet.log

@@ -10,15 +10,16 @@ import os
 import pandas as pd
 import torch
 from data_structure.question import Question, QuestionDataset,TensorQuestionDataset
-from util.util import get_files_paths_from_directory, save_check_point, load_check_point,seed_everything
+from util.util import get_files_paths_from_directory, save_check_point, load_check_point,seed_everything,write_tensor_board
 from util.eval_util import evaluate_batch
 from util.data_util import get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset,load_data_to_dataset
 from model.loss import loss_fn
-from triplet.train import get_optimizer_scheduler,get_train_args, init_train_env
-from triplet.train_trinity import get_exe_name
+from train import get_optimizer_scheduler,get_train_args, init_train_env, get_exe_name
 from apex.parallel import DistributedDataParallel as DDP
 from torch.optim import AdamW
 from transformers import BertConfig, get_linear_schedule_with_warmup
+from torch.utils.tensorboard import SummaryWriter
+
 logger = logging.getLogger(__name__)
 
 def log_train_info(args):
@@ -43,7 +44,10 @@ def main():
     logger.info("init environment")
     model = init_train_env(args, tbert_type='triplet')
     files = get_files_paths_from_directory(args.data_folder)
-
+    if not args.exp_name:
+        exp_name = get_exe_name(args)
+    else:
+        exp_name = args.exp_name
     # total training examples 10279014
     train_numbers = 10279014
     epoch_batch_num = train_numbers / args.train_batch_size
@@ -61,12 +65,14 @@ def main():
     ]
     optimizer = AdamW(optimizer_grouped_parameters,
                       lr=args.learning_rate, eps=args.adam_epsilon)
-    # get the name of the execution
-    exp_name = get_exe_name(args)
+    
     # make output directory
     args.output_dir = os.path.join(args.output_dir, exp_name)
     if not os.path.isdir(args.output_dir):
         os.makedirs(args.output_dir)
+    if args.local_rank in [-1, 0]:
+        tb_writer = SummaryWriter(log_dir="../runs/{}".format(exp_name))
+    
     if args.fp16:
         try:
             from apex import amp
@@ -157,11 +163,12 @@ def main():
                     model.zero_grad()
                     args.global_step += 1
 
-                    if args.logging_steps > 0 and args.global_step % args.logging_steps == 0:
+                    if args.local_rank in [-1, 0] and args.logging_steps > 0 and args.global_step % args.logging_steps == 0:
                         tb_data = {
                             'lr': scheduler.get_last_lr()[0],
                             'loss': tr_loss / args.logging_steps
                         }
+                        write_tensor_board(tb_writer, tb_data, args.global_step)
                         logger.info("tb_data {}".format(tb_data))
                         logger.info(
                             'Epoch: {}, Batch: {}， Loss:  {}'.format(epoch, step, tr_loss / args.logging_steps))
@@ -169,11 +176,14 @@ def main():
             logger.info(
                 '############# FILE {}: Training End     #############'.format(file_cnt))
             
-            if (file_cnt + 1) % 5 == 0:
+            ### Save Model
+            if args.local_rank in [-1, 0] and (file_cnt + 1) % 50 == 0:
                 model_output = os.path.join(
                     args.output_dir, "final_model-{}".format(file_cnt))
                 save_check_point(model, model_output, args,
                                 optimizer, scheduler)
+    if args.local_rank in [-1, 0]:
+        tb_writer.close()
 
 
 if __name__ == "__main__":
