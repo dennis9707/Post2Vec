@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=4,5 python -m torch.distributed.launch \
+CUDA_VISIBLE_DEVICES=2,3 python -m torch.distributed.launch \
     --nproc_per_node=2 train_triplet.py \
     --data_folder ../../data/tensor_data \
     --output_dir ../../data/results \
@@ -7,4 +7,5 @@ CUDA_VISIBLE_DEVICES=4,5 python -m torch.distributed.launch \
     --gradient_accumulation_steps 4 \
     --num_train_epochs 3 \
     --fp16 \
+    ----fp16_opt_level O2 \
     --learning_rate 7e-5  2>&1| tee train_triplet.log
