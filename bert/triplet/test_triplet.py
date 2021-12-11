@@ -11,7 +11,7 @@ sys.path.append("../..")
 import torch
 from transformers import BertConfig
 from util.util import get_files_paths_from_directory
-from model.model import TBertTLarge
+from model.model import TBertT
 from util.data_util import get_tag_encoder, get_fixed_tag_encoder, load_data_to_dataset, get_dataloader
 from torch.utils.data import DataLoader
 import numpy as np
@@ -56,14 +56,15 @@ def evaluate_ori(pred, label, topk,mlb=None):
     else:
         f1_k = 2 * pre_k * rec_k / (pre_k + rec_k)
     # return {'precision': pre_k, 'recall': rec_k, 'f1': f1_k}
-    new_dict = dict()
-    new_dict['top'] = topk
-    new_dict['precision'] = pre_k
-    new_dict['recall'] = rec_k
-    new_dict['f1'] = f1_k
-    new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
-    new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
-    to_csv.append(new_dict)
+    # new_dict = dict()
+    # new_dict['top'] = topk
+    # new_dict['precision'] = pre_k
+    # new_dict['recall'] = rec_k
+    # new_dict['f1'] = f1_k
+    # new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
+    # new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
+    # to_csv.append(new_dict)
+    # logger.info("Loging dict ---> {0}".format(new_dict))
     return pre_k, rec_k, f1_k
 
 
@@ -156,13 +157,14 @@ def get_eval_args():
     parser.add_argument(
         "--data_dir", default="../../data/test", type=str,
         help="The input test data dir.")
-    parser.add_argument("--model_path", default="../../data/results/trinity_12-02 15-31-04_t_bert.pt/final_model-504/t_bert.pt", help="The model to evaluate")
+    parser.add_argument("--model_path", default="../../data/results/triplet_12-08 16-04-00_/final_model-249/t_bert.pt", help="The model to evaluate")
+    # parser.add_argument("--model_path", default="../../data/results/triplet_12-07 15-29-36_/final_model-199/t_bert.pt", help="The model to evaluate")
     parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
     parser.add_argument("--verbus", action="store_true", help="show more logs")
     parser.add_argument("--mlb_latest", action="store_true", help="use the latest mlb")
-    parser.add_argument("--test_batch_size", default=500, help="batch size used for testing")
+    parser.add_argument("--test_batch_size", default=500, type=int,help="batch size used for testing")
     parser.add_argument("--output_dir", default="./logs", help="directory to store the results")
     parser.add_argument("--code_bert", default="microsoft/codebert-base", help="the base bert")
     args = parser.parse_args()
@@ -184,13 +186,14 @@ def main():
     
     # get the encoder for tags
     if args.mlb_latest == True:
+        logger.info("use new mlb tagger")
         mlb, num_class = get_fixed_tag_encoder(args.vocab_file)
     else:
         mlb, num_class = get_tag_encoder(args.vocab_file)
     args.mlb = mlb
     args.num_class = num_class
     
-    model = TBertTLarge(BertConfig(), args.code_bert, num_class)
+    model = TBertT(BertConfig(), args.code_bert, num_class)
     model = torch.nn.DataParallel(model)
     model.to(device)
     if args.model_path and os.path.exists(args.model_path):
@@ -225,11 +228,11 @@ def main():
     logger.info("Final Precision Score  = {}".format(avg_pre))
     logger.info("Final Count  = {}".format(fin_cnt))
     logger.info("Test finished")
-    keys = to_csv[0].keys()
+    # keys = to_csv[0].keys()
 
-    with open('./logs/result.csv', 'w', newline='') as output_file:
-        dict_writer = csv.DictWriter(output_file, keys)
-        dict_writer.writeheader()
-        dict_writer.writerows(to_csv)
+    # with open('./logs/result.csv', 'w', newline='') as output_file:
+    #     dict_writer = csv.DictWriter(output_file, keys)
+    #     dict_writer.writeheader()
+    #     dict_writer.writerows(to_csv)
 if __name__ == "__main__":
     main()
