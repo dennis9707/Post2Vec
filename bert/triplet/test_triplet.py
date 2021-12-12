@@ -11,7 +11,7 @@ sys.path.append("../..")
 import torch
 from transformers import BertConfig
 from util.util import get_files_paths_from_directory
-from model.model import TBertT
+from model.model import TBertT,TBertSI
 from util.data_util import get_tag_encoder, get_fixed_tag_encoder, load_data_to_dataset, get_dataloader
 from torch.utils.data import DataLoader
 import numpy as np
@@ -167,6 +167,7 @@ def get_eval_args():
     parser.add_argument("--test_batch_size", default=500, type=int,help="batch size used for testing")
     parser.add_argument("--output_dir", default="./logs", help="directory to store the results")
     parser.add_argument("--code_bert", default="microsoft/codebert-base", help="the base bert")
+    parser.add_argument("--model_type", default="triplet", choices=["triplet","siamese"])
     args = parser.parse_args()
     return args
 def main():
@@ -193,7 +194,10 @@ def main():
     args.mlb = mlb
     args.num_class = num_class
     
-    model = TBertT(BertConfig(), args.code_bert, num_class)
+    if args.model_type == "triplet":
+        model = TBertT(BertConfig(), args.code_bert, num_class)
+    elif args.model_type == "siamese":
+        model = TBertSI(BertConfig(), args.code_bert, num_class)
     model = torch.nn.DataParallel(model)
     model.to(device)
     if args.model_path and os.path.exists(args.model_path):
