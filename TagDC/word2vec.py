@@ -5,28 +5,20 @@ from gensim.models import Word2Vec
 import pickle
 from gensim.corpora.dictionary import Dictionary
 import pandas as pd
-from data_structure.question import Question
-
-def getSentences_list(file_name):
-    sentence_words = []
-    data = pd.read_pickle(file_name)
-    length = len(data)
-    for i in range(length):
-        sentences = []
-        title = data[i].get_comp_by_name("title")
-        text = data[i].get_comp_by_name("desc_text")
-        for word in title:
-            sentences.append(word)
-        for word in text:
-            sentences.append(word)
-
-        sentence_words.append(sentences)
-        
-    print(len(sentence_words))   
-    return sentence_words
-
-
-
+from data_structure.question import Question, TagDCQuestion
+import os
+class MySentences(object):
+    def __init__(self, dirname):
+        self.dirname = dirname
+ 
+    def __iter__(self):
+        for root, dirs, files in os.walk(self.dirname):
+            for file_name in files:
+                path = os.path.join(root, file_name)
+                for data in pd.read_pickle(path):
+                    yield data.get_desp()
+                
+ 
 def saveWordIndex(model):
     gensim_dict = Dictionary()
     gensim_dict.doc2bow(list(model.wv.index_to_key), allow_update=True)
@@ -39,8 +31,8 @@ def saveWordIndex(model):
     return w2indx, w2vec
 
 def trainWord2Vec():#训练word2vec模型并存储
-    target_file = "../data/train/train-0-20000.pkl"
-    sentences=getSentences_list(target_file)
+    target_dir = "../data/tagdc"
+    sentences = MySentences(target_dir) # a memory-friendly iterator
     model=Word2Vec(sentences=sentences,vector_size=256,sg=1,min_count=1,window=5)
     model.save('../data/w2vec/word2vec.model')
     print("word2vec")

@@ -229,7 +229,7 @@ def train_lstm(p_n_symbols, p_embedding_weights, p_X_train, p_y_train, p_X_test,
     """
     inputs = Input(shape=(100,))
     # embedding layer, first layer in the model
-    # 
+    # turn positive integers into dense vectors
     embedding_output = Embedding(input_dim=p_n_symbols,
                                  output_dim=vocab_dim,
                                  mask_zero=False,
@@ -372,11 +372,9 @@ def train_lstm(p_n_symbols, p_embedding_weights, p_X_train, p_y_train, p_X_test,
  
 def createModel():
     maxlen=100
-  
     index_dict=pickle.load(open('/data/lican/StackOverflowsmall/cixiangliang/256/w2indx.pkl','rb'))
-     
     vec_dict = pickle.load(open('/data/lican/StackOverflowsmall/cixiangliang/256/w2vec.pkl','rb'))
-     
+    
     n_words=len(index_dict.keys())
     vec_matrix=np.zeros((n_words+1,256))
     for k,i in index_dict.items():#将所有词索引与词向量一一对应
