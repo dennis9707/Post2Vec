@@ -1,23 +1,25 @@
 #encoding = utf-8
-
+import sys
+sys.path.append("../bert")
 from gensim.models import Word2Vec
 import pickle
 from gensim.corpora.dictionary import Dictionary
+import pandas as pd
+from data_structure.question import Question
 
-
-
-
-
-
-def getSentences_list():
+def getSentences_list(file_name):
     sentence_words = []
-    for i in range(1,47837):
-        print(i)
+    data = pd.read_pickle(file_name)
+    length = len(data)
+    for i in range(length):
         sentences = []
-        sens = open("/data0/docker/lican/StackOverflowsmall/TitleBody/TitleBody%ld.txt"%i,encoding = 'utf-8').read().split()   
-        for word in sens:
+        title = data[i].get_comp_by_name("title")
+        text = data[i].get_comp_by_name("desc_text")
+        for word in title:
             sentences.append(word)
-        print(sentences)
+        for word in text:
+            sentences.append(word)
+
         sentence_words.append(sentences)
         
     print(len(sentence_words))   
@@ -27,24 +29,22 @@ def getSentences_list():
 
 def saveWordIndex(model):
     gensim_dict = Dictionary()
-    gensim_dict.doc2bow(model.wv.vocab.keys(), allow_update=True)
+    gensim_dict.doc2bow(list(model.wv.index_to_key), allow_update=True)
     w2indx = {v: k + 1 for k, v in gensim_dict.items()}  # 词语的索引，从1开始编号
     w2vec = {word: model.wv[word] for word in w2indx.keys()}  # 词语的词向量
-    pickle.dump(w2indx,open("/data0/docker/lican/StackOverflowsmall/cixiangliang1/w2indx.pkl", 'wb'))  # 索引字典
+    pickle.dump(w2indx,open("../data/w2vec/w2indx.pkl", 'wb'))  # 索引字典
     print("w2indx")
-    pickle.dump(w2vec,open("/data0/docker/lican/StackOverflowsmall/cixiangliang1/w2vec.pkl", 'wb'))  # 词向量字典
+    pickle.dump(w2vec,open("../data/w2vec/w2vec.pkl", 'wb'))  # 词向量字典
     print("w2vec")
     return w2indx, w2vec
 
 def trainWord2Vec():#训练word2vec模型并存储
-    sentences=getSentences_list()
-    model=Word2Vec(sentences=sentences,size=256,sg=1,min_count=1,window=5)
-    model.save('/data0/docker/lican/StackOverflowsmall/cixiangliang1/word2vec.model')
+    target_file = "../data/train/train-0-20000.pkl"
+    sentences=getSentences_list(target_file)
+    model=Word2Vec(sentences=sentences,vector_size=256,sg=1,min_count=1,window=5)
+    model.save('../data/w2vec/word2vec.model')
     print("word2vec")
     # model=Word2Vec.load('./word2vec.model')
-    
-    print(model.wv["c++"])
-    
     saveWordIndex(model=model)
 
 

@@ -157,7 +157,7 @@ def get_eval_args():
     parser.add_argument(
         "--data_dir", default="../../data/test", type=str,
         help="The input test data dir.")
-    parser.add_argument("--model_path", default="../../data/results/triplet_12-08 16-04-00_/final_model-249/t_bert.pt", help="The model to evaluate")
+    parser.add_argument("--model_path", default="../../data/results/triplet_12-08 16-04-00_/final_model-449/t_bert.pt", help="The model to evaluate")
     # parser.add_argument("--model_path", default="../../data/results/triplet_12-07 15-29-36_/final_model-199/t_bert.pt", help="The model to evaluate")
     parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
