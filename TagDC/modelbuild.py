@@ -3,7 +3,6 @@
 
 
 from capsulelayers import CapsuleLayer, PrimaryCap, Length, Mask
-
 from keras.utils import multi_gpu_model
 import keras.backend as K
 from keras.constraints import max_norm
@@ -105,7 +104,6 @@ class Classifier(object):
                                  name = "Embedding")(x)
         x = Dropout(0.5)(em)
         #x = Bidirectional(CuDNNLSTM(256,kernel_regularizer=l2(0.0002),recurrent_regularizer=l2(0.0002),return_sequences=True))(x)
-        """
         x = Bidirectional(LSTM(units = 256,
                    activation='tanh',
                    recurrent_activation='sigmoid',
@@ -124,50 +122,31 @@ class Classifier(object):
                    return_sequences = True,
                    dropout=0.5,
                    recurrent_dropout=0.5,
-                   name = "Lstm"))(x)
-        """
-        
-        #x = Concatenate()([x,em])
-       
-        
-        x1 = Activation(activation="relu")(BatchNormalization()(Conv1D(filters=32, kernel_size=1, padding="same")(x)))
+                   name = "Lstm"))(x)        
+        x = Concatenate()([x,em]) 
+        x1 = Activation(activation="relu")(BatchNormalization()(Conv1D(filters=32, kernel_size=2, padding="same")(x)))
         x1 = GlobalMaxPooling1D()(x1)
-        x2 = Activation(activation="relu")(BatchNormalization()(Conv1D(filters=32, kernel_size=2, padding="same")(x)))
+        x2 = Activation(activation="relu")(BatchNormalization()(Conv1D(filters=32, kernel_size=3, padding="same")(x)))
         x2 = GlobalMaxPooling1D()(x2)
-        x3 = Activation(activation="relu")(BatchNormalization()(Conv1D(filters=32, kernel_size=3, padding="same")(x)))
+        x3 = Activation(activation="relu")(BatchNormalization()(Conv1D(filters=32, kernel_size=4, padding="same")(x)))
         x3 = GlobalMaxPooling1D()(x3)
         
-                
-
         x = Concatenate()([x1,x2,x3])
         
         x = Dropout(0.5)(x)     
-        
-        """
         x = PrimaryCap(x, dim_vector=32, n_channels=4, kernel_size=3, strides=1, padding='valid')
-
         x = BatchNormalization()(x)
         x = CapsuleLayer(num_capsule=self.num_classes, dim_capsule=16, routings=3, name='digitcaps')(x)
         out_caps = Length(name='out_caps')(x)        
         output_tensor = out_caps
-        """
                 
-        
         x = Dense(self.num_classes, activation = 'sigmoid')(x)
         output_tensor = x
         
         model = Model([input_tensor], [output_tensor])
 
-        
-        #mulmodel = multi_gpu_model(model, 2)
-        
-        """
-        model.compile(loss=lambda y_true,y_pred: y_true*K.relu(0.9-y_pred)**2 + 0.25*(1-y_true)*K.relu(y_pred-0.1)**2,
-              optimizer=Adam(0.001),
-              metrics=['accuracy'])
-        """
         model.compile(loss='binary_crossentropy',
-              optimizer=Adam(0.001),
+              optimizer=Adam(lr=0.001),
               metrics=['accuracy'])
         
         return model

@@ -1,88 +1,44 @@
-# -*- coding: utf-8 -*-
+#encoding = utf-8
 import sys
-sys.path.append("../../bert")
-from util.util import get_files_paths_from_directory
+sys.path.append("../bert")
+from gensim.models import Word2Vec
+import pickle
+from gensim.corpora.dictionary import Dictionary
 import pandas as pd
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
 from data_structure.question import Question, TagDCQuestion
-import argparse
-import logging
-import time
 import os
+import multiprocessing
 from tqdm import tqdm
-import multiprocessing as mp
-from util.util import get_files_paths_from_directory
-
-
-stopwords_list = stopwords.words()
-porter_stemmer = PorterStemmer()         #使用nltk.stem.porter的PorterStemmer方法提取单词的主干
-
-def is_number(s):
-    try:  # 如果能运行float(s)语句，返回True（字符串s是浮点数）
-        float(s)
-        return True
-    except ValueError:  # ValueError为Python的一种标准异常，表示"传入无效的参数"
-        pass  # 如果引发了ValueError这种异常，不做任何事情（pass：不做任何事情，一般用做占位语句）
-    try:
-        import unicodedata  # 处理ASCii码的包
-        unicodedata.numeric(s)  # 把一个表示数字的字符串转换为浮点数返回的函数
-        return True
-    except (TypeError, ValueError):
-        pass
-    return False
-
-def process_post(file):
-    out_dir = "../../data/tagdc/"
-    file_name = file[16:]
-    data = pd.read_pickle(file)
-    length = len(data)
-    q_list = []
-    for i in range(length):
-        qid = data[i].get_comp_by_name("qid")
-        title = data[i].get_comp_by_name("title")
-        text = data[i].get_comp_by_name("desc_text")
-        date = data[i].get_comp_by_name("creation_date")
-        tags = data[i].get_comp_by_name("tags")
-        desp = title + text
-        desp = desp.split()
-        filtered_words = [word for word in desp if word not in stopwords_list]
-        stemmer_words = [porter_stemmer.stem(word) for word in filtered_words]
-        res = []
-        for word in stemmer_words:
-            panduan = is_number(word)
-            if panduan == False:
-                res.append(word)
-        q_list.append(TagDCQuestion(qid, res, date, tags))
-        logging.info(i)
-    # write to pickle
-    import pickle
-    with open(out_dir+file_name, 'wb') as f:
-        pickle.dump(q_list, f)
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", "-i", default="../../data/tagdc")
-    parser.add_argument("--out_dir", "-o", default="../../data/tagdc")
-    args = parser.parse_args()
-
-    # If folder doesn't exist, then create it.
-    if not args.out_dir:
-        os.makedirs(args.out_dir)
-        print("created folder : ", args.out_dir)
-
-    else:
-        print(args.out_dir, "folder already exists.")
-    
-    files = get_files_paths_from_directory(args.input_dir)
-    logging.getLogger().setLevel(logging.INFO)
-    logging.info("Start to process files...")
-    process_post(files[0])
-        
-if __name__ == '__main__':
-    main()
-
-     
-       
+class MySentences(object):
+    def __init__(self, dirname):
+        self.dirname = dirname
  
+    def __iter__(self):
+        for root, dirs, files in os.walk(self.dirname):
+            for file_name in files:
+                path = os.path.join(root, file_name)
+                for data in pd.read_pickle(path):
+                    yield data.get_desp()
+                
+ 
+def saveWordIndex(model):
+    gensim_dict = Dictionary()
+    gensim_dict.doc2bow(list(model.wv.index_to_key), allow_update=True)
+    w2indx = {v: k + 1 for k, v in gensim_dict.items()}  # 词语的索引，从1开始编号
+    w2vec = {word: model.wv[word] for word in w2indx.keys()}  # 词语的词向量
+    pickle.dump(w2indx,open("../data/w2vec/w2indx.pkl", 'wb'))  # 索引字典
+    print("w2indx")
+    pickle.dump(w2vec,open("../data/w2vec/w2vec.pkl", 'wb'))  # 词向量字典
+    print("w2vec")
+    return w2indx, w2vec
 
+def trainWord2Vec():#训练word2vec模型并存储
+    target_dir = "../data/tagdc"
+    sentences = MySentences(target_dir) # a memory-friendly iterator
+    number = multiprocessing.cpu_count()
+
+    model=Word2Vec(sentences=sentences,vector_size=256,sg=1,min_count=1,window=5, workers=number)
+    model.save('../data/w2vec/word2vec.model')
+    print("word2vec")
+    # model=Word2Vec.load('./word2vec.model')
+    saveWordIndex(model=model)

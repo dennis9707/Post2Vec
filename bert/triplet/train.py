@@ -113,6 +113,8 @@ def get_train_args():
                         help="The direcoty of the input training data files.")
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
+    parser.add_argument("--train_numbers", default=50000, type=int,
+                        help="The total number of training samples")
     parser.add_argument(
         "--model_path", default="", type=str,
         help="path of checkpoint and trained model, if none will do training from scratch")

@@ -7,6 +7,7 @@ from gensim.corpora.dictionary import Dictionary
 import pandas as pd
 from data_structure.question import Question, TagDCQuestion
 import os
+import multiprocessing
 class MySentences(object):
     def __init__(self, dirname):
         self.dirname = dirname
@@ -16,7 +17,8 @@ class MySentences(object):
             for file_name in files:
                 path = os.path.join(root, file_name)
                 for data in pd.read_pickle(path):
-                    yield data.get_desp()
+                    text = [ word.lower() for word in data.get_desp()]
+                    yield text
                 
  
 def saveWordIndex(model):
@@ -33,13 +35,11 @@ def saveWordIndex(model):
 def trainWord2Vec():#训练word2vec模型并存储
     target_dir = "../data/tagdc"
     sentences = MySentences(target_dir) # a memory-friendly iterator
-    model=Word2Vec(sentences=sentences,vector_size=256,sg=1,min_count=1,window=5)
+    model=Word2Vec(sentences=sentences,vector_size=256,sg=1,min_count=1,window=5,workers=multiprocessing.cpu_count())
     model.save('../data/w2vec/word2vec.model')
     print("word2vec")
     # model=Word2Vec.load('./word2vec.model')
     saveWordIndex(model=model)
-
-
 
 trainWord2Vec()
 
