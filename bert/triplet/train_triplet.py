@@ -47,7 +47,7 @@ def train(args, model):
     # total training examples 10279014
     args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
     args.valid_batch_size = args.per_gpu_evalute_batch_size * max(1, args.n_gpu)
-    train_numbers = 50000
+    train_numbers = args.train_numbers
     epoch_batch_num = train_numbers / args.train_batch_size
     t_total = epoch_batch_num // args.gradient_accumulation_steps * args.num_train_epochs
     optimizer = get_optimizer(args,model)
@@ -74,8 +74,6 @@ def train(args, model):
 
     # Distributed training (should be after apex fp16 initialization)
     if args.local_rank != -1:
-        # model = torch.nn.parallel.DistributedDataParallel(
-        #     model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
         model = DDP(model, delay_allreduce=True)
 
 
@@ -88,35 +86,18 @@ def train(args, model):
     torch.cuda.empty_cache()
     import gc
     gc.collect()
-    for file_cnt in range(len(files)):
-        # Load dataset and dataloader
-        train_dataset = load_tenor_data_to_dataset(args.mlb, files[file_cnt])
-        train_size = int(0.8 * len(train_dataset))
-        valid_size = len(train_dataset) - train_size
-        train_dataset, valid_dataset = torch.utils.data.random_split(
-            train_dataset, [train_size, valid_size])
-        
-        valid_size = int(0.5 * len(valid_dataset))
-        test_size = len(valid_dataset) - valid_size
-        
-        valid_dataset, test_dataset = torch.utils.data.random_split(
-            valid_dataset, [valid_size, test_size])      
-        if args.local_rank == -1:
-            train_data_loader = get_dataloader(
-                train_dataset, args.train_batch_size)
-            test_data_loader = get_dataloader(
-                test_dataset, args.train_batch_size)
-        else: 
-            train_data_loader = get_distribued_dataloader(
-                train_dataset, args.train_batch_size)
-            test_data_loader = get_distribued_dataloader(
-                test_dataset, args.train_batch_size)
-            # test_data_loader = get_distribued_dataloader(
-            #     test_dataset, args.train_batch_size)
-        for epoch in range(args.num_train_epochs):
-            logger.info(
-                '############# Epoch {}: Training Start   #############'.format(epoch)) 
-            
+    for epoch in range(args.num_train_epochs):
+        logger.info(
+            '############# Epoch {}: Training Start   #############'.format(epoch))
+        for file_cnt in range(len(files)):
+            # Load dataset and dataloader
+            train_dataset = load_tenor_data_to_dataset(args.mlb, files[file_cnt])     
+            if args.local_rank == -1:
+                train_data_loader = get_dataloader(
+                    train_dataset, args.train_batch_size)
+            else: 
+                train_data_loader = get_distribued_dataloader(
+                    train_dataset, args.train_batch_size)    
             tr_loss = 0
             model.train()
             model.zero_grad()
@@ -178,45 +159,9 @@ def train(args, model):
             ### Save Model
             if args.local_rank in [-1, 0]:
                 model_output = os.path.join(
-                    args.output_dir, "epoch-{}".format(epoch))
+                    args.output_dir, "epoch-{}-file-{}".format(epoch,file_cnt))
                 save_check_point(model, model_output, args,
                                 optimizer, scheduler)
-            with torch.no_grad():
-                model.eval()
-                fin_outputs = []
-                fin_targets = []
-                for batch_idx, data in enumerate(test_data_loader, 0):
-                    title_ids = data['titile_ids'].to(
-                        args.device, dtype=torch.long)
-                    title_mask = data['title_mask'].to(
-                        args.device, dtype=torch.long)
-                    text_ids = data['text_ids'].to(
-                        args.device, dtype=torch.long)
-                    text_mask = data['text_mask'].to(
-                        args.device, dtype=torch.long)
-                    code_ids = data['code_ids'].to(
-                        args.device, dtype=torch.long)
-                    code_mask = data['code_mask'].to(
-                        args.device, dtype=torch.long)
-                    targets = data['labels'].to(
-                        args.device, dtype=torch.float)
-
-                    outputs = model(title_ids=title_ids,
-                                    title_attention_mask=title_mask,
-                                    text_ids=text_ids,
-                                    text_attention_mask=text_mask,
-                                    code_ids=code_ids,
-                                    code_attention_mask=code_mask)
-
-                    fin_targets.extend(targets.cpu().detach().numpy().tolist())
-                    fin_outputs.extend(torch.sigmoid(
-                        outputs).cpu().detach().numpy().tolist())
-                    [pre, rc, f1, cnt] = evaluate_batch(
-                        fin_outputs, fin_targets, [5])
-                    logger.info("Final F1 Score = {}".format(f1))
-                    logger.info("Final Recall Score  = {}".format(rc))
-                    logger.info("Final Precision Score  = {}".format(pre))
-                    logger.info("Final Count  = {}".format(cnt))
     if args.local_rank in [-1, 0]:
         tb_writer.close()
 

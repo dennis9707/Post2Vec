@@ -27,12 +27,13 @@ def gen_feature(tokens, max_length):
             "attention_mask": feature["attention_mask"].flatten()}
         return res
 
-
 def process_file_to_tensor(file, title_max, text_max, code_max):
-    out_dir = "../data/tensor_data/"
+    out_dir = "../data/tagdc_train_tensor/"
     dataset = pd.read_pickle(file)
-    file_name = file[24:]
+    file_name = file[20:]
+    print(out_dir+file_name)
     q_list = list()
+    cnt = 0
     for question in dataset:
         qid = question.get_qid()
         title = question.get_title()
@@ -44,20 +45,24 @@ def process_file_to_tensor(file, title_max, text_max, code_max):
         date = question.get_creation_date()
         tags = question.get_tag()
         q_list.append(NewQuestion(qid, title_feature, text_feature, code_feature, date, tags))
+        cnt += 1
+        if cnt % 10000 == 0:
+            print("process {}".format(cnt))
     import pickle
     with open(out_dir+file_name, 'wb') as f:
         pickle.dump(q_list, f)
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", "-i", default="../data/processed_train")
-    parser.add_argument("--out_dir", "-o", default="../data/tensor_data")
+    parser.add_argument("--input_dir", "-i", default="../data/tagdc_train")
+    parser.add_argument("--out_dir", "-o", default="../data/tagdc_train_tensor")
     parser.add_argument("--title_max", default=100)
     parser.add_argument("--text_max", default=512)
     parser.add_argument("--code_max", default=512)
     args = parser.parse_args()
 
     # If folder doesn't exist, then create it.
+    import os
     if not args.out_dir:
         os.makedirs(args.out_dir)
         print("created folder : ", args.out_dir)
@@ -72,8 +77,6 @@ def main():
     files = get_files_paths_from_directory(args.input_dir)
     logging.getLogger().setLevel(logging.INFO)
     logging.info("Start to process files...")
-    files = get_files_paths_from_directory("../data/processed_train")
-
     pbar = tqdm(total=len(files))
     update = lambda *args: pbar.update()
     start_time = time.time()
