@@ -12,7 +12,7 @@ import torch
 from transformers import BertConfig
 from util.util import get_files_paths_from_directory
 from model.model import TBertT,TBertSI
-from util.data_util import get_tag_encoder, get_fixed_tag_encoder, load_data_to_dataset, get_dataloader
+from util.data_util import get_tag_encoder, get_fixed_tag_encoder, load_data_to_dataset, load_tenor_data_to_dataset
 from torch.utils.data import DataLoader
 import numpy as np
 logging.basicConfig(
@@ -56,14 +56,14 @@ def evaluate_ori(pred, label, topk,mlb=None):
     else:
         f1_k = 2 * pre_k * rec_k / (pre_k + rec_k)
     # return {'precision': pre_k, 'recall': rec_k, 'f1': f1_k}
-    # new_dict = dict()
-    # new_dict['top'] = topk
-    # new_dict['precision'] = pre_k
-    # new_dict['recall'] = rec_k
-    # new_dict['f1'] = f1_k
-    # new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
-    # new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
-    # to_csv.append(new_dict)
+    new_dict = dict()
+    new_dict['top'] = topk
+    new_dict['precision'] = pre_k
+    new_dict['recall'] = rec_k
+    new_dict['f1'] = f1_k
+    new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
+    new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
+    to_csv.append(new_dict)
     # logger.info("Loging dict ---> {0}".format(new_dict))
     return pre_k, rec_k, f1_k
 
@@ -134,7 +134,7 @@ def test(args, model, test_set,mlb):
             fin_outputs.extend(torch.sigmoid(
                 outputs).cpu().detach().numpy().tolist())
             [pre, rc, f1, cnt] = evaluate_batch(
-                fin_outputs, fin_targets, [1, 2, 3, 4, 5],mlb)
+                fin_outputs, fin_targets, [5],mlb)
             fin_pre.append(pre)
             fin_rc.append(rc)
             fin_f1.append(f1)
@@ -157,11 +157,11 @@ def get_eval_args():
     parser.add_argument(
         "--data_dir", default="../../data/test", type=str,
         help="The input test data dir.")
-    parser.add_argument("--model_path", default="../../data/results/triplet_12-08 16-04-00_/final_model-499/t_bert.pt", help="The model to evaluate")
-    # parser.add_argument("--model_path", default="../../data/results/triplet_12-07 15-29-36_/final_model-199/t_bert.pt", help="The model to evaluate")
+    parser.add_argument("--model_path", default="../../data/tagdc_small_results/triplet_12-23 05-15-29_/epoch-420/t_bert.pt", help="The model to evaluate")
     parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
+    parser.add_argument("--load_tensor", action="store_true",help="The type of loaded test data")
     parser.add_argument("--verbus", action="store_true", help="show more logs")
     parser.add_argument("--mlb_latest", action="store_true", help="use the latest mlb")
     parser.add_argument("--test_batch_size", default=500, type=int,help="batch size used for testing")
@@ -171,7 +171,7 @@ def get_eval_args():
     args = parser.parse_args()
     return args
 def main():
-    os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
+    # os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
@@ -214,10 +214,13 @@ def main():
 
     logger.info("***** Running testing *****")
     logger.info("device %s",args.device)
-    
+    logger.info("number of files: {}".format(len(files)))
     for file_cnt in range(len(files)):
         logger.info("load file {}".format(file_cnt))
-        test_set = load_data_to_dataset(args.mlb, files[file_cnt])
+        if args.load_tensor:
+            test_set = load_tenor_data_to_dataset(args.mlb, files[file_cnt])
+        else: 
+            test_set = load_data_to_dataset(args.mlb, files[file_cnt])
         [pre, rc, f1, cnt] = test(args, model, test_set, mlb)
         fin_pre.append(pre)
         fin_rc.append(rc)
@@ -232,11 +235,11 @@ def main():
     logger.info("Final Precision Score  = {}".format(avg_pre))
     logger.info("Final Count  = {}".format(fin_cnt))
     logger.info("Test finished")
-    # keys = to_csv[0].keys()
+    keys = to_csv[0].keys()
 
-    # with open('./logs/result.csv', 'w', newline='') as output_file:
-    #     dict_writer = csv.DictWriter(output_file, keys)
-    #     dict_writer.writeheader()
-    #     dict_writer.writerows(to_csv)
+    with open('./logs/result.csv', 'w', newline='') as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(to_csv)
 if __name__ == "__main__":
     main()

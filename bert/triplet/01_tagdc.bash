@@ -1,13 +1,13 @@
-CUDA_VISIBLE_DEVICES=6,7 python -m torch.distributed.launch \
+CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch \
     --nproc_per_node=2 train_triplet.py \
     --data_folder ../../data/tagdc_train_tensor \
     --output_dir ../../data/tagdc_results \
     --train_numbers 10073127 \
     --vocab_file ../../data/tagdc_csv/tagdc_commonTags.csv \
-    --per_gpu_train_batch_size 2 \
+    --per_gpu_train_batch_size 4 \
     --per_gpu_evalute_batch_size 4 \
     --logging_steps 100 \
-    --gradient_accumulation_steps 2 \
+    --gradient_accumulation_steps 4 \
     --num_train_epochs 4 \
     --fp16 \
     --fp16_opt_level O2 \
