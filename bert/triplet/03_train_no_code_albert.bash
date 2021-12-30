@@ -1,6 +1,6 @@
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch \
     --nproc_per_node=2 train_no_code.py \
-    --data_folder ../../data/tensor_data \
+    --data_folder ../../data/albert \
     --output_dir ../../data/results \
     --per_gpu_train_batch_size 16 \
     --logging_steps 100 \
