@@ -6,7 +6,7 @@ CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch \
     --logging_steps 100 \
     --gradient_accumulation_steps 2 \
     --num_train_epochs 3 \
-    --code_bert roberta-base \ 
+    --code_bert roberta-base \
     --no_code \
     --fp16 \
     --fp16_opt_level O2 \

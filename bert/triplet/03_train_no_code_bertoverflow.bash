@@ -6,7 +6,7 @@ CUDA_VISIBLE_DEVICES=6,7 python -m torch.distributed.launch \
     --logging_steps 100 \
     --gradient_accumulation_steps 2 \
     --num_train_epochs 3 \
-    --code_bert jeniya/BERTOverflow \ 
+    --code_bert jeniya/BERTOverflow \
     --no_code \
     --fp16 \
     --fp16_opt_level O2 \
