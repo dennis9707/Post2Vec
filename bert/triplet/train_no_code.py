@@ -10,11 +10,10 @@ import os
 import pandas as pd
 import torch
 from data_structure.question import Question, QuestionDataset,TensorQuestionDataset
-from util.util import get_files_paths_from_directory, save_check_point, load_check_point,seed_everything,write_tensor_board
-from util.eval_util import evaluate_batch
+from util.util import get_files_paths_from_directory, save_check_point, load_check_point, seed_everything, write_tensor_board
 from util.data_util import get_dataloader, get_distribued_dataloader, load_tenor_data_to_dataset,load_data_to_dataset
 from model.loss import loss_fn
-from train import get_optimizer, get_optimizer_scheduler,get_train_args, init_train_env, get_exe_name
+from train import get_optimizer, get_optimizer_scheduler, get_train_args, init_train_env, get_exe_name
 from apex.parallel import DistributedDataParallel as DDP
 from torch.optim import AdamW
 from transformers import BertConfig, get_linear_schedule_with_warmup
@@ -44,6 +43,7 @@ def train(args, model):
         exp_name = get_exe_name(args)
     else:
         exp_name = args.exp_name
+
     # total training examples 10279014
     args.train_batch_size = args.per_gpu_train_batch_size * max(1, args.n_gpu)
     train_numbers = args.train_numbers

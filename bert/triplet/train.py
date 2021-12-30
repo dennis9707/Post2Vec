@@ -159,9 +159,10 @@ def get_train_args():
                         help="Linear warmup over warmup_steps.")
     parser.add_argument("--bert_type", default='triplet',
                         choices=['triplet', 'siamese','single'])
+    parser.add_argument("--no_code", action="store_true", help="whether to consider code snippets")
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
-                                 'codistai/codeBERT-small-v2'])
+                                 'codistai/codeBERT-small-v2', ])
     parser.add_argument(
         "--fp16", action="store_true",
         help="Whether to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit", )
