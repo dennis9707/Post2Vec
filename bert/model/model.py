@@ -73,7 +73,7 @@ class ClassifyHeaderNoCode(nn.Module):
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.output_layer = nn.Linear(config.hidden_size, num_class)
 
-    def forward(self, title_hidden, text_hidden, code_hidden):
+    def forward(self, title_hidden, text_hidden):
         pool_title_hidden = self.title_pooler(title_hidden)
         pool_text_hidden = self.text_pooler(text_hidden)
         concated_hidden = torch.cat((pool_title_hidden, pool_text_hidden), 1)

@@ -83,7 +83,6 @@ def train(args, model):
     args.global_step = 0
         
     torch.cuda.empty_cache()
-    import gc
     gc.collect()
     for epoch in range(args.num_train_epochs):
         logger.info(
@@ -107,15 +106,11 @@ def train(args, model):
                     args.device, dtype=torch.long)
                 text_ids = data['text_ids'].to(args.device, dtype=torch.long)
                 text_mask = data['text_mask'].to(args.device, dtype=torch.long)
-                code_ids = data['code_ids'].to(args.device, dtype=torch.long)
-                code_mask = data['code_mask'].to(args.device, dtype=torch.long)
                 targets = data['labels'].to(args.device, dtype=torch.float)
                 outputs = model(title_ids=title_ids,
                                 title_attention_mask=title_mask,
                                 text_ids=text_ids,
-                                text_attention_mask=text_mask,
-                                code_ids=code_ids,
-                                code_attention_mask=code_mask)
+                                text_attention_mask=text_mask)
 
                 loss = loss_fn(outputs, targets)
                 if args.gradient_accumulation_steps > 1:
@@ -156,11 +151,17 @@ def train(args, model):
                 '############# FILE {}: Training End     #############'.format(file_cnt))
             
             ### Save Model
-            if args.local_rank in [-1, 0]:
+            if (file_cnt+1) % 10 == 0 and args.local_rank in [-1, 0]:
                 model_output = os.path.join(
                     args.output_dir, "epoch-{}-file-{}".format(epoch,file_cnt))
                 save_check_point(model, model_output, args,
                                 optimizer, scheduler)
+        ### Save Model
+        if args.local_rank in [-1, 0]:
+            model_output = os.path.join(
+                args.output_dir, "final-epoch-{}".format(epoch))
+            save_check_point(model, model_output, args,
+                            optimizer, scheduler)
     if args.local_rank in [-1, 0]:
         tb_writer.close()
 

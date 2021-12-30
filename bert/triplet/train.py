@@ -4,12 +4,20 @@ sys.path.append("/usr/src/bert")
 import torch
 from torch.optim import AdamW
 from transformers import BertConfig, get_linear_schedule_with_warmup
+from transformers import AlbertConfig, RobertaConfig
 from datetime import datetime
-from model.model import TBertT,TBertSI
+from model.model import TBertT,TBertSI, TBertTNoCode
 import logging
 import argparse
 from util.data_util import get_fixed_tag_encoder
 from util.util import seed_everything
+
+MODEL_CLASSES = {
+    'albert': (BertConfig, BertForMaskedLM, BertTokenizer),
+    'roberta': (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer),
+    'bert': (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer),
+}
+
 
 logger = logging.getLogger(__name__)
 
@@ -77,8 +85,10 @@ def init_train_env(args, tbert_type):
     if args.local_rank not in [-1, 0]:
         # Make sure only the first process in distributed training will download model & vocab
         torch.distributed.barrier()
-    if tbert_type == 'triplet':
+    if tbert_type == 'triplet' and args.no_code == False:
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
+    if tbert_type == 'triplet' and args.no_code:
+        model = TBertTNoCode(BertConfig(), args.code_bert, args.num_class)
     elif tbert_type == 'siamese':
         model = TBertSI(BertConfig(), args.code_bert, args.num_class)
     elif tbert_type == 'single':
@@ -162,7 +172,8 @@ def get_train_args():
     parser.add_argument("--no_code", action="store_true", help="whether to consider code snippets")
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
-                                 'codistai/codeBERT-small-v2', ])
+                                 'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
+                                 'bert-base-uncased'])
     parser.add_argument(
         "--fp16", action="store_true",
         help="Whether to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit", )

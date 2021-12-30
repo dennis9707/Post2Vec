@@ -14,9 +14,17 @@ from tqdm import tqdm
 import time
 import multiprocessing as mp
 from transformers import AutoTokenizer
-tokenizer = AutoTokenizer.from_pretrained(
-        "microsoft/codebert-base", local_files_only=True)
-def gen_feature(tokens, max_length):
+
+
+TOKENIZER_CLASSES = {
+    'bertoverflow': 'jeniya/BERTOverflow',
+    'codebert': 'microsoft/codebert-base',
+    'bert': 'bert-base-uncased',
+    'roberta': 'roberta-base',
+    'albert': 'albert-base-v2',
+}
+
+def gen_feature(tokens, max_length, tokenizer):
 
         feature = tokenizer(tokens, max_length=max_length,
                                  padding='max_length', return_attention_mask=True,
@@ -27,21 +35,21 @@ def gen_feature(tokens, max_length):
             "attention_mask": feature["attention_mask"].flatten()}
         return res
 
-def process_file_to_tensor(file, title_max, text_max, code_max):
-    out_dir = "../data/tagdc_train_tensor/"
+def process_file_to_tensor(file, title_max, text_max, code_max, args, tokenizer):
+    out_dir = args.out_dir
     dataset = pd.read_pickle(file)
-    file_name = file[19:]
-    print(out_dir+file_name)
+    file_name = file[14:]
+    logging.info(out_dir+file_name)
     q_list = list()
     cnt = 0
     for question in dataset:
         qid = question.get_qid()
         title = question.get_title()
-        title_feature = gen_feature(title, title_max)
+        title_feature = gen_feature(title, title_max, tokenizer)
         text = question.get_text()
-        text_feature = gen_feature(text, text_max)
+        text_feature = gen_feature(text, text_max, tokenizer)
         code = question.get_code()
-        code_feature = gen_feature(code, code_max)
+        code_feature = gen_feature(code, code_max, tokenizer)
         date = question.get_creation_date()
         tags = question.get_tag()
         q_list.append(NewQuestion(qid, title_feature, text_feature, code_feature, date, tags))
@@ -54,8 +62,11 @@ def process_file_to_tensor(file, title_max, text_max, code_max):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", "-i", default="../data/tagdc_test")
-    parser.add_argument("--out_dir", "-o", default="../data/tagdc_test_tensor")
+    parser.add_argument("--input_dir", "-i", default="../data/train")
+    parser.add_argument("--out_dir", "-o", default="../data/")
+    parser.add_argument("--model_type", default='microsoft/codebert-base',
+                        choices=['microsoft/codebert-base', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
+                                 'bert-base-uncased'])
     parser.add_argument("--title_max", default=100)
     parser.add_argument("--text_max", default=512)
     parser.add_argument("--code_max", default=512)
@@ -73,16 +84,17 @@ def main():
     title_max = args.title_max
     text_max = args.text_max
     code_max = args.code_max
-
+    print(args)
+    tokenizer = AutoTokenizer.from_pretrained(args.model_type)
     files = get_files_paths_from_directory(args.input_dir)
     logging.getLogger().setLevel(logging.INFO)
     logging.info("Start to process files...")
     pbar = tqdm(total=len(files))
     update = lambda *args: pbar.update()
-    start_time = time.time()
     pool = mp.Pool(mp.cpu_count())
     for file in files:
-        pool.apply_async(process_file_to_tensor, args=(file, title_max, text_max, code_max), callback=update)
+        res = pool.apply_async(process_file_to_tensor, args=(file, title_max, text_max, code_max, args, tokenizer), callback=update)
+        res.get()
     pool.close()
     pool.join()
 
