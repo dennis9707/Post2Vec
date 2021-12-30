@@ -12,13 +12,6 @@ import argparse
 from util.data_util import get_fixed_tag_encoder
 from util.util import seed_everything
 
-MODEL_CLASSES = {
-    'albert': (BertConfig, BertForMaskedLM, BertTokenizer),
-    'roberta': (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer),
-    'bert': (RobertaConfig, RobertaForSequenceClassification, RobertaTokenizer),
-}
-
-
 logger = logging.getLogger(__name__)
 
 def get_exe_name(args):

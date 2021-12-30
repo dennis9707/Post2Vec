@@ -38,8 +38,8 @@ def gen_feature(tokens, max_length, tokenizer):
 def process_file_to_tensor(file, title_max, text_max, code_max, args, tokenizer):
     out_dir = args.out_dir
     dataset = pd.read_pickle(file)
-    file_name = file[14:]
-    logging.info(out_dir+file_name)
+    file_name = file[24:]
+    # logging.info(out_dir+file_name)
     q_list = list()
     cnt = 0
     for question in dataset:
@@ -62,7 +62,7 @@ def process_file_to_tensor(file, title_max, text_max, code_max, args, tokenizer)
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", "-i", default="../data/train")
+    parser.add_argument("--input_dir", "-i", default="../data/processed_train")
     parser.add_argument("--out_dir", "-o", default="../data/")
     parser.add_argument("--model_type", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
@@ -93,8 +93,7 @@ def main():
     update = lambda *args: pbar.update()
     pool = mp.Pool(mp.cpu_count())
     for file in files:
-        res = pool.apply_async(process_file_to_tensor, args=(file, title_max, text_max, code_max, args, tokenizer), callback=update)
-        res.get()
+        pool.apply_async(process_file_to_tensor, args=(file, title_max, text_max, code_max, args, tokenizer), callback=update)
     pool.close()
     pool.join()
 
