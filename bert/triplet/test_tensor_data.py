@@ -157,7 +157,8 @@ def get_eval_args():
     parser.add_argument(
         "--data_dir", default="../../data/test", type=str,
         help="The input test data dir.")
-    parser.add_argument("--model_path", default="../../data/tagdc_small_results/triplet_12-23 05-15-29_/epoch-420/t_bert.pt", help="The model to evaluate")
+    # parser.add_argument("--model_path", default="../../data/tagdc_small_results/triplet_12-23 05-15-29_/epoch-499/t_bert.pt", help="The model to evaluate")
+    parser.add_argument("--model_path", default="../../data/tagdc_results/triplet_12-27 10-36-02_/epoch-0-file-87/t_bert.pt", help="The model to evaluate")
     parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
@@ -171,7 +172,6 @@ def get_eval_args():
     args = parser.parse_args()
     return args
 def main():
-    # os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",

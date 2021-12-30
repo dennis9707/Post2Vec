@@ -30,7 +30,7 @@ def gen_feature(tokens, max_length):
 def process_file_to_tensor(file, title_max, text_max, code_max):
     out_dir = "../data/tagdc_train_tensor/"
     dataset = pd.read_pickle(file)
-    file_name = file[20:]
+    file_name = file[19:]
     print(out_dir+file_name)
     q_list = list()
     cnt = 0
@@ -54,8 +54,8 @@ def process_file_to_tensor(file, title_max, text_max, code_max):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", "-i", default="../data/tagdc_train")
-    parser.add_argument("--out_dir", "-o", default="../data/tagdc_train_tensor")
+    parser.add_argument("--input_dir", "-i", default="../data/tagdc_test")
+    parser.add_argument("--out_dir", "-o", default="../data/tagdc_test_tensor")
     parser.add_argument("--title_max", default=100)
     parser.add_argument("--text_max", default=512)
     parser.add_argument("--code_max", default=512)
