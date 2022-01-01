@@ -195,7 +195,10 @@ def main():
     args.num_class = num_class
     
     if args.model_type == "triplet":
-        model = TBertT(BertConfig(), args.code_bert, num_class)
+        if args.no_code == False:
+            model = TBertT(BertConfig(), args.code_bert, num_class)
+        else: 
+            model = TBertTNoCode(BertConfig(), args.code_bert, num_class)
     elif args.model_type == "siamese":
         model = TBertSI(BertConfig(), args.code_bert, num_class)
     model = torch.nn.DataParallel(model)
