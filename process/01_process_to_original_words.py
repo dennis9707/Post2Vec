@@ -10,12 +10,12 @@ import logging
 import argparse
 from typing import Counter
 import multiprocessing as mp
-
+import os
 
 
 def process_file(file):
-    out_dir = "../data/processed_train/"
-    file_name = file[14:]
+    out_dir = "../data/processed_test/"
+    file_name = file[12:]
     q_list = list()
     data = pd.read_pickle(file)
     length = len(data)
@@ -35,7 +35,7 @@ def process_file(file):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", "-i", default="../data/train")
+    parser.add_argument("--input_dir", "-i", default="../data/test")
     parser.add_argument("--out_dir", "-o", default="../data/processed_train")
     args = parser.parse_args()
 

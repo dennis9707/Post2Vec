@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch \
+CUDA_VISIBLE_DEVICES=2,5 python -m torch.distributed.launch \
     --nproc_per_node=2 train_no_code.py \
     --data_folder ../../data/roberta \
     --output_dir ../../data/results \

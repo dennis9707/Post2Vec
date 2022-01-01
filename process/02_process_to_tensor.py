@@ -38,7 +38,7 @@ def gen_feature(tokens, max_length, tokenizer):
 def process_file_to_tensor(file, title_max, text_max, code_max, args, tokenizer):
     out_dir = args.out_dir
     dataset = pd.read_pickle(file)
-    file_name = file[24:]
+    file_name = file[22:]
     # logging.info(out_dir+file_name)
     q_list = list()
     cnt = 0

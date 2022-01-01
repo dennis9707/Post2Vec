@@ -11,8 +11,8 @@ sys.path.append("../..")
 import torch
 from transformers import BertConfig
 from util.util import get_files_paths_from_directory
-from model.model import TBertT,TBertSI
-from util.data_util import get_tag_encoder, get_fixed_tag_encoder, load_data_to_dataset, get_dataloader
+from model.model import TBertT,TBertSI, TBertTNoCode
+from util.data_util import get_tag_encoder, get_fixed_tag_encoder, load_data_to_dataset, get_dataloader, load_tenor_data_to_dataset
 from torch.utils.data import DataLoader
 import numpy as np
 logging.basicConfig(
@@ -157,9 +157,10 @@ def get_eval_args():
     parser.add_argument(
         "--data_dir", default="../../data/test", type=str,
         help="The input test data dir.")
-    parser.add_argument("--model_path", default="../../data/results/triplet_12-08 16-04-00_/final_model-499/t_bert.pt", help="The model to evaluate")
+    parser.add_argument("--model_path", default="./epoch1_t_bert.pt", help="The model to evaluate")
     # parser.add_argument("--model_path", default="../../data/results/triplet_12-07 15-29-36_/final_model-199/t_bert.pt", help="The model to evaluate")
     parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
+    parser.add_argument("--no_code", action="store_true", help="Whether to include code in the model")
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
     parser.add_argument("--verbus", action="store_true", help="show more logs")
@@ -171,7 +172,6 @@ def get_eval_args():
     args = parser.parse_args()
     return args
 def main():
-    os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
@@ -204,8 +204,7 @@ def main():
         model_path = os.path.join(args.model_path, )
         model.load_state_dict(torch.load(model_path)) 
     logger.info("model loaded")
-    # torch.save(model.module.state_dict(), "./tbert.pt")
-    # logger.info("model saved")
+
     fin_pre = []
     fin_rc = []
     fin_f1 = []
@@ -217,7 +216,7 @@ def main():
     
     for file_cnt in range(len(files)):
         logger.info("load file {}".format(file_cnt))
-        test_set = load_data_to_dataset(args.mlb, files[file_cnt])
+        test_set = load_tenor_data_to_dataset(args.mlb, files[file_cnt])
         [pre, rc, f1, cnt] = test(args, model, test_set, mlb)
         fin_pre.append(pre)
         fin_rc.append(rc)
