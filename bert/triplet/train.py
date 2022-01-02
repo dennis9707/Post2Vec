@@ -16,10 +16,9 @@ logger = logging.getLogger(__name__)
 
 def get_exe_name(args):
     exe_name = "{}_{}_{}"
-    time = datetime.now().strftime("%m-%d %H-%M-%S")
-
-    base_model = ""
-    return exe_name.format(args.tbert_type, time, base_model)
+    time = datetime.now().strftime("%m-%d-%H-%M-%S")
+    component = args.remove_component
+    return exe_name.format(args.code_bert, time, component)
 def get_optimizer(args,model):
     no_decay = ["bias", "LayerNorm.weight"]
     optimizer_grouped_parameters = [
@@ -78,10 +77,16 @@ def init_train_env(args, tbert_type):
     if args.local_rank not in [-1, 0]:
         # Make sure only the first process in distributed training will download model & vocab
         torch.distributed.barrier()
-    if tbert_type == 'triplet' and args.no_code == False:
-        model = TBertT(BertConfig(), args.code_bert, args.num_class)
-    if tbert_type == 'triplet' and args.no_code:
+        
+    logger.info("tbert_type architectue {}".format(tbert_type))
+    if args.remove_component == "title":
         model = TBertTNoCode(BertConfig(), args.code_bert, args.num_class)
+    elif args.remove_component == "text":
+        model = TBertTNoCode(BertConfig(), args.code_bert, args.num_class)
+    elif args.remove_component == "code":
+        model = TBertTNoCode(BertConfig(), args.code_bert, args.num_class)
+    elif tbert_type == 'triplet':
+        model = TBertT(BertConfig(), args.code_bert, args.num_class)
     elif tbert_type == 'siamese':
         model = TBertSI(BertConfig(), args.code_bert, args.num_class)
     elif tbert_type == 'single':
@@ -116,7 +121,7 @@ def get_train_args():
                         help="The direcoty of the input training data files.")
     parser.add_argument("--vocab_file", default="../../data/tags/commonTags_post2vec.csv", type=str,
                         help="The tag vocab data file.")
-    parser.add_argument("--train_numbers", default=50000, type=int,
+    parser.add_argument("--train_numbers", default=10279014, type=int,
                         help="The total number of training samples")
     parser.add_argument(
         "--model_path", default="", type=str,
@@ -162,7 +167,7 @@ def get_train_args():
                         help="Linear warmup over warmup_steps.")
     parser.add_argument("--bert_type", default='triplet',
                         choices=['triplet', 'siamese','single'])
-    parser.add_argument("--no_code", action="store_true", help="whether to consider code snippets")
+    parser.add_argument("--remove_component", default="", choices=['title', 'text','code'])
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
                                  'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',

@@ -1,12 +1,12 @@
-CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch \
+CUDA_VISIBLE_DEVICES=6,7 python -m torch.distributed.launch \
     --nproc_per_node=2 train_triplet.py \
-    --data_folder ../../data/bertoverflow \
+    --data_folder ../../data/roberta \
     --output_dir ../../data/results \
     --per_gpu_train_batch_size 4 \
     --logging_steps 100 \
     --gradient_accumulation_steps 8 \
     --num_train_epochs 3 \
-    --code_bert jeniya/BERTOverflow \
+    --code_bert roberta-base \
     --fp16 \
     --fp16_opt_level O2 \
-    --learning_rate 7e-5  2>&1| tee ./train_logs/train_triplet_bertoverflow-fpO2.log
+    --learning_rate 7e-5  2>&1| tee ./train_logs/train_triplet_roberta-fpO2.log

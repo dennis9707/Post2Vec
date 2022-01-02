@@ -38,6 +38,8 @@ def log_train_info(args):
 
 
 def train(args, model):
+    logger.info("GET ARGS")
+    logger.info(args)
     files = get_files_paths_from_directory(args.data_folder)
     
     if not args.exp_name:
