@@ -116,19 +116,13 @@ def test(args, model, test_set,mlb):
                 args.device, dtype=torch.long)
             text_mask = data['text_mask'].to(
                 args.device, dtype=torch.long)
-            code_ids = data['code_ids'].to(
-                args.device, dtype=torch.long)
-            code_mask = data['code_mask'].to(
-                args.device, dtype=torch.long)
             targets = data['labels'].to(
                 args.device, dtype=torch.float)
 
             outputs = model(title_ids=title_ids,
                             title_attention_mask=title_mask,
                             text_ids=text_ids,
-                            text_attention_mask=text_mask,
-                            code_ids=code_ids,
-                            code_attention_mask=code_mask)
+                            text_attention_mask=text_mask)
 
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(
@@ -168,7 +162,11 @@ def get_eval_args():
     parser.add_argument("--mlb_latest", action="store_true", help="use the latest mlb")
     parser.add_argument("--test_batch_size", default=500, type=int,help="batch size used for testing")
     parser.add_argument("--output_dir", default="./logs", help="directory to store the results")
-    parser.add_argument("--code_bert", default="microsoft/codebert-base", help="the base bert")
+    parser.add_argument("--code_bert", default='microsoft/codebert-base',
+                        choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
+                                 'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
+                                 'bert-base-uncased'])
+    parser.add_argument("--log_result", action="store_true", help="wheather to store the test result in a csv file")
     parser.add_argument("--model_type", default="triplet", choices=["triplet","siamese"])
     args = parser.parse_args()
     return args
@@ -208,7 +206,11 @@ def main():
     if args.code_bert == "microsoft/codebert-base":
         args.model_path = "../../data/results/triplet_12-30 06-12-15_/epoch-0-file-509/t_bert.pt"
         
-    
+    elif args.code_bert == 'jeniya/BERTOverflow':
+        args.model_path = "../../data/results/triplet_12-30 06-35-41_/epoch-0-file-509/t_bert.pt"
+    elif args.code_bert == "roberta-base":
+        args.model_path = "../../data/results/triplet_12-31 08-55-27_/epoch-0-file-439/t_bert.pt"
+
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
         model.load_state_dict(torch.load(model_path)) 
