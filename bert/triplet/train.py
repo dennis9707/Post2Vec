@@ -80,12 +80,16 @@ def init_train_env(args, tbert_type):
         
     logger.info("tbert_type architectue {}".format(tbert_type))
     if args.remove_component == "title":
+        logger.info("No title model")
         model = TBertTNoTitle(BertConfig(), args.code_bert, args.num_class)
     elif args.remove_component == "text":
+        logger.info("No text model")
         model = TBertTNoText(BertConfig(), args.code_bert, args.num_class)
     elif args.remove_component == "code":
+        logger.info("No code model")
         model = TBertTNoCode(BertConfig(), args.code_bert, args.num_class)
     elif tbert_type == 'triplet':
+        logger.info("model with all components")
         model = TBertT(BertConfig(), args.code_bert, args.num_class)
     elif tbert_type == 'siamese':
         model = TBertSI(BertConfig(), args.code_bert, args.num_class)
