@@ -6,7 +6,7 @@ from torch.optim import AdamW
 from transformers import BertConfig, get_linear_schedule_with_warmup
 from transformers import AlbertConfig, RobertaConfig
 from datetime import datetime
-from model.model import TBertT,TBertSI, TBertTNoCode
+from model.model import TBertT,TBertSI, TBertTNoCode,TBertTNoTitle, TBertTNoText
 import logging
 import argparse
 from util.data_util import get_fixed_tag_encoder
@@ -80,9 +80,9 @@ def init_train_env(args, tbert_type):
         
     logger.info("tbert_type architectue {}".format(tbert_type))
     if args.remove_component == "title":
-        model = TBertTNoCode(BertConfig(), args.code_bert, args.num_class)
+        model = TBertTNoTitle(BertConfig(), args.code_bert, args.num_class)
     elif args.remove_component == "text":
-        model = TBertTNoCode(BertConfig(), args.code_bert, args.num_class)
+        model = TBertTNoText(BertConfig(), args.code_bert, args.num_class)
     elif args.remove_component == "code":
         model = TBertTNoCode(BertConfig(), args.code_bert, args.num_class)
     elif tbert_type == 'triplet':

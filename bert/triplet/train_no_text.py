@@ -104,13 +104,13 @@ def train(args, model):
                     args.device, dtype=torch.long)
                 title_mask = data['title_mask'].to(
                     args.device, dtype=torch.long)
-                text_ids = data['text_ids'].to(args.device, dtype=torch.long)
-                text_mask = data['text_mask'].to(args.device, dtype=torch.long)
+                code_ids = data['code_ids'].to(args.device, dtype=torch.long)
+                code_mask = data['code_mask'].to(args.device, dtype=torch.long)
                 targets = data['labels'].to(args.device, dtype=torch.float)
                 outputs = model(title_ids=title_ids,
                                 title_attention_mask=title_mask,
-                                text_ids=text_ids,
-                                text_attention_mask=text_mask)
+                                code_ids=code_ids,
+                                code_attention_mask=code_mask)
 
                 loss = loss_fn(outputs, targets)
                 if args.gradient_accumulation_steps > 1:
