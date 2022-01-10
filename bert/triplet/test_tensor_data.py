@@ -167,8 +167,10 @@ def get_eval_args():
     parser.add_argument("--mlb_latest", action="store_true", help="use the latest mlb")
     parser.add_argument("--test_batch_size", default=500, type=int,help="batch size used for testing")
     parser.add_argument("--output_dir", default="./logs", help="directory to store the results")
-    parser.add_argument("--code_bert", default="microsoft/codebert-base", help="the base bert")
-    parser.add_argument("--model_type", default="triplet", choices=["triplet","siamese"])
+    parser.add_argument("--code_bert", default='microsoft/codebert-base',
+                        choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
+                                 'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
+                                 'bert-base-uncased'])    parser.add_argument("--model_type", default="triplet", choices=["triplet","siamese"])
     args = parser.parse_args()
     return args
 def main():

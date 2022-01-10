@@ -152,7 +152,7 @@ def get_eval_args():
         "--data_dir", default="../../data/test", type=str,
         help="The input test data dir.")
     
-    parser.add_argument("--model_path", default="../../data/results/triplet_12-30 06-12-15_/epoch-0-file-509/t_bert.pt", help="The model to evaluate")
+    parser.add_argument("--model_path", default="../../data/results/microsoft/codebert-base_01-02-03-14-13_code/epoch-0-file-499/t_bert.pt", help="The model to evaluate")
     # parser.add_argument("--model_path", default="../../data/results/triplet_12-07 15-29-36_/final_model-199/t_bert.pt", help="The model to evaluate")
     parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
     parser.add_argument("--no_code", action="store_true", help="Whether to include code in the model")
@@ -194,22 +194,14 @@ def main():
     args.num_class = num_class
     
     if args.model_type == "triplet":
-        if args.no_code == False:
-            model = TBertT(BertConfig(), args.code_bert, num_class)
-        else: 
-            model = TBertTNoCode(BertConfig(), args.code_bert, num_class)
+        model = TBertTNoCode(BertConfig(), args.code_bert, num_class)
     elif args.model_type == "siamese":
         model = TBertSI(BertConfig(), args.code_bert, num_class)
     model = torch.nn.DataParallel(model)
     model.to(device)
     
     if args.code_bert == "microsoft/codebert-base":
-        args.model_path = "../../data/results/triplet_12-30 06-12-15_/epoch-0-file-509/t_bert.pt"
-        
-    elif args.code_bert == 'jeniya/BERTOverflow':
-        args.model_path = "../../data/results/triplet_12-30 06-35-41_/epoch-0-file-509/t_bert.pt"
-    elif args.code_bert == "roberta-base":
-        args.model_path = "../../data/results/triplet_12-31 08-55-27_/epoch-0-file-439/t_bert.pt"
+        args.model_path = "../../data/results/microsoft/codebert-base_01-02-03-14-13_code/epoch-0-file-499/t_bert.pt"
 
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
