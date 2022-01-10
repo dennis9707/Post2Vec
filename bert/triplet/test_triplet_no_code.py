@@ -144,7 +144,7 @@ def test(args, model, test_set,mlb):
         logger.info("Final File Recall Score  = {}".format(avg_rc))
         logger.info("Final File Precision Score  = {}".format(avg_pre))
         logger.info("Final File Count  = {}".format(fin_cnt))
-    return [pre, rc, f1, cnt]
+    return [avg_pre, avg_rc, avg_f1, fin_cnt]
 
 def get_eval_args():
     parser = argparse.ArgumentParser()
