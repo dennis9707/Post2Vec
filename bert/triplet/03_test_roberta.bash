@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=2,3 python -u test_triplet.py \
+CUDA_VISIBLE_DEVICES=4,5 python -u test_triplet.py \
     --data_dir ../../data/test_roberta \
     --test_batch_size 500 \
     --code_bert roberta-base \

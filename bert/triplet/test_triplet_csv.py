@@ -12,7 +12,7 @@ import torch
 from transformers import BertConfig
 from util.util import get_files_paths_from_directory
 from model.model import TBertT,TBertSI, TBertTNoCode
-from util.data_util import get_tag_encoder, get_fixed_tag_encoder, load_data_to_dataset, get_dataloader, load_tenor_data_to_dataset
+from util.data_util import get_tag_encoder, get_fixed_tag_encoder, load_data_to_dataset, get_dataloader, load_tenor_data_to_dataset, load_data_to_dataset_for_test
 from torch.utils.data import DataLoader
 import numpy as np
 logging.basicConfig(
@@ -55,17 +55,16 @@ def evaluate_ori(pred, label, topk,mlb=None):
         f1_k = 0.0
     else:
         f1_k = 2 * pre_k * rec_k / (pre_k + rec_k)
-    # return {'precision': pre_k, 'recall': rec_k, 'f1': f1_k}
-    # new_dict = dict()
-    # new_dict['top'] = topk
-    # new_dict['precision'] = pre_k
-    # new_dict['recall'] = rec_k
-    # new_dict['f1'] = f1_k
-    # new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
-    # new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
-    # to_csv.append(new_dict)
-    # logger.info("Loging dict ---> {0}".format(new_dict))
-    return pre_k, rec_k, f1_k
+    new_dict = dict()
+    new_dict['top'] = topk
+    new_dict['precision'] = pre_k
+    new_dict['recall'] = rec_k
+    new_dict['f1'] = f1_k
+    new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
+    new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
+    to_csv.append(new_dict)
+    logger.info("Loging dict ---> {0}".format(new_dict))
+    return {'precision': pre_k, 'recall': rec_k, 'f1': f1_k}
 
 
 def evaluate_batch(pred, label, topk_list=[1, 2, 3, 4, 5], mlb=None):
@@ -133,8 +132,10 @@ def test(args, model, test_set,mlb):
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(
                 outputs).cpu().detach().numpy().tolist())
+            logger.info(data['title'])
+            logger.info(type(data['title']))
             [pre, rc, f1, cnt] = evaluate_batch(
-                fin_outputs, fin_targets, [1, 2, 3, 4, 5],mlb)
+                fin_outputs, fin_targets, [1, 2, 3, 4, 5], mlb)
             fin_pre.append(pre)
             fin_rc.append(rc)
             fin_f1.append(f1)
@@ -231,7 +232,7 @@ def main():
     
     for file_cnt in range(len(files)):
         logger.info("load file {}".format(file_cnt))
-        test_set = load_tenor_data_to_dataset(args.mlb, files[file_cnt])
+        test_set = load_data_to_dataset_for_test(args.mlb, files[file_cnt], args.code_bert)
         [pre, rc, f1, cnt] = test(args, model, test_set, mlb)
         fin_pre.append(pre)
         fin_rc.append(rc)
@@ -246,11 +247,12 @@ def main():
     logger.info("Final Precision Score  = {}".format(avg_pre))
     logger.info("Final Count  = {}".format(fin_cnt))
     logger.info("Test finished")
-    # keys = to_csv[0].keys()
+    keys = to_csv[0].keys()
 
-    # with open('./logs/result.csv', 'w', newline='') as output_file:
-    #     dict_writer = csv.DictWriter(output_file, keys)
-    #     dict_writer.writeheader()
-    #     dict_writer.writerows(to_csv)
+    rgs.codebert
+    with open('./logs/' + args.codebert + '-result.csv', 'w', newline='') as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(to_csv)
 if __name__ == "__main__":
     main()
