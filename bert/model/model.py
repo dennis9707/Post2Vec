@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from transformers import AutoTokenizer, AutoModel, PreTrainedModel
+from transformers import AutoTokenizer, AutoModel, PreTrainedModel, T5EncoderModel
 from model.loss import loss_fn
 
 
@@ -151,9 +151,21 @@ class ClassifyHeaderNoCode(nn.Module):
 class TBertT(PreTrainedModel):
     def __init__(self, config, code_bert, num_class):
         super().__init__(config)
-        self.tbert = AutoModel.from_pretrained(code_bert)
-        self.nbert = AutoModel.from_pretrained(code_bert)
-        self.cbert = AutoModel.from_pretrained(code_bert)
+        if "t5" in code_bert:
+            self.tbert = T5EncoderModel.from_pretrained(code_bert)
+            self.nbert = T5EncoderModel.from_pretrained(code_bert)
+            self.cbert = T5EncoderModel.from_pretrained(code_bert)
+            print("T5EncoderModel")
+        
+        elif "cotext" in code_bert:
+            self.tbert = T5EncoderModel.from_pretrained(code_bert)
+            self.nbert = T5EncoderModel.from_pretrained(code_bert)
+            self.cbert = T5EncoderModel.from_pretrained(code_bert)
+            print("T5EncoderModel")
+        else:
+            self.tbert = AutoModel.from_pretrained(code_bert)
+            self.nbert = AutoModel.from_pretrained(code_bert)
+            self.cbert = AutoModel.from_pretrained(code_bert)
 
         self.cls = ClassifyHeader(config, num_class=num_class)
 
@@ -267,4 +279,43 @@ class TBertSI(PreTrainedModel):
 
         logits = self.cls(title_hidden=t_hidden,
                           text_hidden=n_hidden, code_hidden=c_hidden)
+        return logits
+
+
+
+
+class ClassifyHeaderSingle(nn.Module):
+
+    def __init__(self, config, num_class):
+        super().__init__()
+        self.hidden_size = config.hidden_size
+        self.post_pooler = AvgPooler(config)
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        self.output_layer = nn.Linear(config.hidden_size, num_class)
+
+    def forward(self, hidden_input):
+        pool_hidden_input = self.post_pooler(hidden_input)
+        x = self.dropout(pool_hidden_input)
+        x = self.dense(x)
+        x = torch.tanh(x)
+        x = self.dropout(x)
+        x = self.output_layer(x)
+        return x
+
+
+class TBertSingle(PreTrainedModel):
+    def __init__(self, config, code_bert, num_class):
+        super().__init__(config)
+        self.bert = AutoModel.from_pretrained(code_bert)
+        self.cls = ClassifyHeaderSingle(config, num_class=num_class)
+
+    def forward(
+            self,
+            post_ids=None,
+            post_attention_mask=None,
+    ):
+        hidden_input = self.bert(post_ids, attention_mask=post_attention_mask)[0]
+
+        logits = self.cls(hidden_input=hidden_input)
         return logits

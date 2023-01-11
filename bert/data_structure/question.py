@@ -203,32 +203,3 @@ class TensorQuestionDataset(Dataset):
             'code_mask': code_feat['attention_mask'],
             'labels': torch.from_numpy(ret[0]).type(torch.FloatTensor)
         }
-        
-class TagDCQuestion:
-    # use __slots to decrease the memory usage
-    __slots__ = ['qid', 'desp', 'creation_date', 'tags', ]
-
-    def __init__(self, qid=None, desp=None,
-                 creation_date=None, tags=None):
-        self.qid = qid
-        self.desp = desp
-        self.creation_date = creation_date
-        self.tags = tags
-
-    def get_qid(self):
-        return self.qid
-
-    def get_creation_date(self):
-        return self.creation_date
-
-    def get_desp(self):
-        return self.desp
-
-    def get_tag(self):
-        return self.tags
-
-    def get_comp_by_name(self, comp_name):
-        if comp_name == "qid":
-            return self.qid
-        if comp_name == "creation_date":
-            return self.creation_date

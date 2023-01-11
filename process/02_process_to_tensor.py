@@ -13,16 +13,8 @@ from util.util import get_files_paths_from_directory
 from tqdm import tqdm
 import time
 import multiprocessing as mp
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, PLBartTokenizer
 
-
-TOKENIZER_CLASSES = {
-    'bertoverflow': 'jeniya/BERTOverflow',
-    'codebert': 'microsoft/codebert-base',
-    'bert': 'bert-base-uncased',
-    'roberta': 'roberta-base',
-    'albert': 'albert-base-v2',
-}
 
 def gen_feature(tokens, max_length, tokenizer):
 
@@ -38,8 +30,9 @@ def gen_feature(tokens, max_length, tokenizer):
 def process_file_to_tensor(file, title_max, text_max, code_max, args, tokenizer):
     out_dir = args.out_dir
     dataset = pd.read_pickle(file)
-    file_name = file[22:]
-    # logging.info(out_dir+file_name)
+    file_name = file[24:]
+
+    print(out_dir+file_name, flush=True)
     q_list = list()
     cnt = 0
     for question in dataset:
@@ -64,9 +57,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_dir", "-i", default="../data/processed_train")
     parser.add_argument("--out_dir", "-o", default="../data/")
-    parser.add_argument("--model_type", default='microsoft/codebert-base',
-                        choices=['microsoft/codebert-base', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
-                                 'bert-base-uncased'])
+    parser.add_argument("--model_type", default='microsoft/codebert-base')
     parser.add_argument("--title_max", default=100)
     parser.add_argument("--text_max", default=512)
     parser.add_argument("--code_max", default=512)
@@ -89,13 +80,19 @@ def main():
     files = get_files_paths_from_directory(args.input_dir)
     logging.getLogger().setLevel(logging.INFO)
     logging.info("Start to process files...")
+    # process_file_to_tensor(files[0], title_max, text_max, code_max, args, tokenizer)
     pbar = tqdm(total=len(files))
     update = lambda *args: pbar.update()
-    pool = mp.Pool(mp.cpu_count())
+    pool = mp.Pool(80)
+    logging.info("here")
     for file in files:
+        logging.info("inside")
         pool.apply_async(process_file_to_tensor, args=(file, title_max, text_max, code_max, args, tokenizer), callback=update)
     pool.close()
     pool.join()
+    logging.info("here")
+    
+    
 
 if __name__ == "__main__":
     main()

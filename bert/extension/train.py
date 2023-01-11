@@ -3,10 +3,10 @@ sys.path.append("../")
 sys.path.append("/usr/src/bert")
 import torch
 from torch.optim import AdamW
-from transformers import BertConfig, get_linear_schedule_with_warmup, AutoConfig
+from transformers import BertConfig, get_linear_schedule_with_warmup
 from transformers import AlbertConfig, RobertaConfig
 from datetime import datetime
-from model.model import TBertT,TBertSI, TBertTNoCode,TBertTNoTitle, TBertTNoText
+from model.model import TBertT, TBertSingle
 import logging
 import argparse
 from util.data_util import get_fixed_tag_encoder
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def get_exe_name(args):
     exe_name = "{}_{}_{}"
     time = datetime.now().strftime("%m-%d-%H-%M-%S")
-    component = args.remove_component
+    component = args.include_component
     return exe_name.format(args.code_bert, time, component)
 def get_optimizer(args,model):
     no_decay = ["bias", "LayerNorm.weight"]
@@ -77,23 +77,17 @@ def init_train_env(args, tbert_type):
     if args.local_rank not in [-1, 0]:
         # Make sure only the first process in distributed training will download model & vocab
         torch.distributed.barrier()
+        
     logger.info("tbert_type architectue {}".format(tbert_type))
-    if args.remove_component == "title":
-        logger.info("No title model")
-        model = TBertTNoTitle(BertConfig(), args.code_bert, args.num_class)
-    elif args.remove_component == "text":
-        logger.info("No text model")
-        model = TBertTNoText(BertConfig(), args.code_bert, args.num_class)
-    elif args.remove_component == "code":
-        logger.info("No code model")
-        model = TBertTNoCode(BertConfig(), args.code_bert, args.num_class)
-    elif tbert_type == 'triplet':
-        logger.info("model with all components")
-        model = TBertT(BertConfig(), args.code_bert, args.num_class)
-    elif tbert_type == 'siamese':
-        model = TBertSI(BertConfig(), args.code_bert, args.num_class)
-    elif tbert_type == 'single':
-        model = TBertSI(BertConfig(), args.code_bert, args.num_class)
+    if args.include_component == "title":
+        logger.info("Title model")
+        model = TBertSingle(BertConfig(), args.code_bert, args.num_class)
+    elif args.include_component == "text":
+        logger.info("Text model")
+        model = TBertSingle(BertConfig(), args.code_bert, args.num_class)
+    elif args.include_component == "code":
+        logger.info("Code model")
+        model = TBertSingle(BertConfig(), args.code_bert, args.num_class)
     else:
         raise Exception("TBERT type not found")
     
@@ -145,7 +139,7 @@ def get_train_args():
     parser.add_argument("--local_rank", type=int, default=-1, help="local_rank for distributed training on gpus")
 
     parser.add_argument(
-        "--gradient_accumulation_steps", type=int, default=4,
+        "--gradient_accumulation_steps", type=int, default=1,
         help="Number of updates steps to accumulate before performing a backward/update pass.", )
     parser.add_argument("--weight_decay", default=0.0,
                         type=float, help="Weight decay if we apply some.")
@@ -170,11 +164,11 @@ def get_train_args():
                         help="Linear warmup over warmup_steps.")
     parser.add_argument("--bert_type", default='triplet',
                         choices=['triplet', 'siamese','single'])
-    parser.add_argument("--remove_component", default="", choices=['title', 'text','code'])
+    parser.add_argument("--include_component", default="", choices=['title', 'text','code'])
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
                                  'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
-                                 'bert-base-uncased', 'distilroberta-base', 'distilbert-base-uncased', 'dennishe97/codet5-encoder-small', 'dennishe97/codet5-encoder-base'])
+                                 'bert-base-uncased'])
     parser.add_argument(
         "--fp16", action="store_true",
         help="Whether to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit", )

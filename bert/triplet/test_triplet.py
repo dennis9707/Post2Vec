@@ -9,7 +9,7 @@ import sys
 sys.path.append("..")
 sys.path.append("../..")
 import torch
-from transformers import BertConfig
+from transformers import BertConfig, AutoConfig
 from util.util import get_files_paths_from_directory
 from model.model import TBertT,TBertSI, TBertTNoCode
 from util.data_util import get_tag_encoder, get_fixed_tag_encoder, load_data_to_dataset, get_dataloader, load_tenor_data_to_dataset
@@ -196,11 +196,11 @@ def main():
         mlb, num_class = get_tag_encoder(args.vocab_file)
     args.mlb = mlb
     args.num_class = num_class
-    
+    config = AutoConfig.from_pretrained(args.code_bert)
     if args.model_type == "triplet":
-        model = TBertT(BertConfig(), args.code_bert, num_class)
+        model = TBertT(config, args.code_bert, num_class)
     elif args.model_type == "siamese":
-        model = TBertSI(BertConfig(), args.code_bert, num_class)
+        model = TBertSI(config, args.code_bert, num_class)
     model = torch.nn.DataParallel(model)
     model.to(device)
     

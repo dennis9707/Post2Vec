@@ -3,7 +3,7 @@ sys.path.append("../")
 sys.path.append("/usr/src/bert")
 import torch
 from torch.optim import AdamW
-from transformers import BertConfig, get_linear_schedule_with_warmup, AutoConfig
+from transformers import BertConfig, get_linear_schedule_with_warmup
 from transformers import AlbertConfig, RobertaConfig
 from datetime import datetime
 from model.model import TBertT,TBertSI, TBertTNoCode,TBertTNoTitle, TBertTNoText
@@ -77,6 +77,7 @@ def init_train_env(args, tbert_type):
     if args.local_rank not in [-1, 0]:
         # Make sure only the first process in distributed training will download model & vocab
         torch.distributed.barrier()
+        
     logger.info("tbert_type architectue {}".format(tbert_type))
     if args.remove_component == "title":
         logger.info("No title model")
@@ -173,8 +174,8 @@ def get_train_args():
     parser.add_argument("--remove_component", default="", choices=['title', 'text','code'])
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
-                                 'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
-                                 'bert-base-uncased', 'distilroberta-base', 'distilbert-base-uncased', 'dennishe97/codet5-encoder-small', 'dennishe97/codet5-encoder-base'])
+                                 'codistai/codeBERT-small-v2', 'Salesforce/codet5-small','jeniya/BERTOverflow', 'roberta-base',
+                                 'bert-base-uncased', 'Salesforce/codet5-base', 'razent/cotext-2-cc'])
     parser.add_argument(
         "--fp16", action="store_true",
         help="Whether to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit", )

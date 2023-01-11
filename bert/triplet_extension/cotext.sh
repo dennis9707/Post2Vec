@@ -1,0 +1,12 @@
+CUDA_VISIBLE_DEVICES=1,2 python -m torch.distributed.launch \
+    --nproc_per_node=2 train_triplet.py \
+    --data_folder ../../data/cotext \
+    --output_dir ../../data/results \
+    --per_gpu_train_batch_size 4 \
+    --logging_steps 100 \
+    --gradient_accumulation_steps 2 \
+    --code_bert razent/cotext-2-cc \
+    --num_train_epochs 1 \
+    --fp16 \
+    --fp16_opt_level O2 \
+    --learning_rate 7e-5  2>&1| tee train_cotext.log

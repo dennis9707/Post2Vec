@@ -93,6 +93,8 @@ def main():
     pbar = tqdm(total=len(files))
     update = lambda *args: pbar.update()
     pool = mp.Pool(mp.cpu_count())
+    
+    print(mp.cpu_count())
     for file in files:
         pool.apply_async(process_file_to_tensor, args=(file, title_max, text_max, code_max, args, tokenizer), callback=update)
     pool.close()

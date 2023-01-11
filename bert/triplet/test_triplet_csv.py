@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 import csv
 
 to_csv = []
-def evaluate_ori(pred, label, topk,mlb=None):
+def evaluate_ori(pred, label, topk,mlb=None, title=None, text=None, code=None):
     """
     dimension of pred and label should be equal.
     :param pred: a list of prediction
@@ -57,17 +57,20 @@ def evaluate_ori(pred, label, topk,mlb=None):
         f1_k = 2 * pre_k * rec_k / (pre_k + rec_k)
     new_dict = dict()
     new_dict['top'] = topk
+    new_dict['title'] = title
+    new_dict['text'] = text
+    new_dict['code'] = code
     new_dict['precision'] = pre_k
     new_dict['recall'] = rec_k
     new_dict['f1'] = f1_k
     new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
     new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
     to_csv.append(new_dict)
-    logger.info("Loging dict ---> {0}".format(new_dict))
-    return {'precision': pre_k, 'recall': rec_k, 'f1': f1_k}
+    # logger.info("Loging dict ---> {0}".format(new_dict))
+    return pre_k, rec_k, f1_k
 
 
-def evaluate_batch(pred, label, topk_list=[1, 2, 3, 4, 5], mlb=None):
+def evaluate_batch(pred, label, topk_list=[1, 2, 3, 4, 5], mlb=None, title=None, text=None, code=None):
     pre = [0.0] * len(topk_list)
     rc = [0.0] * len(topk_list)
     f1 = [0.0] * len(topk_list)
@@ -75,7 +78,7 @@ def evaluate_batch(pred, label, topk_list=[1, 2, 3, 4, 5], mlb=None):
     for i in range(0, len(pred)):
         for idx, topk in enumerate(topk_list):
             pre_val, rc_val, f1_val = evaluate_ori(
-                pred=pred[i], label=label[i], topk=topk,mlb=mlb)
+                pred=pred[i], label=label[i], topk=topk,mlb=mlb,title=title[i],text=text[i],code=code[i])
             if pre_val == -1:
                 cnt -= 1
             pre[idx] += pre_val
@@ -132,10 +135,13 @@ def test(args, model, test_set,mlb):
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(
                 outputs).cpu().detach().numpy().tolist())
-            logger.info(data['title'])
-            logger.info(type(data['title']))
+            title = data['title']
+            text = data['text']
+            code = data['code']
+            # logger.info(data['title'])
+            # logger.info(type(data['title']))
             [pre, rc, f1, cnt] = evaluate_batch(
-                fin_outputs, fin_targets, [1, 2, 3, 4, 5], mlb)
+                fin_outputs, fin_targets, [1, 2, 3, 4, 5], mlb, title, text, code)
             fin_pre.append(pre)
             fin_rc.append(rc)
             fin_f1.append(f1)
@@ -207,15 +213,22 @@ def main():
     
     if args.code_bert == "microsoft/codebert-base":
         args.model_path = "./epoch1_t_bert.pt"
+        args.name = "codebert"
     elif  args.code_bert == "roberta-base":
         args.model_path = "../../data/results/triplet_01-02-02-57-44_/epoch-0-file-499/t_bert.pt"
+        args.name = "roberta"
     elif  args.code_bert == "jeniya/BERTOverflow":
         args.model_path = "../../data/results/triplet_01-02-02-54-11_/epoch-0-file-499/t_bert.pt"
+        args.name = "bertoverflow"
+
     elif  args.code_bert == "albert-base-v2":
         args.model_path = "../../data/results/albert-base-v2_01-02-06-19-49_/epoch-0-file-499/t_bert.pt"
+        args.name = "albert"
+
     elif  args.code_bert == "bert-base-uncased":
         args.model_path = "../../data/results/bert-base-uncased_01-05-15-56-05_/epoch-0-file-499/t_bert.pt"
-        
+        args.name = "bert"
+
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
         model.load_state_dict(torch.load(model_path)) 
@@ -237,7 +250,12 @@ def main():
         fin_pre.append(pre)
         fin_rc.append(rc)
         fin_f1.append(f1)
-        fin_cnt += cnt 
+        fin_cnt += cnt
+        keys = to_csv[0].keys()
+        with open('./logs/' + args.name + '-result'+str(file_cnt)+'.csv', 'w', newline='') as output_file:
+            dict_writer = csv.DictWriter(output_file, keys)
+            dict_writer.writeheader()
+            dict_writer.writerows(to_csv)
     
     avg_pre = avg(fin_pre)
     avg_rc = avg(fin_rc)
@@ -249,7 +267,6 @@ def main():
     logger.info("Test finished")
     keys = to_csv[0].keys()
 
-    rgs.codebert
     with open('./logs/' + args.codebert + '-result.csv', 'w', newline='') as output_file:
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
