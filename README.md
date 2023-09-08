@@ -59,3 +59,21 @@ distributed training
     --num_train_epochs 3 \
     --learning_rate 1e-5  2>&1| tee train_trinity.log
 ```
+
+
+
+Model Name:
+```
+bert-base-uncased
+albert-base-v2
+jeniya/BERTOverflow
+microsoft/codebert-base
+Salesforce/codet5-base
+huggingface/CodeBERTa-small-v1
+distilbert-base-uncased
+distilroberta-base
+razent/cotext-2-cc
+Salesforce/codet5-small
+uclanlp/plbart-base
+roberta-base
+```

@@ -1,0 +1,12 @@
+CUDA_VISIBLE_DEVICES=3,0 python -m torch.distributed.launch \
+    --nproc_per_node=2 train_triplet.py \
+    --data_folder ../../data/plbart \
+    --output_dir ../../data/results \
+    --per_gpu_train_batch_size 16 \
+    --logging_steps 100 \
+    --model_path ../../data/results/uclanlp/plbart-base_01-13-07-06-54_/epoch-0-file-492/t_bert.pt \
+    --code_bert uclanlp/plbart-base \
+    --num_train_epochs 1 \
+    --fp16 \
+    --fp16_opt_level O2 \
+    --learning_rate 7e-5  2>&1| tee train_plbart-new.log

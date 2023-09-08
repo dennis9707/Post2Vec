@@ -1,4 +1,5 @@
 CUDA_VISIBLE_DEVICES=2,3 python -u test_triplet_no_title.py \
-    --data_dir ../../data/test_tensor \
+    --data_dir ../../data/codet5-base-test \
     --test_batch_size 500 \
-    --mlb_latest 2>&1| tee ./logs/test_trinity_no_title.log
+    --code_bert Salesforce/codet5-base \
+    --mlb_latest 2>&1| tee ./logs/test_codet5_no_title.log

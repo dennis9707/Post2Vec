@@ -19,28 +19,29 @@ from apex.parallel import DistributedDataParallel as DDP
 from torch.optim import AdamW
 from transformers import BertConfig, get_linear_schedule_with_warmup
 from torch.utils.tensorboard import SummaryWriter
+import random
 # from accelerate import Accelerator
 
 logger = logging.getLogger(__name__)
 
 def log_train_info(args):
-    logger.info("***** Running training *****")
-    logger.info("  Num Epochs = %d", args.num_train_epochs)
-    logger.info("  Instantaneous batch size per GPU = %d",
+    logger.warning("***** Running training *****")
+    logger.warning("  Num Epochs = %d", args.num_train_epochs)
+    logger.warning("  Instantaneous batch size per GPU = %d",
                 args.per_gpu_train_batch_size)
-    logger.info(
+    logger.warning(
         "  Total train batch size (w. parallel, distributed & accumulation) = %d",
         args.train_batch_size
         * args.gradient_accumulation_steps
         * (torch.distributed.get_world_size() if args.local_rank != -1 else 1),
     )
-    logger.info("  Gradient Accumulation steps = %d",
+    logger.warning("  Gradient Accumulation steps = %d",
                 args.gradient_accumulation_steps)
 
 
 def train(args, model):
-    logger.info("GET ARGS")
-    logger.info(args)
+    logger.warning("GET ARGS")
+    logger.warning(args)
     files = get_files_paths_from_directory(args.data_folder)
     
     if not args.exp_name:
@@ -70,7 +71,7 @@ def train(args, model):
     scheduler = get_linear_schedule_with_warmup(
         optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=t_total
     )
-    logger.info("n_gpu: {}".format(args.n_gpu))
+    logger.warning("n_gpu: {}".format(args.n_gpu))
     if args.n_gpu > 1:
         model = torch.nn.DataParallel(model)
 
@@ -81,7 +82,7 @@ def train(args, model):
 
     if args.model_path and os.path.exists(args.model_path):
         model.load_state_dict(torch.load(args.model_path))
-        logger.info("model loaded")
+        logger.warning("model loaded")
     log_train_info(args)
     args.global_step = 0
         
@@ -89,9 +90,11 @@ def train(args, model):
     import gc
     gc.collect()
     for epoch in range(args.num_train_epochs):
-        logger.info(
+        logger.warning(
             '############# Epoch {}: Training Start   #############'.format(epoch))
-        for file_cnt in range(len(files)):
+        file_rand = random.sample(range(0, 490), 20)
+        logger.warning(file_rand)
+        for file_cnt in file_rand:
             # Load dataset and dataloader
             train_dataset = load_tenor_data_to_dataset(args.mlb, files[file_cnt])     
             if args.local_rank == -1:
@@ -151,11 +154,11 @@ def train(args, model):
                             'loss': tr_loss / args.logging_steps
                         }
                         write_tensor_board(tb_writer, tb_data, args.global_step)
-                        logger.info("tb_data {}".format(tb_data))
-                        logger.info(
+                        logger.warning("tb_data {}".format(tb_data))
+                        logger.warning(
                             'Epoch: {}, Batch: {}， Loss:  {}'.format(epoch, step, tr_loss / args.logging_steps))
                         tr_loss = 0.0
-            logger.info(
+            logger.warning(
                 '############# FILE {}: Training End     #############'.format(file_cnt))
             
             ### Save Model

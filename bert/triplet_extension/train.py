@@ -97,7 +97,7 @@ def init_train_env(args, tbert_type):
         model = TBertSI(BertConfig(), args.code_bert, args.num_class)
     else:
         raise Exception("TBERT type not found")
-    
+    logger.info("debug")
     args.tbert_type = tbert_type
     if args.local_rank == 0:
         # Make sure only the first process in distributed training will download model & vocab
@@ -146,7 +146,7 @@ def get_train_args():
     parser.add_argument("--local_rank", type=int, default=-1, help="local_rank for distributed training on gpus")
 
     parser.add_argument(
-        "--gradient_accumulation_steps", type=int, default=4,
+        "--gradient_accumulation_steps", type=int, default=1,
         help="Number of updates steps to accumulate before performing a backward/update pass.", )
     parser.add_argument("--weight_decay", default=0.0,
                         type=float, help="Weight decay if we apply some.")
@@ -175,7 +175,7 @@ def get_train_args():
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
                                  'codistai/codeBERT-small-v2', 'Salesforce/codet5-small','jeniya/BERTOverflow', 'roberta-base',
-                                 'bert-base-uncased', 'Salesforce/codet5-base', 'razent/cotext-2-cc'])
+                                 'bert-base-uncased', 'Salesforce/codet5-base', 'razent/cotext-2-cc', 'uclanlp/plbart-base'])
     parser.add_argument(
         "--fp16", action="store_true",
         help="Whether to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit", )

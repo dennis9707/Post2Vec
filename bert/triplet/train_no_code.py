@@ -144,10 +144,10 @@ def train(args, model):
                         }
                         write_tensor_board(tb_writer, tb_data, args.global_step)
                         logger.info("tb_data {}".format(tb_data))
-                        logger.info(
+                        logger.warning(
                             'Epoch: {}, Batch: {}， Loss:  {}'.format(epoch, step, tr_loss / args.logging_steps))
                         tr_loss = 0.0
-            logger.info(
+            logger.warning(
                 '############# FILE {}: Training End     #############'.format(file_cnt))
             
             ### Save Model

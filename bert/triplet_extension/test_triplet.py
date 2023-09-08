@@ -170,7 +170,7 @@ def get_eval_args():
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
                                  'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
-                                 'bert-base-uncased', 'Salesforce/codet5-base', "Salesforce/codet5-small", 'distilroberta-base', 'distilbert-base-uncased'])
+                                 'bert-base-uncased', 'Salesforce/codet5-base', "Salesforce/codet5-small", 'distilroberta-base', 'distilbert-base-uncased','uclanlp/plbart-base'])
     parser.add_argument("--model_type", default="triplet", choices=["triplet","siamese"])
     args = parser.parse_args()
     return args
@@ -216,6 +216,11 @@ def main():
     elif  args.code_bert == "huggingface/CodeBERTa-small-v1":
         args.model_path = "../../data/results/huggingface/CodeBERTa-small-v1_01-07-18-59-27_/epoch-0-file-499/t_bert.pt"
         args.name = "codebert-small"
+    
+    elif  args.code_bert == "uclanlp/plbart-base":
+        args.model_path = "../../data/results/uclanlp/plbart-base_01-13-07-06-54_/epoch-0-file-492/t_bert.pt"
+        args.name = "plbart"
+
         
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )

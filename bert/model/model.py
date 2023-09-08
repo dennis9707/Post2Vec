@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from transformers import AutoTokenizer, AutoModel, PreTrainedModel, T5EncoderModel
+from transformers import AutoTokenizer, AutoModel, PreTrainedModel, T5EncoderModel, PLBartModel
+from transformers.models.plbart.modeling_plbart import PLBartEncoder
 from model.loss import loss_fn
 
 
@@ -162,6 +163,10 @@ class TBertT(PreTrainedModel):
             self.nbert = T5EncoderModel.from_pretrained(code_bert)
             self.cbert = T5EncoderModel.from_pretrained(code_bert)
             print("T5EncoderModel")
+        elif "plbart" in code_bert:
+            self.tbert = PLBartEncoder.from_pretrained(code_bert)
+            self.nbert = PLBartEncoder.from_pretrained(code_bert)
+            self.cbert = PLBartEncoder.from_pretrained(code_bert)
         else:
             self.tbert = AutoModel.from_pretrained(code_bert)
             self.nbert = AutoModel.from_pretrained(code_bert)
@@ -191,8 +196,13 @@ class TBertT(PreTrainedModel):
 class TBertTNoTitle(PreTrainedModel):
     def __init__(self, config, code_bert, num_class):
         super().__init__(config)
-        self.nbert = AutoModel.from_pretrained(code_bert)
-        self.cbert = AutoModel.from_pretrained(code_bert)
+
+        if "t5" in code_bert:
+            self.nbert = T5EncoderModel.from_pretrained(code_bert)
+            self.cbert = T5EncoderModel.from_pretrained(code_bert)
+        else:
+            self.nbert = AutoModel.from_pretrained(code_bert)
+            self.cbert = AutoModel.from_pretrained(code_bert)
 
         self.cls = ClassifyHeaderNoTitle(config, num_class=num_class)
 
@@ -318,4 +328,31 @@ class TBertSingle(PreTrainedModel):
         hidden_input = self.bert(post_ids, attention_mask=post_attention_mask)[0]
 
         logits = self.cls(hidden_input=hidden_input)
+        return logits
+
+class TBertPLBart(PreTrainedModel):
+    def __init__(self, config, code_bert, num_class):
+        super().__init__(config)
+        self.tbert = PLBartModel.from_pretrained(code_bert)
+        self.nbert = PLBartModel.from_pretrained(code_bert)
+        self.cbert = PLBartModel.from_pretrained(code_bert)
+
+        self.cls = ClassifyHeader(config, num_class=num_class)
+
+    def forward(
+            self,
+            title_ids=None,
+            title_attention_mask=None,
+            text_ids=None,
+            text_attention_mask=None,
+            code_ids=None,
+            code_attention_mask=None,
+    ):
+        t_hidden = self.tbert(
+            input_ids=title_ids, attention_mask=title_attention_mask)[0]
+        n_hidden = self.nbert(input_ids=text_ids, attention_mask=text_attention_mask)[0]
+        c_hidden = self.cbert(input_ids=code_ids, attention_mask=code_attention_mask)[0]
+
+        logits = self.cls(title_hidden=t_hidden,
+                          text_hidden=n_hidden, code_hidden=c_hidden)
         return logits

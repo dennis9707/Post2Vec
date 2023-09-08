@@ -133,17 +133,17 @@ def test(args, model, test_set,mlb):
             fin_rc.append(rc)
             fin_f1.append(f1)
             fin_cnt += cnt
-            logger.info("Final F1 Score = {}".format(f1))
-            logger.info("Final Recall Score  = {}".format(rc))
-            logger.info("Final Precision Score  = {}".format(pre))
-            logger.info("Final Count  = {}".format(cnt))
+            logger.warning("Final F1 Score = {}".format(f1))
+            logger.warning("Final Recall Score  = {}".format(rc))
+            logger.warning("Final Precision Score  = {}".format(pre))
+            logger.warning("Final Count  = {}".format(cnt))
         avg_pre = avg(fin_pre)
         avg_rc = avg(fin_rc)
         avg_f1 = avg(fin_f1)
-        logger.info("Final File F1 Score = {}".format(avg_f1))
-        logger.info("Final File Recall Score  = {}".format(avg_rc))
-        logger.info("Final File Precision Score  = {}".format(avg_pre))
-        logger.info("Final File Count  = {}".format(fin_cnt))
+        logger.warning("Final File F1 Score = {}".format(avg_f1))
+        logger.warning("Final File Recall Score  = {}".format(avg_rc))
+        logger.warning("Final File Precision Score  = {}".format(avg_pre))
+        logger.warning("Final File Count  = {}".format(fin_cnt))
     return [avg_pre, avg_rc, avg_f1, fin_cnt]
 
 def get_eval_args():
@@ -165,7 +165,7 @@ def get_eval_args():
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
                                  'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
-                                 'bert-base-uncased'])
+                                 'bert-base-uncased','Salesforce/codet5-base'])
     parser.add_argument("--log_result", action="store_true", help="wheather to store the test result in a csv file")
     parser.add_argument("--model_type", default="triplet", choices=["triplet","siamese"])
     args = parser.parse_args()
@@ -202,6 +202,10 @@ def main():
     
     if args.code_bert == "microsoft/codebert-base":
         args.model_path = "../../data/results/microsoft/codebert-base_01-03-17-42-19_title/epoch-0-file-499/t_bert.pt"
+    
+
+    else:
+        args.model_path = "../../data/results/Salesforce/codet5-base_01-16-09-28-23_title/final-epoch-0/t_bert.pt"
 
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
@@ -218,7 +222,7 @@ def main():
     logger.info("device %s",args.device)
     
     for file_cnt in range(len(files)):
-        logger.info("load file {}".format(file_cnt))
+        logger.warning("load file {}".format(file_cnt))
         test_set = load_tenor_data_to_dataset(args.mlb, files[file_cnt])
         [pre, rc, f1, cnt] = test(args, model, test_set, mlb)
         fin_pre.append(pre)
@@ -229,11 +233,11 @@ def main():
     avg_pre = avg(fin_pre)
     avg_rc = avg(fin_rc)
     avg_f1 = avg(fin_f1)
-    logger.info("Final F1 Score = {}".format(avg_f1))
-    logger.info("Final Recall Score  = {}".format(avg_rc))
-    logger.info("Final Precision Score  = {}".format(avg_pre))
-    logger.info("Final Count  = {}".format(fin_cnt))
-    logger.info("Test finished")
+    logger.warning("Final F1 Score = {}".format(avg_f1))
+    logger.warning("Final Recall Score  = {}".format(avg_rc))
+    logger.warning("Final Precision Score  = {}".format(avg_pre))
+    logger.warning("Final Count  = {}".format(fin_cnt))
+    logger.warning("Test finished")
     # keys = to_csv[0].keys()
 
     # with open('./logs/result.csv', 'w', newline='') as output_file:
