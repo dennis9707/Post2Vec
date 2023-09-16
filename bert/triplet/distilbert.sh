@@ -9,4 +9,4 @@ CUDA_VISIBLE_DEVICES=1,2 python -m torch.distributed.launch \
     --code_bert distilbert-base-uncased \
     --fp16 \
     --fp16_opt_level O2 \
-    --learning_rate 7e-5  2>&1| tee train_distilbert.log
+    --learning_rate 7e-5  2>&1| tee train_distilbert0916.log

@@ -174,7 +174,8 @@ def get_train_args():
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
                                  'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
-                                 'bert-base-uncased', 'distilroberta-base', 'distilbert-base-uncased', 'dennishe97/codet5-encoder-small', 'dennishe97/codet5-encoder-base'])
+                                 'bert-base-uncased', 'distilroberta-base', 'distilbert-base-uncased', 'dennishe97/codet5-encoder-small', 'dennishe97/codet5-encoder-base',
+                                 'Salesforce/codet5-base'])
     parser.add_argument(
         "--fp16", action="store_true",
         help="Whether to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit", )

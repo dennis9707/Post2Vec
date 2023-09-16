@@ -89,7 +89,13 @@ def save_check_point(model, ckpt_dir, args, optimizer, scheduler):
     logger.info("Saving checkpoint to %s", ckpt_dir)
     if not os.path.exists(ckpt_dir):
         os.makedirs(ckpt_dir)
-    torch.save(model.state_dict(), os.path.join(ckpt_dir, MODEL_FNAME))
+
+    # Check if model was parallelized with DataParallel or DistributedDataParallel
+    if isinstance(model, (torch.nn.DataParallel, torch.nn.parallel.DistributedDataParallel)):
+        torch.save(model.module.state_dict(), os.path.join(ckpt_dir, MODEL_FNAME))
+    else:
+        torch.save(model.state_dict(), os.path.join(ckpt_dir, MODEL_FNAME))
+    # torch.save(model.state_dict(), os.path.join(ckpt_dir, MODEL_FNAME))
     torch.save(args, os.path.join(ckpt_dir, ARG_FNAME))
     torch.save(optimizer.state_dict(), os.path.join(ckpt_dir, OPTIMIZER_FNAME))
     torch.save(scheduler.state_dict(), os.path.join(ckpt_dir, SCHED_FNAME))

@@ -160,10 +160,11 @@ def train(args, model):
             
             ### Save Model
             if args.local_rank in [-1, 0]:
-                model_output = os.path.join(
-                    args.output_dir, "epoch-{}-file-{}".format(epoch,file_cnt))
-                save_check_point(model, model_output, args,
-                                optimizer, scheduler)
+                if file_cnt > 100 and file_cnt % 5 == 0:
+                    model_output = os.path.join(
+                        args.output_dir, "epoch-{}-file-{}".format(epoch,file_cnt))
+                    save_check_point(model, model_output, args,
+                                    optimizer, scheduler)
     if args.local_rank in [-1, 0]:
         tb_writer.close()
 

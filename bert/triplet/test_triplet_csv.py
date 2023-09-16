@@ -58,8 +58,8 @@ def evaluate_ori(pred, label, topk,mlb=None, title=None, text=None, code=None):
     new_dict = dict()
     new_dict['top'] = topk
     new_dict['title'] = title
-    new_dict['text'] = text
-    new_dict['code'] = code
+    # new_dict['text'] = text
+    # new_dict['code'] = code
     new_dict['precision'] = pre_k
     new_dict['recall'] = rec_k
     new_dict['f1'] = f1_k
@@ -150,6 +150,7 @@ def test(args, model, test_set,mlb):
             logger.info("Final Recall Score  = {}".format(rc))
             logger.info("Final Precision Score  = {}".format(pre))
             logger.info("Final Count  = {}".format(cnt))
+            break
         avg_pre = avg(fin_pre)
         avg_rc = avg(fin_rc)
         avg_f1 = avg(fin_f1)
@@ -203,7 +204,7 @@ def main():
         mlb, num_class = get_tag_encoder(args.vocab_file)
     args.mlb = mlb
     args.num_class = num_class
-    
+    config = AutoConfig.from_pretrained(args.code_bert)
     if args.model_type == "triplet":
         model = TBertT(BertConfig(), args.code_bert, num_class)
     elif args.model_type == "siamese":
@@ -218,7 +219,7 @@ def main():
         args.model_path = "../../data/results/triplet_01-02-02-57-44_/epoch-0-file-499/t_bert.pt"
         args.name = "roberta"
     elif  args.code_bert == "jeniya/BERTOverflow":
-        args.model_path = "../../data/results/triplet_01-02-02-54-11_/epoch-0-file-499/t_bert.pt"
+        args.model_path = "../../data/results/triplet_01-02-02-54-11_/epoch-0-file-500/t_bert.pt"
         args.name = "bertoverflow"
 
     elif  args.code_bert == "albert-base-v2":
@@ -251,11 +252,6 @@ def main():
         fin_rc.append(rc)
         fin_f1.append(f1)
         fin_cnt += cnt
-        keys = to_csv[0].keys()
-        with open('./logs/' + args.name + '-result'+str(file_cnt)+'.csv', 'w', newline='') as output_file:
-            dict_writer = csv.DictWriter(output_file, keys)
-            dict_writer.writeheader()
-            dict_writer.writerows(to_csv)
     
     avg_pre = avg(fin_pre)
     avg_rc = avg(fin_rc)
@@ -267,7 +263,7 @@ def main():
     logger.info("Test finished")
     keys = to_csv[0].keys()
 
-    with open('./logs/' + args.codebert + '-result.csv', 'w', newline='') as output_file:
+    with open('./logs/' + args.name + '-result.csv', 'w', newline='') as output_file:
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(to_csv)

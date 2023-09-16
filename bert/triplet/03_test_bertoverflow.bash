@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=0,1 python -u test_triplet.py \
+CUDA_VISIBLE_DEVICES=6,7 python -u test_triplet_csv.py \
     --data_dir ../../data/test_bertoverflow \
     --test_batch_size 400 \
     --code_bert jeniya/BERTOverflow \

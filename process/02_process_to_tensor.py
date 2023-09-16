@@ -65,7 +65,7 @@ def main():
 
     # If folder doesn't exist, then create it.
     import os
-    if not args.out_dir:
+    if not os.path.exists(args.out_dir):
         os.makedirs(args.out_dir)
         print("created folder : ", args.out_dir)
 
@@ -84,9 +84,7 @@ def main():
     pbar = tqdm(total=len(files))
     update = lambda *args: pbar.update()
     pool = mp.Pool(80)
-    logging.info("here")
     for file in files:
-        logging.info("inside")
         pool.apply_async(process_file_to_tensor, args=(file, title_max, text_max, code_max, args, tokenizer), callback=update)
     pool.close()
     pool.join()

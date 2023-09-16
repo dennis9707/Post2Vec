@@ -209,7 +209,7 @@ def main():
     elif  args.code_bert == "roberta-base":
         args.model_path = "../../data/results/triplet_01-02-02-57-44_/epoch-0-file-499/t_bert.pt"
     elif  args.code_bert == "jeniya/BERTOverflow":
-        args.model_path = "../../data/results/triplet_01-02-02-54-11_/epoch-0-file-499/t_bert.pt"
+        args.model_path = "../../data/results/triplet_01-02-02-54-11_/epoch-0-file-500/t_bert.pt"
     elif  args.code_bert == "albert-base-v2":
         args.model_path = "../../data/results/albert-base-v2_01-02-06-19-49_/epoch-0-file-499/t_bert.pt"
     elif  args.code_bert == "bert-base-uncased":

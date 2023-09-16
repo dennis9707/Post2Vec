@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 import csv
 
 to_csv = []
+diffs = []
 def evaluate_ori(pred, label, topk,mlb=None):
     """
     dimension of pred and label should be equal.
@@ -56,14 +57,14 @@ def evaluate_ori(pred, label, topk,mlb=None):
     else:
         f1_k = 2 * pre_k * rec_k / (pre_k + rec_k)
     # return {'precision': pre_k, 'recall': rec_k, 'f1': f1_k}
-    # new_dict = dict()
-    # new_dict['top'] = topk
-    # new_dict['precision'] = pre_k
-    # new_dict['recall'] = rec_k
-    # new_dict['f1'] = f1_k
-    # new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
-    # new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
-    # to_csv.append(new_dict)
+    new_dict = dict()
+    new_dict['top'] = topk
+    new_dict['precision'] = pre_k
+    new_dict['recall'] = rec_k
+    new_dict['f1'] = f1_k
+    new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
+    new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
+    to_csv.append(new_dict)
     # logger.info("Loging dict ---> {0}".format(new_dict))
     return pre_k, rec_k, f1_k
 
@@ -106,8 +107,10 @@ def test(args, model, test_set,mlb):
         fin_f1 = []
         fin_cnt = 0
         for batch_idx, data in enumerate(test_data_loader, 0):
+            
             fin_outputs = []
             fin_targets = []
+            
             title_ids = data['titile_ids'].to(
                 args.device, dtype=torch.long)
             title_mask = data['title_mask'].to(
@@ -122,17 +125,27 @@ def test(args, model, test_set,mlb):
                 args.device, dtype=torch.long)
             targets = data['labels'].to(
                 args.device, dtype=torch.float)
-
+            # logger.info("Time Start")
+            # st = time.time()
             outputs = model(title_ids=title_ids,
                             title_attention_mask=title_mask,
                             text_ids=text_ids,
                             text_attention_mask=text_mask,
                             code_ids=code_ids,
                             code_attention_mask=code_mask)
-
+            # end = time.time()
+            # diff = end - st
+            # diffs.append(diff)
+            # logging.info(diff)
+            # if (batch_idx+1) % 2000 == 0:
+            #     logging.info("average latency")
+            #     logging.info(sum(diffs) / len(diffs))
+            #     break
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(
                 outputs).cpu().detach().numpy().tolist())
+        
+        # logging.info(sum(diffs) / len(diffs))
             [pre, rc, f1, cnt] = evaluate_batch(
                 fin_outputs, fin_targets, [1, 2, 3, 4, 5],mlb)
             fin_pre.append(pre)
@@ -170,7 +183,8 @@ def get_eval_args():
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
                                  'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
-                                 'bert-base-uncased', 'Salesforce/codet5-base', "Salesforce/codet5-small", 'distilroberta-base', 'distilbert-base-uncased'])
+                                 'bert-base-uncased', 'Salesforce/codet5-base', "Salesforce/codet5-small", 'distilroberta-base', 'distilbert-base-uncased',
+                                 'Salesforce/codet5-base', 'razent/cotext-2-cc','facebook/bart-base','t5-base'])
     parser.add_argument("--model_type", default="triplet", choices=["triplet","siamese"])
     args = parser.parse_args()
     return args
@@ -205,17 +219,37 @@ def main():
     model.to(device)
     
     if args.code_bert == "Salesforce/codet5-small":
-        args.model_path = "../../data/results/Salesforce/codet5-small_01-08-04-25-01_/epoch-0-file-500/t_bert.pt"
+        args.model_path = "../../data/results/Salesforce/codet5-small_01-08-04-25-01_/epoch-0-file-300/t_bert.pt"
         args.name = "codet5-small"
     elif  args.code_bert == 'distilroberta-base':
-        args.model_path = "../../data/results/distilroberta-base_01-06-15-56-35_/epoch-0-file-499/t_bert.pt"
+        args.model_path = "../../data/results/distilroberta-base_01-06-15-56-35_/epoch-0-file-300/t_bert.pt"
         args.name = "distilroberta"
     elif  args.code_bert == 'distilbert-base-uncased':
-        args.model_path = "../../data/results/distilbert-base-uncased_01-06-15-51-42_/epoch-0-file-500/t_bert.pt"
-        args.name = "distilroberta"
+        args.model_path = "../../data/results/distilbert-base-uncased_09-13-10-41-47_/epoch-0-file-300/t_bert.pt"
+        args.name = "distilbert"
     elif  args.code_bert == "huggingface/CodeBERTa-small-v1":
-        args.model_path = "../../data/results/huggingface/CodeBERTa-small-v1_01-07-18-59-27_/epoch-0-file-499/t_bert.pt"
+        args.model_path = "../../data/results/huggingface/CodeBERTa-small-v1_01-07-18-59-27_/epoch-0-file-300/t_bert.pt"
         args.name = "codebert-small"
+    elif  args.code_bert == 'Salesforce/codet5-base':
+        args.model_path = "../../data/results/Salesforce/codet5-base_01-09-06-12-41_/epoch-0-file-513/t_bert.pt"
+        args.name = "codet5-base"
+    elif  args.code_bert == 'razent/cotext-2-cc':
+        args.model_path = "../../data/results/razent/cotext-2-cc_01-09-19-11-56_/epoch-0-file-513/t_bert.pt"
+        args.name = "cotext"
+    
+    elif  args.code_bert == 'facebook/bart-base':
+        args.model_path = "../../data/results/facebook/bart-base_02-08-12-51-19_/epoch-0-file-513/t_bert.pt"
+        args.name = "bart"
+    
+    elif  args.code_bert == 't5-base':
+        args.model_path = "../../data/results/t5-base_02-08-12-05-13_/epoch-0-file-513/t_bert.pt"
+        args.name = "t5"
+    elif  args.code_bert == "albert-base-v2":
+        args.model_path = "../../data/results/albert-base-v2_01-02-06-19-49_/epoch-0-file-513/t_bert.pt"
+        args.name = "albert"
+    elif  args.code_bert == "jeniya/BERTOverflow":
+        args.model_path = "../../data/results/triplet_01-02-02-54-11_/epoch-0-file-500/t_bert.pt"
+        args.name = "bertoverflow"
         
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
@@ -250,9 +284,12 @@ def main():
     logger.info("Test finished")
     keys = to_csv[0].keys()
 
-    # with open('./logs/' + args.codebert + '-result.csv', 'w', newline='') as output_file:
-    #     dict_writer = csv.DictWriter(output_file, keys)
-    #     dict_writer.writeheader()
-    #     dict_writer.writerows(to_csv)
+    # Create logs directory if it does not exist
+    if not os.path.exists('./logs/'+ args.code_bert):
+        os.makedirs('./logs/'+ args.code_bert)
+    with open('./logs/' + args.name + '-result.csv', 'w', newline='') as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(to_csv)
 if __name__ == "__main__":
     main()

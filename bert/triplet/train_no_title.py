@@ -149,11 +149,11 @@ def train(args, model):
                 '############# FILE {}: Training End     #############'.format(file_cnt))
             
             ### Save Model
-            if (file_cnt+1) % 10 == 0 and args.local_rank in [-1, 0]:
-                model_output = os.path.join(
-                    args.output_dir, "epoch-{}-file-{}".format(epoch,file_cnt))
-                save_check_point(model, model_output, args,
-                                optimizer, scheduler)
+            # if (file_cnt+1) % 10 == 0 and args.local_rank in [-1, 0]:
+            model_output = os.path.join(
+                args.output_dir, "epoch-{}-file-{}".format(epoch,file_cnt))
+            save_check_point(model, model_output, args,
+                            optimizer, scheduler)
         ### Save Model
         if args.local_rank in [-1, 0]:
             model_output = os.path.join(

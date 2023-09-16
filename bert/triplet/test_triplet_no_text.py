@@ -56,14 +56,14 @@ def evaluate_ori(pred, label, topk,mlb=None):
     else:
         f1_k = 2 * pre_k * rec_k / (pre_k + rec_k)
     # return {'precision': pre_k, 'recall': rec_k, 'f1': f1_k}
-    # new_dict = dict()
-    # new_dict['top'] = topk
-    # new_dict['precision'] = pre_k
-    # new_dict['recall'] = rec_k
-    # new_dict['f1'] = f1_k
-    # new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
-    # new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
-    # to_csv.append(new_dict)
+    new_dict = dict()
+    new_dict['top'] = topk
+    new_dict['precision'] = pre_k
+    new_dict['recall'] = rec_k
+    new_dict['f1'] = f1_k
+    new_dict['predict_tag'] = mlb.inverse_transform(np.array([top_idx_one_hot]))
+    new_dict['true_tag'] = mlb.inverse_transform(np.array([label]))
+    to_csv.append(new_dict)
     # logger.info("Loging dict ---> {0}".format(new_dict))
     return pre_k, rec_k, f1_k
 
@@ -165,7 +165,7 @@ def get_eval_args():
     parser.add_argument("--code_bert", default='microsoft/codebert-base',
                         choices=['microsoft/codebert-base', 'huggingface/CodeBERTa-small-v1',
                                  'codistai/codeBERT-small-v2', 'albert-base-v2','jeniya/BERTOverflow', 'roberta-base',
-                                 'bert-base-uncased'])
+                                 'bert-base-uncased', "Salesforce/codet5-base"])
     parser.add_argument("--log_result", action="store_true", help="wheather to store the test result in a csv file")
     parser.add_argument("--model_type", default="triplet", choices=["triplet","siamese"])
     args = parser.parse_args()
@@ -202,6 +202,10 @@ def main():
     
     if args.code_bert == "microsoft/codebert-base":
         args.model_path = "../../data/results/microsoft/codebert-base_01-05-20-50-50_text/epoch-0-file-499/t_bert.pt"
+    elif args.code_bert == "Salesforce/codet5-base":
+        args.model_path = "../../data/results/Salesforce/codet5-base_01-16-08-48-26_text/final-epoch-0/t_bert.pt"
+
+
 
     if args.model_path and os.path.exists(args.model_path):
         model_path = os.path.join(args.model_path, )
@@ -234,11 +238,11 @@ def main():
     logger.info("Final Precision Score  = {}".format(avg_pre))
     logger.info("Final Count  = {}".format(fin_cnt))
     logger.info("Test finished")
-    # keys = to_csv[0].keys()
+    keys = to_csv[0].keys()
 
-    # with open('./logs/result.csv', 'w', newline='') as output_file:
-    #     dict_writer = csv.DictWriter(output_file, keys)
-    #     dict_writer.writeheader()
-    #     dict_writer.writerows(to_csv)
+    with open('./logs/codebert-no-text-result.csv', 'w', newline='') as output_file:
+        dict_writer = csv.DictWriter(output_file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(to_csv)
 if __name__ == "__main__":
     main()

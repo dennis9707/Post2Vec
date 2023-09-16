@@ -9,3 +9,4 @@ bert/trinity/apex/
 *.pyc
 __pycache__/
 apex/
+new_data/
