@@ -151,8 +151,7 @@ def get_eval_args():
     parser.add_argument(
         "--data_dir", default="../../data/test", type=str,
         help="The input test data dir.")
-    
-    parser.add_argument("--model_path", default="../../data/results/microsoft/codebert-base_01-02-03-14-13_code/epoch-0-file-499/t_bert.pt", help="The model to evaluate")
+    parser.add_argument("--model_path", default="../../data/results/microsoft/codebert-base_09-13-15-19-36_code/epoch-0-file-499/t_bert.pt", help="The model to evaluate")
     # parser.add_argument("--model_path", default="../../data/results/triplet_12-07 15-29-36_/final_model-199/t_bert.pt", help="The model to evaluate")
     parser.add_argument("--no_cuda", action="store_true", help="Whether not to use CUDA when available")
     parser.add_argument("--no_code", action="store_true", help="Whether to include code in the model")
@@ -201,7 +200,7 @@ def main():
     model.to(device)
     
     if args.code_bert == "microsoft/codebert-base":
-        args.model_path = "../../data/results/microsoft/codebert-base_01-02-03-14-13_code/epoch-0-file-499/t_bert.pt"
+        args.model_path = "../../data/results/microsoft/codebert-base_09-13-15-19-36_code/epoch-0-file-499/t_bert.pt"
     elif args.code_bert == "Salesforce/codet5-base":
         # /mnt/dgxv1-Vol01/jundahe/Post2Vec/data/results/Salesforce/codet5-base_01-16-08-48-16_code/final-epoch-0
         args.model_path = "../../data/results/Salesforce/codet5-base_01-16-08-48-16_code/epoch-0-file-499/t_bert.pt"

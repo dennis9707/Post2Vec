@@ -78,6 +78,8 @@ def train(args, model):
 
     if args.model_path and os.path.exists(args.model_path):
         model.load_state_dict(torch.load(args.model_path))
+        optimizer.load_state_dict("../../data/results/Salesforce/codet5-base_01-16-08-48-16_code/final-epoch-0/optimizer.pt")
+        scheduler.load_state_dict("../../data/results/Salesforce/codet5-base_01-16-08-48-16_code/final-epoch-0/scheduler.pt")
         logger.info("model loaded")
     log_train_info(args)
     args.global_step = 0
